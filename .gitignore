@@ -1,0 +1,10 @@
+# Logs
+# Dependencias
+node_modules/
+
+# Archivos de entorno
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
