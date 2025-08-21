@@ -46,8 +46,7 @@
             <option value="">Todos</option>
             <option value="exito">Éxito</option>
             <option value="error">Error</option>
-            <option value="ejecucion">En Proceso</option>
-            <option value="pausado">En Pausa</option>
+            <option value="proceso">En Proceso</option>
           </select>
         </div>
       </div>
