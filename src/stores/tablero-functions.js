@@ -165,20 +165,28 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       }
     },
 
-    iniciarSocket() {
-      socket.on('nuevo_registro', (registro) => {
+    iniciarSocket() { 
+      socket.on('nuevo_registro', (registro, bot) => {
         console.log('registro recibido desde el store: ', registro);
-        
+        // Verificar si el registro pertenece a un bot en el estado y si ya tiene registros
+
         const perteneceABot = this.bots.some(bot => bot.id === registro.bot_id)
         //const yaExiste = this.registros.some(r => r.id === registro.id)
         const yaTieneRegistros = this.registros.some(r => r.bot_id === registro.bot_id)
 
-        if (perteneceABot && yaTieneRegistros /*&& !yaExiste*/) {
-          this.registros.unshift(registro)
-          console.log('✅ Registro agregado desde socket:', registro)
-        }
-        else{
-          console.log('⚠️ Registro ignorado porque no existe historial para este bot:', registro.bot_id)
+        if (perteneceABot /*&& !yaExiste*/) {
+          const indexBot = this.bots.findIndex(b => b.id === bot.id);
+          if (indexBot !== -1) {
+            this.bots[indexBot] = bot; // actualizamos datos del bot
+            console.log('🔄 Bot actualizado desde socket:', bot);
+          }
+          if (yaTieneRegistros) {
+            this.registros.unshift(registro)
+            console.log('✅ Registro agregado desde socket:', registro)
+          }
+          else{
+            console.log('⚠️ Registro ignorado porque no existe historial para este bot:', registro.bot_id)
+          }
         }
       })
     },
