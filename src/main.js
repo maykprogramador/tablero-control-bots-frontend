@@ -19,4 +19,5 @@ app.component('dashboard-Bot', dashboardBot)
 app.mount('#app')
 
 // 👇 Exportas pinia para usarlo en otros archivos
+// cambio oficina
 export { pinia }
