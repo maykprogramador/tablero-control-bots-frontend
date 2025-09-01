@@ -357,7 +357,7 @@ const user = computed(() => authStore.user)
 const bots = computed(() => tableroFunctions.bots)
 const isModalOpen = computed(() => tableroFunctions.isModalOpen)
 const provider = computed(() => authStore.provider) 
-const formInactivation = computed(() => tableroFunctions.formInactivation)
+const formInactivation = computed(() => tableroFunctions.SolicitudInactivacion)
 const botSelected = ref(null)
 const fileInput = ref(null)
 const isDragging = ref(false)
@@ -427,8 +427,14 @@ function descargarFormato() {
 }
 
 const ejecutarBot = async () => {
-  if (formInactivation.value.length > 0) {
-    console.log('registros a inactivar: ',formInactivation.value);
+  console.log('ejecutar bot: ',formInactivation.value);
+  
+  if (formInactivation.value !== null && formInactivation.value.length > 0) {
+    console.log('registros a inactivar: ',formInactivation.value.form);
+    await tableroFunctions.createSolicitud( formInactivation.value, authStore.user.user_id, control.selectedBot) // aqui llamamos al metodo del store que nos consumira la API para crear la solicitud
+    tableroFunctions.setSolicitudInactivacion([]) // limpiar el store despues de enviar la solicitud
+    alert('registro guardado satisfactoriamente')
+    executeBot.value = false
   }
 
   if (control.archivo != null) {

@@ -3,9 +3,10 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import socket from '@/socket'
 import { API_BASE_URL_BACK } from '@/config'
+import { useAuthStore } from '@/stores/Autentificate/auth.js'
 
 const axiosInstance = axios.create({
-  baseURL: `${API_BASE_URL_BACK}/bots/`, // Asegúrate de que esta URL es correcta
+  baseURL: `${API_BASE_URL_BACK}/api/bots/`, // Asegúrate de que esta URL es correcta
   withCredentials: true, // ⚠️ IMPORTANTE: Permite enviar cookies y autenticación
   headers: {
     'Content-Type': 'application/json',
@@ -21,8 +22,9 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     registros: [],
     users: [],
     botsDisponibles: [],
-    formInactivation:[],
+    SolicitudInactivacion:[],
     solicitudes: [],
+    formSolicitudes: [],
     executeBot: false,
   }),
 
@@ -35,6 +37,9 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     },
     setSolicitudes(solicitudes){
       this.solicitudes = solicitudes
+    },
+    setSolicitudInactivacion(solicitud){
+      this.SolicitudInactivacion = solicitud
     },
     setExecuteBot(value){
       this.executeBot = value
@@ -138,8 +143,9 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         const response = await axiosInstance.post('create/solicitud', { formArray: form, user_id: user_id, bot_id: bot_id });
         console.log('solicitud creada: ',response.data);
         //console.log('formulario a enviar: ',form, 'user_id: ', user_id, 'bot_id: ', bot_id);
-        this.solicitudes = [...response.data, ...this.solicitudes];
-
+        if (this.solicitudes.length !== 0) {
+          this.solicitudes = [...response.data, ...this.solicitudes];
+        }
       } catch (error) {
         console.error('Error al crear la solicitud', error);
       }
@@ -166,10 +172,18 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     },
 
     iniciarSocket() { 
-      socket.on('nuevo_registro', (registro, bot) => {
+      socket.on('nuevo_registro', (registro, bot, solicitud) => {
         console.log('registro recibido desde el store: ', registro);
-        // Verificar si el registro pertenece a un bot en el estado y si ya tiene registros
 
+        // usuario actual desde el store de auth
+        const authStore = useAuthStore()
+        const user = authStore.user 
+        console.log('usuario a comparar:', user);
+        
+    
+        // verificar si la solicitud pertenece al usuario autenticado
+        const perteneceASolicitud = solicitud.user_id === user.user_id  
+        // Verificar si el registro pertenece a un bot en el estado y si ya tiene registros
         const perteneceABot = this.bots.some(bot => bot.id === registro.bot_id)
         //const yaExiste = this.registros.some(r => r.id === registro.id)
         const yaTieneRegistros = this.registros.some(r => r.bot_id === registro.bot_id)
@@ -183,6 +197,14 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           if (yaTieneRegistros) {
             this.registros.unshift(registro)
             console.log('✅ Registro agregado desde socket:', registro)
+          }
+          // 👉 actualizar solicitudes si pertenece al usuario autenticado
+          if (perteneceASolicitud) {
+            const indexSolicitud = this.solicitudes.findIndex(s => s.id === solicitud.id);
+            if (indexSolicitud !== -1) {
+              this.solicitudes[indexSolicitud] = solicitud; // actualizamos datos del bot
+              console.log('🔄 Solicitud actualizado desde socket:', solicitud);
+            }
           }
           else{
             console.log('⚠️ Registro ignorado porque no existe historial para este bot:', registro.bot_id)

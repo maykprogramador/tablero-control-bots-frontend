@@ -626,16 +626,20 @@ const saveRecords = async() => {
   // Simulate saving to backend
   console.log('Saving records:', personasInactivacion.value)
 
-  console.log('registros guardados en el store: ',personasInactivation2.value);
-  await tableroFunctions.createSolicitud( personasInactivacion.value, authStore.user.user_id, botSelected) // aqui llamamos al metodo del store que nos consumira la API para crear la solicitud
+  tableroFunctions.setSolicitudInactivacion(personasInactivacion.value)
+  console.log('registros guardados en el store: ',tableroFunctions.SolicitudInactivacion);
+
+  //await tableroFunctions.createSolicitud( personasInactivacion.value, authStore.user.user_id, botSelected) // aqui llamamos al metodo del store que nos consumira la API para crear la solicitud
   
   showToastMessage(`${personasInactivacion.value.length} registros guardados exitosamente`)
   
   // Close modal after a delay
-  setTimeout(() => {
+  /*setTimeout(() => {
     closeDeactivationModal()
     personasInactivacion.value = []
-  }, 1000)
+  }, 1000)*/
+  closeDeactivationModal()
+  personasInactivacion.value = []
   tableroFunctions.setExecuteBot(true)
 }
 
