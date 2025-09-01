@@ -279,7 +279,7 @@
                       class="hover:bg-gray-50 transition-colors duration-150"
                       :class="{ 'bg-blue-50': editingIndex === index }"
                     >
-                      <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td class="px-4 py-4 whitespace-nowrap text-sm lowercase font-medium text-gray-900">
                         {{ persona.nombre }}
                       </td>
                       <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
@@ -559,11 +559,13 @@ const addPerson = () => {
   }
   
   const personData = {
-    nombre: form.nombre.trim(),
+    nombre: form.nombre.trim().toLowerCase(),
     identificacion: form.identificacion.trim(),
-    cargo: form.cargo.trim(),
+    cargo: form.cargo.trim().toLowerCase(),
     buzon_compartido: form.buzon_compartido,
-    cuenta_delegar: form.buzon_compartido === 'si' ? form.cuenta_delegar.trim() : '',
+    cuenta_delegar: form.buzon_compartido === 'si' 
+      ? form.cuenta_delegar.trim().toLowerCase() 
+      : '',
     fecha_inactivacion: form.fecha_inactivacion,
     archivo: form.archivo
   }
