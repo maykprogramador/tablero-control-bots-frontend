@@ -73,11 +73,8 @@
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Solicitante</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Bot</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Nombre</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Identificación</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Creacion</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Inactivacion</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Cargo</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Estado</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Acciones</ th>
           </tr>
@@ -86,12 +83,13 @@
           <tr v-for="(record, index) in filteredRegistros" :key="index" class="hover:bg-gray-50 transition-colors duration-150">
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ index + 1 }}</td>
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ capitalizarNombre(record.User.nombre) }}</td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700" :title="record.Bot.nombre">{{ record.Bot.nombre }}</td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900" :title="record.nombre">{{ record.nombre }}</td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700" :title="record.identificacion">{{ record.identificacion }}</td>
+            <td class="px-4 py-4 text-sm text-gray-700">
+              <div class="truncate max-w-[108px]" :title="record.Bot.nombre">
+                {{ record.Bot.nombre }}
+              </div>
+            </td>
             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">{{ formatDate(record.createdAt) }}</td>
             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">{{ formatDate(record.fecha_inactivacion) }}</td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700" :title="record.cargo">{{ record.cargo }}</td>
             <td class="px-4 py-4 whitespace-nowrap" :title="record.estado">
               <span 
                 :class="getStatusBadgeClass(record.estado)"
@@ -102,7 +100,7 @@
               </span>
             </td>
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
-              <button @click="viewRegistroDetails(record)" class="text-blue-600 hover:text-blue-800 transition-colors duration-200">Ver detalles</button>
+              <button @click="viewRegistroDetails(record)" class="text-blue-600 cursor-pointer hover:text-blue-800 transition-colors duration-200">Ver detalles</button>
             </td>
           </tr>
         </tbody>
@@ -136,7 +134,14 @@
         Exportar
       </button>
     </div>
+    
   </div>
+  <!-- Aquí usamos tu modal -->
+  <solicitudDetailsModal
+    :showModal="showModal"
+    :selectedRecord="selectedRecord"
+    @close="showModal = false"
+  />
 </template>
 
 <script setup>
@@ -144,6 +149,7 @@ import { ref, reactive, computed, onMounted } from 'vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
+import solicitudDetailsModal from './solicitud-details-modal.vue'
 import dayjs from 'dayjs'
 import { capitalizarNombre } from '@/utils/CapitalizarNombre';
 import { formatDate } from '@/utils/FormatDate';
@@ -159,6 +165,8 @@ const tableroFunctions = useTableroFunctions()
 const solicitudes = computed (() => tableroFunctions.solicitudes)
 
 const isLoading = ref(false)
+const showModal = ref(false)
+const selectedRecord = ref(null)
 
 onMounted(async () => {
   isLoading.value = true;
@@ -166,6 +174,11 @@ onMounted(async () => {
   await tableroFunctions.loadSolicitudes(authStore.user);
   isLoading.value = false;
 });
+
+const viewRegistroDetails = (record) => {
+  selectedRecord.value = record;
+  showModal.value = true;
+}
 
 
 // Registros data

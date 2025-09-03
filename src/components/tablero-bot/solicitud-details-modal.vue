@@ -1,0 +1,393 @@
+<template>
+  <!-- Modal Overlay -->
+  <Transition
+    enter-active-class="transition-all duration-300 ease-out"
+    enter-from-class="opacity-0"
+    enter-to-class="opacity-100"
+    leave-active-class="transition-all duration-200 ease-in"
+    leave-from-class="opacity-100"
+    leave-to-class="opacity-0"
+  >
+    <div
+      v-if="showModal"
+      class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+      @click="closeModal"
+    >
+      <!-- Modal Container -->
+      <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="opacity-0 scale-95 translate-y-4"
+        enter-to-class="opacity-100 scale-100 translate-y-0"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="opacity-100 scale-100 translate-y-0"
+        leave-to-class="opacity-0 scale-95 translate-y-4"
+      >
+        <div
+          v-if="showModal && selectedRecord"
+          class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col relative overflow-hidden"
+          @click.stop
+        >
+          <!-- Header - Fijo -->
+          <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 flex-shrink-0">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                <span class="text-white text-lg">📄</span>
+              </div>
+              <div>
+                <h2 class="font-bold text-xl text-white">Detalle de la Solicitud</h2>
+                <p class="text-blue-100 text-sm">Información completa del registro</p>
+              </div>
+            </div>
+            <button
+              @click="closeModal"
+              class="absolute top-4 right-4 text-white/80 hover:text-white transition-colors duration-200"
+            >
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Contenido Principal - Scrolleable -->
+          <div class="flex-1 overflow-y-auto min-h-0">
+            <!-- Sección 1: Datos de la solicitud -->
+            <div class="p-6 border-b border-gray-200">
+              <h3 class="font-semibold text-lg text-slate-800 mb-4">Datos de la Solicitud</h3>
+              
+              <!-- Contenedor scrolleable para los datos -->
+              <div class="max-h-[35vh] overflow-y-auto pr-2 custom-scrollbar">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <!-- ID de la solicitud -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">ID de la solicitud</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.id }}</div>
+                  </div>
+
+                  <!-- Solicitante -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Solicitante</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.User?.nombre || 'N/A' }}</div>
+                  </div>
+
+                  <!-- Bot responsable -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Bot responsable</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.Bot?.nombre || 'N/A' }}</div>
+                  </div>
+
+                  <!-- Nombre usuario a inactivar -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Usuario a inactivar</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.nombre }}</div>
+                  </div>
+
+                  <!-- Identificación -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Identificación</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.identificacion }}</div>
+                  </div>
+
+                  <!-- Cargo -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Cargo</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.cargo }}</div>
+                  </div>
+
+                  <!-- Fecha de creación -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Fecha de creación</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ formatDate(selectedRecord.createdAt) }}</div>
+                  </div>
+
+                  <!-- Fecha de inactivación -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Fecha de inactivación</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ formatDate(selectedRecord.fecha_inactivacion) }}</div>
+                  </div>
+
+                  <!-- Estado -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Estado</label>
+                    <div class="mt-1">
+                      <span :class="getEstadoBadgeClass(selectedRecord.estado)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                        <span :class="getEstadoDotClass(selectedRecord.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                        {{ getEstadoText(selectedRecord.estado) }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Buzón compartido -->
+                  <div class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Buzón compartido</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.buzon_compartido ? 'Sí' : 'No' }}</div>
+                  </div>
+
+                  <!-- Cuenta a delegar (solo si tiene buzón compartido) -->
+                  <div v-if="selectedRecord.buzon_compartido && selectedRecord.cuenta_delegar" class="bg-gray-50 rounded-lg p-4 sm:col-span-2">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Cuenta a delegar</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.cuenta_delegar }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sección 2: Contenido del registro -->
+            <div class="p-6">
+              <h3 class="font-semibold text-lg text-slate-800 mb-4">Detalle del registro</h3>
+              
+              <!-- Barra superior del contenido -->
+              <div class="bg-gray-100 rounded-t-lg px-4 py-2 flex items-center justify-between border border-gray-200">
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-medium text-gray-700">Texto</span>
+                  <span v-if="hasAlert" class="text-yellow-500">⚠️</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <button
+                    @click="copyToClipboard"
+                    class="text-xs text-blue-600 hover:text-blue-800 transition-colors duration-200 flex items-center gap-1"
+                  >
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                    Copiar
+                  </button>
+                  <button
+                    @click="toggleWordWrap"
+                    class="text-xs text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                  >
+                    {{ wordWrap ? 'Sin ajuste' : 'Ajuste de texto' }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Contenedor del mensaje - Scrolleable independiente -->
+              <div class="bg-gray-50 rounded-b-lg border border-t-0 border-gray-200 p-4 max-h-[35vh] overflow-y-auto custom-scrollbar">
+                <pre 
+                  :class="[
+                    'font-mono text-sm text-gray-800',
+                    wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre'
+                  ]"
+                >{{ selectedRecord.Registro?.[0]?.mensaje || 'Sin mensaje disponible' }}</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer - Fijo -->
+          <div class="border-t border-gray-200 px-6 py-4 flex-shrink-0 bg-white">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <div class="text-sm text-gray-500">
+                Visualizado el {{ formatDateTime(new Date()) }}
+              </div>
+              <div class="flex items-center gap-3">
+                <button
+                  @click="downloadRecord"
+                  class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-blue-700 transition-all duration-200 flex items-center gap-2"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  Descargar
+                </button>
+                <button
+                  @click="closeModal"
+                  class="bg-gray-200 text-slate-800 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors duration-200"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toast de confirmación -->
+          <Transition
+            enter-active-class="transition-all duration-300 ease-out"
+            enter-from-class="opacity-0 translate-y-2"
+            enter-to-class="opacity-100 translate-y-0"
+            leave-active-class="transition-all duration-200 ease-in"
+            leave-from-class="opacity-100 translate-y-0"
+            leave-to-class="opacity-0 translate-y-2"
+          >
+            <div
+              v-if="showToast"
+              class="absolute bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 z-10"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+              {{ toastMessage }}
+            </div>
+          </Transition>
+        </div>
+      </Transition>
+    </div>
+  </Transition>
+</template>
+
+<script setup>
+import { ref, computed } from 'vue'
+
+// Props
+const props = defineProps({
+  showModal: {
+    type: Boolean,
+    default: true
+  },
+  selectedRecord: {
+    type: Object,
+    default: null
+  }
+})
+
+// Emits
+const emit = defineEmits(['close'])
+
+// Reactive data
+const wordWrap = ref(true)
+const showToast = ref(false)
+const toastMessage = ref('')
+
+// Computed
+const hasAlert = computed(() => {
+  if (!props.selectedRecord?.mensaje) return false
+  const mensaje = props.selectedRecord.Registro?.[0]?.mensaje.toLowerCase()
+  return mensaje.includes('error') || mensaje.includes('alerta') || mensaje.includes('warning')
+})
+
+// Methods
+const closeModal = () => {
+  emit('close')
+}
+
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A'
+  const date = new Date(dateString)
+  return date.toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  })
+}
+
+const formatDateTime = (date) => {
+  return date.toLocaleString('es-ES', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  })
+}
+
+const getEstadoBadgeClass = (estado) => {
+  const classes = {
+    'exito': 'bg-green-100 text-green-800',
+    'error': 'bg-red-100 text-red-800',
+    'proceso': 'bg-yellow-100 text-yellow-800',
+    'pendiente': 'bg-gray-100 text-gray-800'
+  }
+  return classes[estado] || classes.pendiente
+}
+
+const getEstadoDotClass = (estado) => {
+  const classes = {
+    'exito': 'bg-green-500',
+    'error': 'bg-red-500',
+    'proceso': 'bg-yellow-500',
+    'pendiente': 'bg-gray-500'
+  }
+  return classes[estado] || classes.pendiente
+}
+
+const getEstadoText = (estado) => {
+  const texts = {
+    'exito': 'Completado',
+    'error': 'Error',
+    'proceso': 'En proceso',
+    'pendiente': 'Pendiente'
+  }
+  return texts[estado] || 'Desconocido'
+}
+
+const toggleWordWrap = () => {
+  wordWrap.value = !wordWrap.value
+}
+
+const copyToClipboard = async () => {
+  if (!props.selectedRecord?.Registro.mensaje) return
+  
+  try {
+    await navigator.clipboard.writeText(props.selectedRecord.Registro?.[0]?.mensaje)
+    showToastMessage('Contenido copiado al portapapeles')
+  } catch (err) {
+    console.error('Error al copiar:', err)
+    showToastMessage('Error al copiar el contenido')
+  }
+}
+
+const downloadRecord = () => {
+  if (!props.selectedRecord) return
+  
+  const content = `Detalle de la Solicitud
+ID: ${props.selectedRecord.id}
+Solicitante: ${props.selectedRecord.User?.nombre || 'N/A'}
+Bot responsable: ${props.selectedRecord.Bot?.nombre || 'N/A'}
+Usuario a inactivar: ${props.selectedRecord.nombre}
+Identificación: ${props.selectedRecord.identificacion}
+Cargo: ${props.selectedRecord.cargo}
+Fecha de creación: ${formatDate(props.selectedRecord.createdAt)}
+Fecha de inactivación: ${formatDate(props.selectedRecord.fecha_inactivacion)}
+Estado: ${getEstadoText(props.selectedRecord.estado)}
+Buzón compartido: ${props.selectedRecord.buzon_compartido ? 'Sí' : 'No'}
+${props.selectedRecord.cuenta_delegar ? `Cuenta a delegar: ${props.selectedRecord.cuenta_delegar}` : ''}
+
+Mensaje:
+${props.selectedRecord.Registro?.[0]?.mensaje || 'Sin mensaje disponible'}`
+
+  const blob = new Blob([content], { type: 'text/plain' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = `solicitud_${props.selectedRecord.id}_${new Date().toISOString().split('T')[0]}.txt`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+  
+  showToastMessage('Archivo descargado exitosamente')
+}
+
+const showToastMessage = (message) => {
+  toastMessage.value = message
+  showToast.value = true
+  setTimeout(() => {
+    showToast.value = false
+  }, 3000)
+}
+</script>
+<style scoped>
+/* Scrollbar personalizado */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Para Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+</style>
