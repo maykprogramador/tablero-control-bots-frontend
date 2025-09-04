@@ -80,7 +80,7 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="(record, index) in filteredRegistros" :key="index" class="hover:bg-gray-50 transition-colors duration-150">
+          <tr v-for="(record, index) in paginatedRecords" :key="index" class="hover:bg-gray-50 transition-colors duration-150">
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ index + 1 }}</td>
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ capitalizarNombre(record.User.nombre) }}</td>
             <td class="px-4 py-4 text-sm text-gray-700">
@@ -121,6 +121,76 @@
       <div class="text-gray-400 text-6xl mb-4">🔍</div>
       <h3 class="text-lg font-medium text-gray-900 mb-2">No se encontraron Solicitudes</h3>
       <p class="text-gray-500">Intenta ajustar los filtros de búsqueda</p>
+    </div>
+    <!-- Pagination -->
+    <!-- Pagination -->
+    <div v-if="totalPages > 1" class="mt-6 pt-4 mb-4 border-t border-gray-200">
+      
+      <!-- Versión móvil simplificada (< 500px) -->
+      <div class="flex sm:hidden items-center justify-between">
+        <button 
+          @click="currentPage--"
+          :disabled="currentPage === 1"
+          class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          ‹
+        </button>
+        
+        <div class="text-sm text-gray-700 px-2">
+          {{ currentPage }} / {{ totalPages }}
+        </div>
+        
+        <button 
+          @click="currentPage++"
+          :disabled="currentPage === totalPages"
+          class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+        >
+          ›
+        </button>
+      </div>
+      <div class="flex items-center justify-between mt-4">
+        <!-- Información de registros - Oculta en móviles muy pequeños -->
+        <div class="hidden sm:flex justify-start text-sm text-gray-700 mb-4">
+          Mostrando {{ (currentPage - 1) * recordsPerPage + 1 }} a {{ Math.min(currentPage * recordsPerPage, filteredRegistros.length) }} de {{ filteredRegistros.length }} registros
+        </div>
+
+        <!-- Versión tablet y desktop (≥ 500px) -->
+        <div class="hidden sm:flex items-center gap-2">
+          
+          <button 
+            @click="currentPage--"
+            :disabled="currentPage === 1"
+            class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            Anterior
+          </button>
+          
+          <div class="flex gap-1">
+            <button 
+              v-for="page in visiblePages" 
+              :key="page"
+              @click="currentPage = page"
+              :class="[
+                'px-3 py-1.5 text-sm rounded-lg transition-colors duration-200',
+                page === currentPage 
+                  ? 'bg-blue-600 text-white' 
+                  : 'border border-gray-300 hover:bg-gray-50'
+              ]"
+            >
+              {{ page }}
+            </button>
+          </div>
+          
+          <button 
+            @click="currentPage++"
+            :disabled="currentPage === totalPages"
+            class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
+      
     </div>
     <!-- Modal Footer -->
     <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
@@ -167,6 +237,8 @@ const solicitudes = computed (() => tableroFunctions.solicitudes)
 const isLoading = ref(false)
 const showModal = ref(false)
 const selectedRecord = ref(null)
+const currentPage = ref(1)
+const recordsPerPage = 10
 
 onMounted(async () => {
   isLoading.value = true;
@@ -190,34 +262,6 @@ const registros = ref({
   dateType: 'createdAt'
 })
 
-const exportData = () => {
-  // 1️⃣ Obtener los datos filtrados
-  const data = filteredRegistros.value.map(record => ({
-    ID: record.id,
-    Solicitante: record.User.nombre,
-    Bot: record.Bot.nombre,
-    Nombre: record.nombre,
-    Identificación: record.identificacion,
-    Cargo: record.cargo,
-    Cuenta_Delegar: record.cuenta_delegar,
-    Buzon_Compartido: record.buzon_compartido,
-    Fecha_De_Creación: formatDate(record.createdAt),
-    Fecha_De_Inactivación: formatDate(record.fecha_inactivacion)
-  }));
-
-  // 2️⃣ Crear hoja de cálculo a partir de los datos
-  const worksheet = XLSX.utils.json_to_sheet(data);
-
-  // 3️⃣ Crear un nuevo libro de Excel y añadir la hoja
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Solicitudes');
-
-  // 4️⃣ Generar archivo Excel y descargar
-  XLSX.writeFile(
-    workbook, 
-    `detalles de las solicitudes-${authStore.user.nombre.replace(/\s+/g, '-').toLowerCase()}.xlsx`
-  );
-};
 
 const filteredRegistros = computed(() => {
   return solicitudes.value.filter(record => {
@@ -247,7 +291,56 @@ const filteredRegistros = computed(() => {
   });
 });
 
+//paginacion ----------------------------------------
+const totalPages = computed(() => Math.ceil(filteredRegistros.value.length / recordsPerPage))
 
+const paginatedRecords = computed(() => {
+  const start = (currentPage.value - 1) * recordsPerPage
+  const end = start + recordsPerPage
+  return filteredRegistros.value.slice(start, end)
+})
+
+const visiblePages = computed(() => {
+  const pages = []
+  const start = Math.max(1, currentPage.value - 2)
+  const end = Math.min(totalPages.value, start + 4)
+  
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
+
+// Exportar a Excel ----------------------------------  
+const exportData = () => {
+  // 1️⃣ Obtener los datos filtrados
+  const data = filteredRegistros.value.map(record => ({
+    ID: record.id,
+    Solicitante: record.User.nombre,
+    Bot: record.Bot.nombre,
+    Nombre: record.nombre,
+    Identificación: record.identificacion,
+    Cargo: record.cargo,
+    Cuenta_Delegar: record.cuenta_delegar,
+    Buzon_Compartido: record.buzon_compartido,
+    Fecha_De_Creación: formatDate(record.createdAt),
+    Fecha_De_Inactivación: formatDate(record.fecha_inactivacion)
+  }));
+
+  // 2️⃣ Crear hoja de cálculo a partir de los datos
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  // 3️⃣ Crear un nuevo libro de Excel y añadir la hoja
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Solicitudes');
+
+  // 4️⃣ Generar archivo Excel y descargar
+  XLSX.writeFile(
+    workbook, 
+    `detalles de las solicitudes-${authStore.user.nombre.replace(/\s+/g, '-').toLowerCase()}.xlsx`
+  );
+};
+//--------------------------------------------------
 const getRegistroStatusClass = (estado) => {
   const classes = {
     proceso: 'bg-yellow-100 text-yellow-800',
