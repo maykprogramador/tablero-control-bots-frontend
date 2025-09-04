@@ -4,6 +4,7 @@ import axios from 'axios'
 import { API_BASE_URL_BACK } from '@/config'
 import { API_BASE_URL_FRONT } from '@/config';
 import { useRouter } from 'vue-router';
+import { setupAxiosInterceptor } from '@/utils/axiosInterceptor' // ✅ Importar interceptor
 
 const router = useRouter();
 
@@ -16,6 +17,9 @@ const axiosInstance = axios.create({
     'Accept': 'application/json'
   }
 });
+
+// ✅ Aplicar el interceptor a ESTA instancia específica también
+setupAxiosInterceptor(axiosInstance);
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -98,6 +102,7 @@ export const useAuthStore = defineStore('auth', {
 
       } catch (error) {
         console.error('Error al cerrar sesión:', error)
+        throw error;
       }
     },
 

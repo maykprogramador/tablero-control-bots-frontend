@@ -4,6 +4,8 @@ import axios from 'axios'
 import socket from '@/socket'
 import { API_BASE_URL_BACK } from '@/config'
 import { useAuthStore } from '@/stores/Autentificate/auth.js'
+import { setupAxiosInterceptor } from '@/utils/axiosInterceptor' // ✅ Importar interceptor
+
 
 const axiosInstance = axios.create({
   baseURL: `${API_BASE_URL_BACK}/api/bots/`, // Asegúrate de que esta URL es correcta
@@ -13,6 +15,9 @@ const axiosInstance = axios.create({
     'Accept': 'application/json'
   }
 });
+
+// ✅ Aplicar el interceptor a ESTA instancia específica
+setupAxiosInterceptor(axiosInstance);
 
 export const useTableroFunctions = defineStore('tablero-functions',{
 
@@ -68,7 +73,8 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         
         this.users = response.data;
       } catch (error) {
-        console.error('Error al cargar los usuarios:', error);
+        //console.error('Error al cargar los usuarios:', error);
+        throw error;
       }
     },
     async getAllBots() {

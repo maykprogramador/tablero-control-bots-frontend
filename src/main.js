@@ -4,6 +4,8 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import dashboardBot from './components/tablero-bot/tablero.vue'
+import { setupAxiosInterceptor } from '@/utils/axiosInterceptor'
+
 
 import App from './App.vue'
 import router from './router'
@@ -19,5 +21,5 @@ app.component('dashboard-Bot', dashboardBot)
 app.mount('#app')
 
 // 👇 Exportas pinia para usarlo en otros archivos
-// cambio oficina
+
 export { pinia }

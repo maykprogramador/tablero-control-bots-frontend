@@ -343,6 +343,7 @@ import { useTableroFunctions } from '@/stores/tablero-functions'
 import { useAuthStore } from '@/stores/Autentificate/auth'
 import ManagmentBotsUser from './Managment-Bots-User.vue' // se importa el componente de administracion de los bots
 import { capitalizarNombre } from '@/utils/CapitalizarNombre'
+import { useRouter } from 'vue-router'
 
 // UI State
 const isModalOpen = ref(false)
@@ -353,6 +354,7 @@ const props = defineProps(['onClose'])
 const tableroFunctions = useTableroFunctions()
 const showBotManagement = ref(false)
 const authStore = useAuthStore()
+const router = useRouter()
 
 // Filters and pagination
 const roleFilter = ref('')
@@ -439,6 +441,10 @@ const loadUsers = async () => {
     await tableroFunctions.getUsers()
   } catch (error) {
     console.error('Error loading users:', error)
+    /*if (error.response && error.response.status === 401) {
+      router.push('/')
+      alert('No estás autentificado o tu sesión ha expirado.')
+    }*/
   } finally {
     isLoading.value = false
   }
