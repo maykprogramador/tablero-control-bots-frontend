@@ -45,7 +45,7 @@
         </Transition>
 
         <!-- Login Form -->
-        <form @submit.prevent="handleLogin" class="space-y-6">
+        <form @submit.prevent="handleMicrosoftLogin" class="space-y-6">
           <!-- Email Field -->
           <div class="space-y-2">
             <label for="email" class="block text-sm font-semibold text-blue-800">
@@ -74,7 +74,7 @@
             <p v-if="errors.email" class="text-red-500 text-sm mt-2">{{ errors.email[0] }}</p>
           </div>
 
-          <!-- Password Field -->
+          <!-- Password Field 
           <div class="space-y-2">
             <label for="password" class="block text-sm font-semibold text-blue-800">
               Contraseña
@@ -113,9 +113,9 @@
             </div>
             <p v-if="passwordError" class="text-red-500 text-xs mt-1">{{ passwordError }}</p>
             <p v-if="errors.password" class="text-red-500 text-sm mt-2">{{ errors.password[0] }}</p>
-          </div>
+          </div> -->
 
-          <!-- Remember Me & Forgot Password -->
+          <!-- Remember Me & Forgot Password 
           <div class="flex items-center justify-between">
             <label class="flex items-center">
               <input
@@ -132,9 +132,9 @@
             >
               ¿Olvidaste tu contraseña?
             </button>
-          </div>
+          </div>-->
 
-          <!-- Login Button -->
+          <!-- Login Button 
           <button
             type="submit"
             :disabled="isLoading"
@@ -153,24 +153,21 @@
               </svg>
               Iniciar Sesión
             </div>
+          </button>-->
+          <button
+            type="button"
+            @click="handleMicrosoftLogin"
+            class="w-full cursor-pointer flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+          >
+            <!-- Ícono de Microsoft -->
+            <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
+              <path fill="#F25022" d="M1 1h10v10H1z" />
+              <path fill="#7FBA00" d="M13 1h10v10H13z" />
+              <path fill="#00A4EF" d="M1 13h10v10H1z" />
+              <path fill="#FFB900" d="M13 13h10v10H13z" />
+            </svg>
+            Iniciar Sesión
           </button>
-          <div>
-          <a :href="`${API_BASE_URL_BACK}/api/auth/microsoft`">
-            <button
-              type="button"
-              class="w-full cursor-pointer flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-            >
-              <!-- Ícono de Microsoft (cuatro cuadros) -->
-              <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                <path fill="#F25022" d="M1 1h10v10H1z" />
-                <path fill="#7FBA00" d="M13 1h10v10H13z" />
-                <path fill="#00A4EF" d="M1 13h10v10H1z" />
-                <path fill="#FFB900" d="M13 13h10v10H13z" />
-              </svg>
-              Iniciar Sesion
-            </button>
-          </a>
-        </div>
         </form>
       </div>
 
@@ -236,7 +233,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/Autentificate/auth'
 import { API_BASE_URL_BACK } from '@/config'
@@ -262,6 +259,17 @@ const errorMessage = ref('')
 const forgotEmail = ref('')
 const errors = ref([])
 
+onMounted(() => {
+  const params = new URLSearchParams(window.location.search)
+  const error = params.get("error")
+
+  if (error === "dominio") {
+    errorMessage.value = "El usuario no pertenece a cuentas del dominio"
+  } else if (error === "server") {
+    errorMessage.value = "Error al autenticar con Microsoft. Intenta de nuevo."
+  }
+})
+
 // Validation
 const emailError = computed(() => {
   if (!loginForm.email) return ''
@@ -277,6 +285,25 @@ const passwordError = computed(() => {
 // Methods
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
+}
+
+const handleMicrosoftLogin = () => {
+  // 👉 aquí podrías pedir el correo al usuario (ejemplo: prompt)
+
+  if (!loginForm.email) {
+    //alert("Debes ingresar un correo para continuar.")
+    errorMessage.value = 'Debes ingresar un correo para continuar.'
+    return
+  }
+
+  // 👉 validar dominio
+  if (loginForm.email.endsWith("@zentria.com.co")) {
+    // Redirigir
+    window.location.href = `${API_BASE_URL_BACK}/api/auth/microsoft`
+  } else {
+    //alert("El dominio o el correo no es válido.")
+    errorMessage.value = 'El dominio o el correo no es válido.'
+  }
 }
 
 const handleLogin = async () => {
