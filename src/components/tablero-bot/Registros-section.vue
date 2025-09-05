@@ -57,7 +57,7 @@
         <input 
           v-model="registros.searchQuery" 
           type="text" 
-          placeholder="Buscar por nombre o ID..." 
+          placeholder="Buscar por nombre o ID o Sucursal..." 
           class="w-full pl-10 pr-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
       </div>
@@ -269,6 +269,7 @@ const filteredRegistros = computed(() => {
     const matchesSearch = !registros.value.searchQuery || 
       record.User.nombre.toLowerCase().includes(registros.value.searchQuery.toLowerCase()) ||
       record.nombre.toLowerCase().includes(registros.value.searchQuery.toLowerCase()) ||
+      record.sucursal?.toLowerCase().includes(registros.value.searchQuery.toLowerCase()) ||
       record.identificacion.includes(registros.value.searchQuery);
 
     // --- Filtro por estado ---
