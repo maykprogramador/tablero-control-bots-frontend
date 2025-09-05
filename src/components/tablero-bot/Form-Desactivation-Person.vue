@@ -161,6 +161,57 @@
                     >
                   </div>
                 </Transition>
+                <!-- Sucursal -->
+                <div class="relative">
+                  <label class="block text-sm font-semibold text-slate-800 mb-2">
+                    Sucursal *
+                  </label>
+
+                  <!-- Botón del dropdown -->
+                  <button
+                    type="button"
+                    @click="toggleSucursalDropdown"
+                    class="w-full flex justify-between items-center px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 bg-white"
+                  >
+                    <span>
+                      {{ form.sucursal ? form.sucursal : 'Selecciona una sucursal...' }}
+                    </span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </button>
+
+                  <!-- Dropdown -->
+                  <div
+                    v-if="showSucursalDropdown"
+                    class="absolute z-10 mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-200"
+                  >
+                    <!-- Input búsqueda -->
+                    <div class="p-2">
+                      <input
+                        v-model="searchSucursal"
+                        type="text"
+                        placeholder="Buscar sucursal..."
+                        class="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+
+                    <!-- Lista de sucursales -->
+                    <ul class="max-h-48 overflow-y-auto">
+                      <li
+                        v-for="sucursal in filteredSucursales"
+                        :key="sucursal"
+                        @click="selectSucursal(sucursal)"
+                        class="px-4 py-2 text-sm hover:bg-blue-100 cursor-pointer"
+                      >
+                        {{ sucursal }}
+                      </li>
+                      <li v-if="filteredSucursales.length === 0" class="px-4 py-2 text-sm text-gray-500">
+                        No se encontraron resultados
+                      </li>
+                    </ul>
+                  </div>
+                </div>
 
                 <!-- Fecha de Inactivación -->
                 <div>
@@ -397,9 +448,12 @@ const showToast = ref(false)
 const toastMessage = ref('')
 const editingIndex = ref(-1)
 const { onClose, botSelected } = defineProps(['onClose','botSelected'])
-const personasInactivation2 = computed(() => tableroFunctions.formInactivation)
+//const personasInactivation2 = computed(() => tableroFunctions.formInactivation)
 const errores = ref({})
 const fileInputRef = ref(null)
+// Control del dropdown
+const showSucursalDropdown = ref(false);
+const searchSucursal = ref("");
 
 onMounted(async () => {
   //console.log(' bot seleccionado: ', botSelected);
@@ -420,9 +474,37 @@ const form = reactive({
   buzon_compartido: '',
   cuenta_delegar: '',
   fecha_inactivacion: '',
-  archivo: null
+  archivo: null,
+  sucursal: "" // 👈 aquí guardamos la sucursal seleccionada
 })
 
+// Ejemplo de sucursales (en tu caso vendrán del backend)
+const sucursales = ref([
+  "Sucursal Centro",
+  "Sucursal Norte",
+  "Sucursal Sur",
+  "Sucursal Occidente",
+  "Sucursal Oriente"
+]);
+
+// Filtrar sucursales según búsqueda
+const filteredSucursales = computed(() => {
+  if (!searchSucursal.value) return sucursales.value;
+  return sucursales.value.filter(s =>
+    s.toLowerCase().includes(searchSucursal.value.toLowerCase())
+  );
+});
+
+// Métodos
+const toggleSucursalDropdown = () => {
+  showSucursalDropdown.value = !showSucursalDropdown.value;
+};
+
+const selectSucursal = (sucursal) => {
+  form.sucursal = sucursal;
+  showSucursalDropdown.value = false; // cerrar al seleccionar
+  searchSucursal.value = ""; // resetear búsqueda
+};
 // funcion para subir archivo 
 const handleFileChange = (event) => {
   const file = event.target.files[0]
