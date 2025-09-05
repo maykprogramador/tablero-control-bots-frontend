@@ -200,11 +200,11 @@
                     <ul class="max-h-48 overflow-y-auto">
                       <li
                         v-for="sucursal in filteredSucursales"
-                        :key="sucursal"
-                        @click="selectSucursal(sucursal)"
+                        :key="sucursal.id"
+                        @click="selectSucursal(sucursal.nombre)"
                         class="px-4 py-2 text-sm hover:bg-blue-100 cursor-pointer"
                       >
-                        {{ sucursal }}
+                        <span class="font-bold">{{ sucursal.id }}</span> - {{ sucursal.nombre }}
                       </li>
                       <li v-if="filteredSucursales.length === 0" class="px-4 py-2 text-sm text-gray-500">
                         No se encontraron resultados
@@ -473,19 +473,23 @@ const form = reactive({
 })
 
 // Ejemplo de sucursales (en tu caso vendrán del backend)
+
 const sucursales = ref([
-  "Sucursal Centro",
-  "Sucursal Norte",
-  "Sucursal Sur",
-  "Sucursal Occidente",
-  "Sucursal Oriente"
+  { id: "CAM", nombre: "Clinica Avidanti Manizales" },
+  { id: "CAI", nombre: "Clinica Avidanti Ibague" },
+  { id: "CASM", nombre: "Clinica Avidanti Santa Marta" },
+  { id: "ADC", nombre: "Angiografia de Colombia" },
+  { id: "CACV", nombre: "Clinica Avidanti Ciudad Verde" }, // puedes manejar alias CACV si deseas
+  { id: "DSZF", nombre: "Diacor Soacha Zona Franca" },
+  { id: "CAA", nombre: "Clínica Avidanti Armenia" },
 ]);
 
 // Filtrar sucursales según búsqueda
 const filteredSucursales = computed(() => {
   if (!searchSucursal.value) return sucursales.value;
   return sucursales.value.filter(s =>
-    s.toLowerCase().includes(searchSucursal.value.toLowerCase())
+    s.nombre.toLowerCase().includes(searchSucursal.value.toLowerCase()) ||
+    s.id.toLowerCase().includes(searchSucursal.value.toLowerCase())
   );
 });
 
