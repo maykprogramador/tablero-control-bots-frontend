@@ -460,12 +460,6 @@ onMounted(async () => {
   
 });
 
-// Control data (simulado)
-const control = reactive({
-  selectedBot: '',
-  processingMode: 'normal'
-})
-
 // Form data
 const form = reactive({
   nombre: '',
@@ -649,7 +643,8 @@ const addPerson = () => {
       ? form.cuenta_delegar.trim().toLowerCase() 
       : '',
     fecha_inactivacion: form.fecha_inactivacion,
-    archivo: form.archivo
+    archivo: form.archivo,
+    sucursal: form.sucursal
   }
   
   if (editingIndex.value >= 0) {
@@ -676,7 +671,8 @@ const editPerson = (index) => {
   form.buzon_compartido = persona.buzon_compartido
   form.cuenta_delegar = persona.cuenta_delegar
   form.fecha_inactivacion = persona.fecha_inactivacion
-  form.archivo = persona.archivo
+  form.archivo = persona.archivo,
+  form.sucursal = persona.sucursal
   
   editingIndex.value = index
   formErrors.value = []

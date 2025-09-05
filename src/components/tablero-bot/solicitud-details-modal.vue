@@ -119,13 +119,18 @@
                   <!-- Buzón compartido -->
                   <div class="bg-gray-50 rounded-lg p-4">
                     <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Buzón compartido</label>
-                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.buzon_compartido ? 'Sí' : 'No' }}</div>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.buzon_compartido }}</div>
                   </div>
 
                   <!-- Cuenta a delegar (solo si tiene buzón compartido) -->
-                  <div v-if="selectedRecord.buzon_compartido && selectedRecord.cuenta_delegar" class="bg-gray-50 rounded-lg p-4 sm:col-span-2">
+                  <div v-if="selectedRecord.buzon_compartido === 'si'" class="bg-gray-50 rounded-lg p-4">
                     <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Cuenta a delegar</label>
                     <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.cuenta_delegar }}</div>
+                  </div>
+                  <!-- Sucursal (si existe) -->
+                  <div v-if="selectedRecord.sucursal" class="bg-gray-50 rounded-lg p-4">
+                    <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Sucursal</label>
+                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.sucursal }}</div>
                   </div>
                 </div>
               </div>

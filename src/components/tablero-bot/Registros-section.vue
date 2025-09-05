@@ -323,6 +323,9 @@ const exportData = () => {
     Cargo: record.cargo,
     Cuenta_Delegar: record.cuenta_delegar,
     Buzon_Compartido: record.buzon_compartido,
+    Empresa: validarEmpresa(record.bot_id),
+    Sucursal: record.sucursal || 'N/A',
+    Estado: record.estado,
     Fecha_De_Creación: formatDate(record.createdAt),
     Fecha_De_Inactivación: formatDate(record.fecha_inactivacion)
   }));
@@ -357,6 +360,12 @@ const getStatusBadgeClass = (estado) => {
     proceso: 'bg-yellow-100 text-yellow-700'
   }
   return classes[estado] || 'bg-gray-100 text-gray-700'
+}
+
+const validarEmpresa = (botId) => {
+  if (botId === 1 || botId === 4) return 'Avidanti'
+  if (botId === 3 || botId === 5) return 'Oncologos'
+  return 'Desconocida'
 }
 
 const getStatusDotClass = (estado) => {
