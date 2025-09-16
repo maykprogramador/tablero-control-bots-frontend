@@ -154,8 +154,10 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         }
       } catch (error) {
         console.error('Error al crear la solicitud', error);
+        throw new Error('No se pudo crear la solicitud intente nuevamente');
       }
-    },
+    }
+    ,
     async loadSolicitudes(user) {
       try {
           if (this.solicitudes.length === 0) {

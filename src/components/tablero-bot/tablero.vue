@@ -426,21 +426,27 @@ function descargarFormato() {
   tableroFunctions.descargarFormato()
 }
 
-const ejecutarBot = async () => {
-  console.log('ejecutar bot: ',formInactivation.value);
-  
+const ejecutarBot = async () => { 
+  console.log('ejecutar bot: ', formInactivation.value);
+
   if (formInactivation.value !== null && formInactivation.value.length > 0) {
-    console.log('registros a inactivar: ',formInactivation.value.form);
-    await tableroFunctions.createSolicitud( formInactivation.value, authStore.user.user_id, control.selectedBot) // aqui llamamos al metodo del store que nos consumira la API para crear la solicitud
-    tableroFunctions.setSolicitudInactivacion([]) // limpiar el store despues de enviar la solicitud
-    alert('registro guardado satisfactoriamente')
-    executeBot.value = false
+    console.log('registros a inactivar: ', formInactivation.value);
+    try {
+      await tableroFunctions.createSolicitud(formInactivation.value, authStore.user.user_id, control.selectedBot);
+      tableroFunctions.setSolicitudInactivacion([]);
+      alert('Registro guardado satisfactoriamente');
+      executeBot.value = false;
+    } catch (error) {
+      //console.log(error.message); // 👈 aquí capturas el mensaje
+      alert(error.message);       // 👈 y lo muestras en el alert
+    }
   }
 
   if (control.archivo != null) {
-    console.log('archivo a procesar: ',control.archivo);
+    console.log('archivo a procesar: ', control.archivo);
   }
-}
+};
+
 // Methods
 const openDeactivationModal = () => {
   showDeactivationModal.value = true
