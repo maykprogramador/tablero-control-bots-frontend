@@ -163,13 +163,13 @@
                       </td>
 
                       <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
-                        <div class="flex items-center gap-1">
-                          <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                          </svg>
-                          {{ record.duracion }}
-                        </div>
-                      </td>
+                          <div class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ formatDuration(record.duracion) }}
+                          </div>
+                        </td>
                       <td class="px-4 py-4 whitespace-nowrap">
                         <span 
                           :class="getStatusBadgeClass(record.estado)"
@@ -260,6 +260,7 @@
 import { ref, reactive, computed, defineProps, watch } from 'vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import MessajeDetailsModal from './Messaje-Details-Modal.vue'
+import { formatDuration } from '@/utils/FormatSeconds.js'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween';
 import * as XLSX from 'xlsx';
@@ -300,25 +301,7 @@ const openMessageModal = (record) => {
   isMessageModalOpen.value = true
   selectedRecord.value = record
 }
-/*
-// Execution records data
-const registros2 = ref([
-  {
-    id: 1,
-    fecha_ejecucion: new Date('2025-01-28T14:30:00'),
-    mensaje: 'Procesamiento de factura #FAC-2025-001 completado exitosamente',
-    duracion: '2.3s',
-    estado: 'exito'
-  },
-  {
-    id: 2,
-    fecha_ejecucion: new Date('2025-01-28T14:30:15'),
-    mensaje: 'Validando datos de cliente para factura #FAC-2025-002',
-    duracion: '1.8s',
-    estado: 'proceso'
-  },
- 
-])*/
+
 const registrosDelBot = computed(() => {
   return registros.value.filter(record => record.bot_id === props.bot.id)
 })
