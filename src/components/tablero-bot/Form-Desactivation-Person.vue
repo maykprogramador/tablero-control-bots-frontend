@@ -70,6 +70,7 @@
                     Nombre completo *
                   </label>
                   <input
+                    name="nombre"
                     v-model="form.nombre"
                     pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$"
                     ref="nombreInput"
@@ -91,6 +92,7 @@
                     Número de identificación *
                   </label>
                   <input
+                    name="identificacion"
                     v-model="form.identificacion"
                     type="text"
                     ref="identificacionInput"
@@ -112,6 +114,7 @@
                     Cargo *
                   </label>
                   <input
+                    name="cargo"
                     v-model="form.cargo"
                     type="text"
                     required
@@ -152,6 +155,7 @@
                       Cuenta a delegar *
                     </label>
                     <input
+                      name="cuenta_delegar"
                       v-model="form.cuenta_delegar"
                       type="text"
                       :required="form.buzon_compartido === 'si'"
