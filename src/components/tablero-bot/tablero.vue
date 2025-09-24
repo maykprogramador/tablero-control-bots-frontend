@@ -21,7 +21,7 @@
 
 
       <!-- Main Content -->
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px] gap-8 p-4 lg:p-10">
+      <div :class="[selectedTab !== 'historias'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="gap-8 p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
@@ -119,9 +119,13 @@
           <div v-if="selectedTab === 'solicitudes'"> 
             <RegistrosSection />
           </div>
+          <!-- Registros Solicitados Section -->
+          <div v-if="selectedTab === 'historias'"> 
+            <DashboardHistoriaClinica />
+          </div>
         </div>
         <!-- Right Panel -->
-        <div class="space-y-8">
+        <div v-if="selectedTab !== 'historias'" class="space-y-8">
           <!-- Torre de Control -->
           <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
@@ -348,6 +352,7 @@ import { LogOut } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
+import DashboardHistoriaClinica from './Dashboard-Historia-Clinica.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
