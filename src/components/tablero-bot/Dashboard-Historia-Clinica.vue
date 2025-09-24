@@ -62,7 +62,7 @@
     </div>
 
     <!-- Tabla principal -->
-    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden backdrop-blur-sm bg-white/90">
+    <div class="rounded-2xl shadow-lg border border-gray-100 overflow-hidden backdrop-blur-sm bg-white/90">
       <div class="overflow-x-auto">
         <table class="w-full">
           <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
