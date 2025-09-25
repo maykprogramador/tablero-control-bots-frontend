@@ -334,6 +334,7 @@
         </div>
       </div>
     </div>
+    <DashboardHistoriaClinica v-if="showModalHistoriaClinica" :bot="botSelected" :onclose="closeModalHistoriaCLinica"/>
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
     <FormDesactivationPerson v-if="showDeactivationModal" :onClose="closeModalForm" :botSelected="control.selectedBot"/>
@@ -370,6 +371,7 @@ const isModalControlUsersOpen = ref(false)
 const showDeactivationModal = ref(false)
 const executeBot = computed(() => tableroFunctions.executeBot)
 const selectedTab = ref('bots')
+const showModalHistoriaClinica = ref(false)
 
 
 // Reactive data
@@ -425,6 +427,14 @@ const loadBots = async() => {
   } catch (err) {
     console.error('Error al cargar los bots:', err)
   }
+}
+const openModalHistoriaClinica = () => {
+  showModalHistoriaClinica.value = true
+}
+
+// funcion para cerrar el modal de historia clinica
+const closeModalHistoriaCLinica = () => {
+  showModalHistoriaClinica.value = false
 }
 
 function descargarFormato() {
@@ -588,7 +598,12 @@ const filteredBots = computed(() => {
 })
 
 const openModal = (bot_id) => {
+  
   botSelected.value = bots.value.find(bot => bot.id === bot_id)
+  if (botSelected.value.id === 7) {
+    openModalHistoriaClinica()
+    return 
+  }
   tableroFunctions.openModal()
   console.log('isopnemodal: ', tableroFunctions.isModalOpen );
 }
