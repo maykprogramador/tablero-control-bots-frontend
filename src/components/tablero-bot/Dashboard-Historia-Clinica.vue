@@ -1,6 +1,6 @@
 <template>
   <div @keydown.esc="cerrarModalDashboard" tabindex="0"  class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div @click.stop class="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[95vh] overflow-auto relative">
+    <div @click.stop class="bg-white rounded-xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-auto relative">
       <!-- Close Button -->
       <button 
         @click="cerrarModalDashboard"
@@ -114,9 +114,6 @@
                     Nombre del Paciente
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                    Correo Electrónico
-                  </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Ingreso
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
@@ -127,12 +124,6 @@
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Estado
-                  </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                    Motivo de Fallo
-                  </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                    Bot Responsable
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Acciones
@@ -154,9 +145,6 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                     {{ registro.nombre }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-center">
-                    {{ registro.correo_electronico || '—' }}
-                  </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700">
                     {{ registro.ingreso }}
                   </td>
@@ -170,12 +158,6 @@
                     <span :class="getBadgeClass(registro.estado_envio)" class="px-3 py-1 text-xs font-bold rounded-full">
                       {{ getEstadoTexto(registro.estado_envio) }}
                     </span>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                    {{ registro.motivo_fallo || '—' }}
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-purple-600 font-medium">
-                    {{ registro.bot }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm">
                     <button

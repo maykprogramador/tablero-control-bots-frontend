@@ -119,10 +119,10 @@
           <div v-if="selectedTab === 'solicitudes'"> 
             <RegistrosSection />
           </div>
-          <!-- Registros Solicitados Section -->
+          <!-- Registros Solicitados Section
           <div v-if="selectedTab === 'historias'"> 
             <DashboardHistoriaClinica />
-          </div>
+          </div> -->
         </div>
         <!-- Right Panel -->
         <div v-if="selectedTab !== 'historias'" class="space-y-8">

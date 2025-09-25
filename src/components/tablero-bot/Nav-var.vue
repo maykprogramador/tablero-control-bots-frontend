@@ -36,7 +36,7 @@
       Solicitudes
     </button>
 
-    <!-- Botón Historias clinicas -->
+    <!-- Botón Historias clinicas 
     <button
       @click="$emit('update:selectedTab', 'historias')"
       :class="[
@@ -52,7 +52,7 @@
         </path>
       </svg>
       Historias
-    </button>
+    </button>-->
   </div>
 </template>
 
