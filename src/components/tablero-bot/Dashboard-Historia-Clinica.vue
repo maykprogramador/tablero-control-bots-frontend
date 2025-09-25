@@ -102,9 +102,9 @@
               </th>
             </tr>
           </thead>
-          <tbody v-if="registrosTrazabilidad" class="bg-white divide-y divide-gray-100">
+          <tbody v-if="paginatedRecords" class="bg-white divide-y divide-gray-100">
             <tr
-              v-for="registro in registrosFiltrados"
+              v-for="registro in paginatedRecords"
               :key="`${registro.numero_identificacion}-${registro.ingreso}`"
               class="hover:bg-blue-50/50 transition-all duration-200 group"
             >
@@ -173,6 +173,75 @@
           <p class="text-sm text-gray-500">Intenta ajustar los filtros de búsqueda</p>
         </div>
       </div>
+      <!-- Pagination -->
+      <div v-if="totalPages > 1" class="mt-6 pt-4 mb-4 border-t border-gray-200">
+        
+        <!-- Versión móvil simplificada (< 500px) -->
+        <div class="flex sm:hidden items-center justify-between">
+          <button 
+            @click="currentPage--"
+            :disabled="currentPage === 1"
+            class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            ‹
+          </button>
+          
+          <div class="text-sm text-gray-700 px-2">
+            {{ currentPage }} / {{ totalPages }}
+          </div>
+          
+          <button 
+            @click="currentPage++"
+            :disabled="currentPage === totalPages"
+            class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          >
+            ›
+          </button>
+        </div>
+        <div class="flex items-center justify-between mt-4 ml-4">
+          <!-- Información de registros - Oculta en móviles muy pequeños -->
+          <div class="hidden sm:flex justify-start text-sm text-gray-700 mb-4">
+            Mostrando {{ (currentPage - 1) * recordsPerPage + 1 }} a {{ Math.min(currentPage * recordsPerPage, registrosTrazabilidad.length) }} de {{ registrosTrazabilidad.length }} registros
+          </div>
+
+          <!-- Versión tablet y desktop (≥ 500px) -->
+          <div class="hidden sm:flex items-center gap-2 mr-4">
+            
+            <button 
+              @click="currentPage--"
+              :disabled="currentPage === 1"
+              class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              Anterior
+            </button>
+            
+            <div class="flex gap-1">
+              <button 
+                v-for="page in visiblePages" 
+                :key="page"
+                @click="currentPage = page"
+                :class="[
+                  'px-3 py-1.5 text-sm rounded-lg transition-colors duration-200',
+                  page === currentPage 
+                    ? 'bg-blue-600 text-white' 
+                    : 'border border-gray-300 hover:bg-gray-50'
+                ]"
+              >
+                {{ page }}
+              </button>
+            </div>
+            
+            <button 
+              @click="currentPage++"
+              :disabled="currentPage === totalPages"
+              class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              Siguiente
+            </button>
+          </div>
+        </div>
+        
+      </div>
     </div>
   </div>
   <!-- Modal de detalles -->
@@ -219,19 +288,8 @@ const filtros = ref({
   empresa: ''
 })
 const isLoading = ref(false)
-
-onMounted(async () => {
-  isLoading.value = true;
-  //await new Promise(resolve => setTimeout(resolve, 5000)); // simula la carga de datos por un tiempo de 5 segundos
-  try {
-    await tableroFunctions.loadHistoriasClinicas(authStore.user);
-  }
-  catch(error){
-    alert(error.response.data.error);
-  }
-  
-  isLoading.value = false;
-});
+const currentPage = ref(1)
+const recordsPerPage = 10
 /*
 // Datos mock
 const registrosTrazabilidad2 = ref([
@@ -309,6 +367,27 @@ const registrosTrazabilidad2 = ref([
   }
 ])
 */
+
+//paginacion ----------------------------------------
+const totalPages = computed(() => Math.ceil(registrosFiltrados.value.length / recordsPerPage))
+
+const paginatedRecords = computed(() => {
+  const start = (currentPage.value - 1) * recordsPerPage
+  const end = start + recordsPerPage
+  return registrosFiltrados.value.slice(start, end)
+})
+
+const visiblePages = computed(() => {
+  const pages = []
+  const start = Math.max(1, currentPage.value - 2)
+  const end = Math.min(totalPages.value, start + 4)
+  
+  for (let i = start; i <= end; i++) {
+    pages.push(i)
+  }
+  return pages
+})
+
 // Computed properties
 const empresasUnicas = computed(() => {
   const empresas = [...new Set(registrosTrazabilidad.value.map(r => r.empresa))]
@@ -388,7 +467,17 @@ const handleEscape = (e) => {
   }
 }
 
-onMounted(() => {
+onMounted(async() => {
+   isLoading.value = true;
+  //await new Promise(resolve => setTimeout(resolve, 5000)); // simula la carga de datos por un tiempo de 5 segundos
+  try {
+    await tableroFunctions.loadHistoriasClinicas(authStore.user);
+  }
+  catch(error){
+    alert(error.response.data.error);
+  }
+  
+  isLoading.value = false;
   document.addEventListener('keydown', handleEscape)
 })
 
