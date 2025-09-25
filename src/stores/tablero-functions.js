@@ -29,6 +29,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     botsDisponibles: [],
     SolicitudInactivacion:[],
     solicitudes: [],
+    historias_clinicas: [],
     formSolicitudes: [],
     executeBot: false,
   }),
@@ -178,6 +179,27 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         console.error('Error al cargar los bots:', error);
       }
     },
+    async loadHistoriasClinicas(user) {
+      try {
+          if (this.historias_clinicas.length === 0) {
+              const response = await axiosInstance.get('get/historiasClinicas', {
+                params: {
+                  user_id: user.user_id,
+                  rol: user.rol
+                }
+              });
+              this.historias_clinicas = response.data;
+            console.log('historias cargadas de la DB: ',this.historias_clinicas);
+          }
+          else {
+            console.log('historias_clinicas cargadas del estado: ',this.historias_clinicas);
+          }
+          
+      } catch (error) {
+        console.error('Error al cargar las historias clinicas:', error);
+        throw error;
+      }
+    },
 
     iniciarSocket() { 
       socket.on('nuevo_registro', (registro, bot, solicitud) => {
@@ -218,7 +240,37 @@ export const useTableroFunctions = defineStore('tablero-functions',{
             console.log('⚠️ Registro ignorado porque no existe historial para este bot:', registro.bot_id)
           }
         }
-      })
+      });
+       // 👉 Evento para historias clínicas
+      // 👉 Evento para trazabilidades
+      socket.on('nueva_historia', (trazabilidad, botActualizado) => {
+        console.log('📩 Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
+
+        // Verificar si el bot está en el estado
+        const perteneceABot = this.bots.some(b => b.id === trazabilidad.bot_id);
+        const yaExiste = this.historias_clinicas.some(t => t.id === trazabilidad.id);
+
+        if (perteneceABot) {
+          // 🔄 Actualizar bot en la lista
+          const indexBot = this.bots.findIndex(b => b.id === botActualizado.id);
+          if (indexBot !== -1) {
+            this.bots.splice(indexBot, 1, botActualizado);
+            console.log('🔄 Bot actualizado desde socket:', botActualizado);
+          }
+
+          // 📄 Agregar o actualizar trazabilidad
+          if (!yaExiste) {
+            this.historias_clinicas.unshift(trazabilidad);
+            console.log('✅ Trazabilidad agregada al state:', trazabilidad);
+          } else {
+            const index = this.historias_clinicas.findIndex(t => t.id === trazabilidad.id);
+            this.historias_clinicas.splice(index, 1, trazabilidad);
+            console.log('🔄 Trazabilidad actualizada en el state:', trazabilidad);
+          }
+        } else {
+          console.warn('⚠️ Trazabilidad recibida de un bot no registrado:', trazabilidad.bot_id);
+        }
+      });
     },
 
     descargarFormato() {

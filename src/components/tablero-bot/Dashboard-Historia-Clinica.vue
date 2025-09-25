@@ -102,7 +102,7 @@
               </th>
             </tr>
           </thead>
-          <tbody class="bg-white divide-y divide-gray-100">
+          <tbody v-if="registrosTrazabilidad" class="bg-white divide-y divide-gray-100">
             <tr
               v-for="registro in registrosFiltrados"
               :key="`${registro.numero_identificacion}-${registro.ingreso}`"
@@ -156,9 +156,17 @@
           </tbody>
         </table>
       </div>
-
+      <div v-if="isLoading" class="flex items-center justify-center py-12">
+        <div class="flex items-center gap-3">
+          <svg class="animate-spin h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span class="text-gray-600">Cargando Historias...</span>
+        </div>
+      </div>
       <!-- Mensaje cuando no hay resultados -->
-      <div v-if="registrosFiltrados.length === 0" class="text-center py-16 bg-gradient-to-b from-gray-50 to-white">
+      <div v-if="registrosFiltrados.length === 0 && isLoading === false" class="text-center py-16 bg-gradient-to-b from-gray-50 to-white">
         <div class="text-gray-500">
           <div class="text-gray-400 text-6xl mb-4">🔍</div>
           <p class="text-xl font-semibold text-gray-700 mb-2">No se encontraron registros</p>
@@ -179,7 +187,28 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { ClipboardDocumentListIcon } from "@heroicons/vue/24/outline"
 import ModalDetailsHistoriaClinica from './Modal-details-historia-clinica.vue'
+import { useTableroFunctions } from '@/stores/tablero-functions'
+import { useAuthStore } from '@/stores/Autentificate/auth';
+import { useRouter } from 'vue-router'
 
+const authStore = useAuthStore()
+const router = useRouter()
+
+const tableroFunctions = useTableroFunctions()
+const registrosTrazabilidad = computed(() => 
+  tableroFunctions.historias_clinicas.map(t => ({
+    empresa: t.HistoriaClinica.Paciente.empresa,
+    numero_identificacion: t.HistoriaClinica.Paciente.numero_identificacion,
+    nombre: t.HistoriaClinica.Paciente.nombre,
+    correo_electronico: t.HistoriaClinica.Paciente.correo_electronico,
+    ingreso: t.HistoriaClinica.ingreso,
+    fecha_historia: t.HistoriaClinica.fecha_historia,
+    folio: t.HistoriaClinica.folio,
+    estado_envio: t.estado_envio,
+    motivo_fallo: t.motivo_fallo,
+    bot: t.Bot.nombre
+  }))
+);
 
 // Estado reactivo
 const mostrarModal = ref(false)
@@ -189,9 +218,23 @@ const filtros = ref({
   estado: '',
   empresa: ''
 })
+const isLoading = ref(false)
 
+onMounted(async () => {
+  isLoading.value = true;
+  //await new Promise(resolve => setTimeout(resolve, 5000)); // simula la carga de datos por un tiempo de 5 segundos
+  try {
+    await tableroFunctions.loadHistoriasClinicas(authStore.user);
+  }
+  catch(error){
+    alert(error.response.data.error);
+  }
+  
+  isLoading.value = false;
+});
+/*
 // Datos mock
-const registrosTrazabilidad = ref([
+const registrosTrazabilidad2 = ref([
   {
     empresa: "Clínica San José",
     numero_identificacion: "1006295130",
@@ -265,7 +308,7 @@ const registrosTrazabilidad = ref([
     bot: "Bot_Historias_Clinicas_V2"
   }
 ])
-
+*/
 // Computed properties
 const empresasUnicas = computed(() => {
   const empresas = [...new Set(registrosTrazabilidad.value.map(r => r.empresa))]
