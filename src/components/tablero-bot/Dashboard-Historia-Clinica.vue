@@ -4,7 +4,7 @@
       <!-- Close Button -->
       <button 
         @click="cerrarModalDashboard"
-        class="absolute top-4 right-4 z-10 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200 group"
+        class="absolute top-4 right-4 z-20 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200 group"
       >
         <svg class="w-4 h-4 text-gray-600 group-hover:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -12,40 +12,41 @@
       </button>
 
       <!-- Modal Header -->
-      <div class="bg-gradient-to-r from-slate-800 to-blue-600 text-white p-6 pr-16">
+      <!-- Modal Header -->
+      <div class="bg-gradient-to-r from-slate-800 to-blue-600 text-white p-6 pr-16 md:sticky md:top-0 md:z-10">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
             <span class="text-xl">🤖</span>
           </div>
           <div>
-            <h2 class="text-2xl font-bold">Detalles de Ejecución</h2>
+            <h2 class="text-xl sm:text-2xl font-bold">Detalles de Ejecución</h2>
             <p class="text-blue-100 mt-1">{{ bot.nombre }}</p>
           </div>
         </div>
-        
+
         <!-- Summary Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-6">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
           <div class="bg-white/10 rounded-lg p-3 text-center">
-            <div class="text-2xl font-bold">{{ registrosTrazabilidad.length}}</div>
-            <div class="text-sm text-blue-100">Total Registros</div>
+            <div class="text-lg sm:text-2xl font-bold">{{ registrosTrazabilidad.length }}</div>
+            <div class="text-xs sm:text-sm text-blue-100">Total Registros</div>
           </div>
           <div class="bg-green-500/20 rounded-lg p-3 text-center">
-            <div class="text-2xl font-bold text-green-200">{{ getStatusCount('exito') }}</div>
-            <div class="text-sm text-green-100">Exitosos</div>
+            <div class="text-lg sm:text-2xl font-bold text-green-200">{{ getStatusCount('exito') }}</div>
+            <div class="text-xs sm:text-sm text-green-100">Exitosos</div>
           </div>
           <div class="bg-yellow-500/20 rounded-lg p-3 text-center">
-            <div class="text-2xl font-bold text-yellow-200">{{ getStatusCount('pendiente') }}</div>
-            <div class="text-sm text-yellow-100">En Proceso</div>
+            <div class="text-lg sm:text-2xl font-bold text-yellow-200">{{ getStatusCount('pendiente') }}</div>
+            <div class="text-xs sm:text-sm text-yellow-100">En Proceso</div>
           </div>
           <div class="bg-red-500/20 rounded-lg p-3 text-center">
-            <div class="text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
-            <div class="text-sm text-red-100">Con Error</div>
+            <div class="text-lg sm:text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
+            <div class="text-xs sm:text-sm text-red-100">Con Error</div>
           </div>
         </div>
       </div>
-      <div class="p-6 max-h-[70vh] overflow-y-auto">
+      <div class="p-6 md:max-h-[70vh] md:overflow-y-auto">
         <!-- Barra de búsqueda y filtros -->
-        <div class="rounded-2xl m-4 shadow-lg border border-gray-100 p-6 mb-6 backdrop-blur-sm bg-white/80">
+        <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 p-6 mb-6 backdrop-blur-sm bg-white/80">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <!-- Campo de búsqueda -->
             <div class="md:col-span-2">
@@ -99,7 +100,7 @@
           </div>
         </div>
         <!-- Tabla principal -->
-        <div class="rounded-2xl m-4 shadow-lg border border-gray-100 overflow-hidden backdrop-blur-sm bg-white/90">
+        <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 overflow-hidden backdrop-blur-sm bg-white/90">
           <div class="overflow-x-auto">
             <table class="w-full">
               <thead class="bg-gradient-to-r from-gray-50 to-gray-100">

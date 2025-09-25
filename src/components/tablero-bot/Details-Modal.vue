@@ -51,21 +51,21 @@
               </div>
               
               <!-- Summary Stats -->
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-6">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                 <div class="bg-white/10 rounded-lg p-3 text-center">
-                  <div class="text-2xl font-bold">{{ registrosDelBot.length}}</div>
+                  <div class="text-lg sm:text-2xl font-bold">{{ registrosDelBot.length}}</div>
                   <div class="text-sm text-blue-100">Total Registros</div>
                 </div>
                 <div class="bg-green-500/20 rounded-lg p-3 text-center">
-                  <div class="text-2xl font-bold text-green-200">{{ getStatusCount('exito') }}</div>
+                  <div class="text-lg sm:text-2xl font-bold text-green-200">{{ getStatusCount('exito') }}</div>
                   <div class="text-sm text-green-100">Exitosos</div>
                 </div>
                 <div class="bg-yellow-500/20 rounded-lg p-3 text-center">
-                  <div class="text-2xl font-bold text-yellow-200">{{ getStatusCount('proceso') }}</div>
+                  <div class="text-lg sm:text-2xl font-bold text-yellow-200">{{ getStatusCount('proceso') }}</div>
                   <div class="text-sm text-yellow-100">En Proceso</div>
                 </div>
                 <div class="bg-red-500/20 rounded-lg p-3 text-center">
-                  <div class="text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
+                  <div class="text-lg sm:text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
                   <div class="text-sm text-red-100">Con Error</div>
                 </div>
               </div>
