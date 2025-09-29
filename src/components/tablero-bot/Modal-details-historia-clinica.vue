@@ -4,7 +4,10 @@
     @click="cerrarModal"
   >
     <div
-      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300"
+      class="fixed inset-0 bg-white w-screen h-screen 
+           sm:relative sm:rounded-2xl sm:shadow-2xl sm:max-w-4xl sm:max-h-[90vh] 
+           sm:w-full sm:h-auto 
+           overflow-y-auto transform transition-all duration-300"
       @click.stop
     >
       <div class="p-8">
