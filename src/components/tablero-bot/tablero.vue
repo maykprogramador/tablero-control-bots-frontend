@@ -1,27 +1,10 @@
 <template>
   <div v-if="user" class="min-h-screen bg-gradient-to-br from-indigo-500 to-indigo-400">
-    <div class="max-w-7xl mx-auto bg-white/95 rounded-2xl shadow-xl overflow-hidden">
+    <div class="max-w-7xl mx-auto rounded-2xl shadow-xl">
       <!-- Header -->
-      <div class="relative bg-gradient-to-br from-slate-800 to-blue-500 text-white p-8 text-center overflow-hidden">
-        <!-- Fondo animado -->
-        <div class="absolute inset-0 bg-gradient-radial from-white/10 to-transparent animate-pulse"></div>
-
-        <!-- Botón de cerrar sesión -->
-        <div class="absolute top-4 right-6 z-20">
-          <button @click="logout()" class="flex items-center gap-2 px-3 py-1.5 cursor-pointer text-sm font-semibold text-white bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors duration-200">
-            <LogOut />
-            Cerrar sesión
-          </button>
-        </div>
-
-        <!-- Título y subtítulo -->
-        <h1 class="text-4xl font-bold mb-3 relative z-10">🤖 Tablero de Control de Bots</h1>
-        <p class="text-xl opacity-90 relative z-10">Monitoreo y gestión centralizada de procesos automatizados</p>
-      </div>
-
-
+      <HeaderTablero />
       <!-- Main Content -->
-      <div :class="[selectedTab !== 'historias'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="gap-8 p-4 lg:p-10">
+      <div :class="[selectedTab !== 'historias'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-white/95 gap-8 p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
@@ -354,6 +337,7 @@ import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import DashboardHistoriaClinica from './Dashboard-Historia-Clinica.vue';
+import HeaderTablero from './header-tablero.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
