@@ -76,7 +76,7 @@
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Creacion</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Inactivacion</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Estado</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Acciones</ th>
+            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Acciones</ th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -99,8 +99,18 @@
                 {{ getStatusText(record.estado) }}
               </span>
             </td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
-              <button @click="viewRegistroDetails(record)" class="text-blue-600 cursor-pointer hover:text-blue-800 transition-colors duration-200">Ver detalles</button>
+
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              <button
+                @click="viewRegistroDetails(record)"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-blue-700 bg-blue-100 hover:bg-blue-200 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 group-hover:scale-105"
+              >
+                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                </svg>
+                Ver detalles
+              </button>
             </td>
           </tr>
         </tbody>
@@ -389,3 +399,14 @@ const getStatusText = (estado) => {
 
 
 </script>
+<style scoped>
+/* Animaciones personalizadas */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-enter-active {
+  animation: fadeIn 0.3s ease-out;
+}
+</style>

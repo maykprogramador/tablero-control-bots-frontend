@@ -157,9 +157,13 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                     {{ formatearFecha(registro.fecha_historia) }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <span :class="getBadgeClass(registro.estado_envio)" class="px-3 py-1 text-xs font-bold rounded-full">
-                      {{ getEstadoTexto(registro.estado_envio) }}
+                  <td class="px-4 py-4 whitespace-nowrap">
+                    <span 
+                      :class="getStatusBadgeClass(registro.estado_envio)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    >
+                      <span :class="getStatusDotClass(registro.estado_envio)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                      {{ getStatusText(registro.estado_envio) }}
                     </span>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm">
@@ -270,7 +274,7 @@
       <!-- Modal Footer -->
       <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
         <button 
-          
+          @click="exportData"
           class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 flex items-center gap-2"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -304,6 +308,8 @@ import ModalDetailsHistoriaClinica from './Modal-details-historia-clinica.vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
+import { formatDate } from '@/utils/FormatDate';
+import * as XLSX from 'xlsx';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -311,6 +317,21 @@ const router = useRouter()
 const props = defineProps(['onclose','bot'])
 
 const tableroFunctions = useTableroFunctions()
+
+onMounted(async() => {
+   isLoading.value = true;
+  //await new Promise(resolve => setTimeout(resolve, 5000)); // simula la carga de datos por un tiempo de 5 segundos
+  try {
+    await tableroFunctions.loadHistoriasClinicas(authStore.user);
+  }
+  catch(error){
+    alert(error.response.data.error);
+  }
+  
+  isLoading.value = false;
+  document.addEventListener('keydown', handleEscape)
+})
+
 const registrosTrazabilidad = computed(() => 
   tableroFunctions.historias_clinicas.map(t => ({
     empresa: t.HistoriaClinica.Paciente.empresa,
@@ -483,26 +504,35 @@ const cerrarModal = () => {
   registroSeleccionado.value = null
 }
 
-const getBadgeClass = (estado) => {
-  const clases = {
-    exito: 'bg-green-100 text-green-800 border border-green-200',
-    error: 'bg-red-100 text-red-800 border border-red-200',
-    pendiente: 'bg-yellow-100 text-yellow-800 border border-yellow-200'
+const getStatusBadgeClass = (estado) => {
+  const classes = {
+    exito: 'bg-green-100 text-green-700',
+    error: 'bg-red-100 text-red-700',
+    pendiente: 'bg-yellow-100 text-yellow-700'
   }
-  return clases[estado] || 'bg-gray-100 text-gray-800 border border-gray-200'
+  return classes[estado] || 'bg-gray-100 text-gray-700'
+}
+
+const getStatusDotClass = (estado) => {
+  const classes = {
+    exito: 'bg-green-500',
+    error: 'bg-red-500',
+    pendiente: 'bg-yellow-500'
+  }
+  return classes[estado] || 'bg-gray-500'
 }
 
 const getStatusCount = (estado) => {
   return registrosTrazabilidad.value.filter(record => record.estado_envio === estado).length
 }
 
-const getEstadoTexto = (estado) => {
-  const textos = {
+const getStatusText = (estado) => {
+  const texts = {
     exito: 'Éxito',
     error: 'Error',
-    pendiente: 'Pendiente'
+    pendiente: 'pendiente'
   }
-  return textos[estado] || estado
+  return texts[estado] || 'Desconocido'
 }
 
 const formatearFecha = (fecha) => {
@@ -515,6 +545,36 @@ const formatearFecha = (fecha) => {
   })
 }
 
+const exportData = () => {
+  // 1️⃣ Obtener los datos filtrados
+  const data = registrosFiltrados.value.map(record => ({
+    Empresa: record.empresa,
+    Identificación: record.numero_identificacion,
+    Nombre: record.nombre,
+    Correo_Electrónico: record.correo_electronico || '—',
+    Ingreso: record.ingreso,
+    Folio: record.folio,
+    Fecha_Historia: formatDate(record.fecha_historia),
+    fecha_envio: formatDate(record.fecha_envio),
+    Estado: record.estado_envio,
+    Motivo_Fallo: record.motivo_fallo || '—',
+    Bot: record.bot
+  }));
+
+  // 2️⃣ Crear hoja de cálculo a partir de los datos
+  const worksheet = XLSX.utils.json_to_sheet(data);
+
+  // 3️⃣ Crear un nuevo libro de Excel y añadir la hoja
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Trazabilidad Correos Envidos");// nombre de la hoja
+
+  // 4️⃣ Generar archivo Excel y descargar
+  XLSX.writeFile(
+    workbook, 
+    `lista-correos-enviados-${props.bot.nombre.replace(/\s+/g, '-').toLowerCase()}.xlsx`
+  );
+};
+
 // Cerrar modal con tecla Escape
 const handleEscape = (e) => {
   if (e.key === 'Escape' && mostrarModal.value) {
@@ -522,19 +582,6 @@ const handleEscape = (e) => {
   }
 }
 
-onMounted(async() => {
-   isLoading.value = true;
-  //await new Promise(resolve => setTimeout(resolve, 5000)); // simula la carga de datos por un tiempo de 5 segundos
-  try {
-    await tableroFunctions.loadHistoriasClinicas(authStore.user);
-  }
-  catch(error){
-    alert(error.response.data.error);
-  }
-  
-  isLoading.value = false;
-  document.addEventListener('keydown', handleEscape)
-})
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEscape)
