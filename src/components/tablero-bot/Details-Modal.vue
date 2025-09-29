@@ -26,7 +26,7 @@
           <div 
    
             @click.stop
-            class="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden relative"
+            class="fixed inset-0 bg-white sm:relative sm:rounded-xl shadow-2xl sm:max-w-6xl sm:w-full sm:max-h-[95vh] sm:h-auto overflow-auto sm:overflow-hidden"
           >
             <!-- Close Button -->
             <button 
@@ -72,7 +72,7 @@
             </div>
 
             <!-- Modal Body -->
-            <div class="p-6 max-h-[60vh] overflow-y-auto">
+            <div class="p-6 md:max-h-[60vh] sm:overflow-y-auto">
               <!-- Filters -->
               <div class="flex flex-wrap gap-4 mb-6">
                 <div class="flex items-center gap-2">
