@@ -1,6 +1,6 @@
 <template>
   <div @keydown.esc="cerrarModalDashboard" tabindex="0"  class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div @click.stop class="bg-white rounded-xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-auto relative">
+    <div @click.stop class="bg-white rounded-xl shadow-2xl max-w-7xl w-full max-h-[95vh] overflow-hidden relative">
       <!-- Close Button -->
       <button 
         @click="cerrarModalDashboard"
@@ -11,7 +11,6 @@
         </svg>
       </button>
 
-      <!-- Modal Header -->
       <!-- Modal Header -->
       <div class="bg-gradient-to-r from-slate-800 to-blue-600 text-white p-6 pr-16 md:sticky md:top-0 md:z-10">
         <div class="flex items-center gap-3">
@@ -44,7 +43,9 @@
           </div>
         </div>
       </div>
-      <div class="p-6 md:max-h-[70vh] md:overflow-y-auto">
+
+      <!-- Cuerpo del dashboard -->
+      <div class="p-6 md:max-h-[65vh] md:overflow-y-auto">
         <!-- Barra de búsqueda y filtros -->
         <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 p-6 mb-6 backdrop-blur-sm bg-white/80">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -99,8 +100,9 @@
             </div>
           </div>
         </div>
-        <!-- Tabla principal -->
+        
         <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 overflow-hidden backdrop-blur-sm bg-white/90">
+          <!-- Tabla principal -->
           <div class="overflow-x-auto">
             <table class="w-full">
               <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
@@ -176,6 +178,7 @@
               </tbody>
             </table>
           </div>
+          <!-- Indicador de carga -->
           <div v-if="isLoading" class="flex items-center justify-center py-12">
             <div class="flex items-center gap-3">
               <svg class="animate-spin h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24">
@@ -263,6 +266,24 @@
             
           </div>
         </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
+        <button 
+          
+          class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 flex items-center gap-2"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Exportar
+        </button>
+        <button 
+          @click="cerrarModalDashboard"
+          class="px-4 py-2 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors duration-200"
+        >
+          Cerrar
+        </button>
       </div>
 
     </div>

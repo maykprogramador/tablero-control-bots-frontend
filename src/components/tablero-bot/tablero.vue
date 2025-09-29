@@ -197,7 +197,7 @@
             <!-- Botón de Registro -->
             <div class="mb-6">
               <button
-                v-if="control.selectedBot === 1 || control.selectedBot === 2 || control.selectedBot === 3"
+                v-if="botOptions.includes(control.selectedBot)"
                 @click="openDeactivationModal"
                 class="w-full cursor-pointer flex items-center justify-center px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200"
               >
@@ -372,6 +372,7 @@ const showDeactivationModal = ref(false)
 const executeBot = computed(() => tableroFunctions.executeBot)
 const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
+const botOptions = [1, 2, 3, 7]
 
 
 // Reactive data
