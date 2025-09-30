@@ -303,10 +303,11 @@ function marcarTodasLeidas() {
   // opcional: llamada a API -> PATCH /notificaciones/leidas
 }
 
-function eliminarTodas() {
-  notificacionStore.eliminarNotificaciones()
+const eliminarTodas = () => {
+  if (confirm('¿Estás seguro de que deseas eliminar todas las notificaciones?')) {
+    notificacionStore.eliminarNotificaciones()
+  }
   showMenuAcciones.value = false
-  // opcional: llamada a API -> DELETE /notificaciones
 }
 
 const NotificationCount = computed(() => {

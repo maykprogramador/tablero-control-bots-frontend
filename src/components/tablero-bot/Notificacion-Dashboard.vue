@@ -75,7 +75,7 @@
             v-for="notificacion in notificacionesFiltradas"
             :key="notificacion.id"
             :class="[
-              'bg-white rounded-2xl cursor-pointer shadow-sm border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden',
+              'bg-white rounded-2xl shadow-sm border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden',
               notificacion.leido ? 'border-gray-200' : getIconConfig(notificacion.tipo).borderColor
             ]"
           >
@@ -85,7 +85,7 @@
               :class="['h-full w-1.5 absolute left-0 top-0 bottom-0', getIconConfig(notificacion.tipo).color.replace('text-', 'bg-')]"
             ></div>
 
-            <div @click="handleNotificacionClick(notificacion)" class="p-5 lg:p-6">
+            <div class="p-5 lg:p-6">
               <div class="flex gap-4">
                 <!-- Icono -->
                 <div class="flex-shrink-0">
@@ -107,7 +107,7 @@
                 <!-- Contenido -->
                 <div class="flex-1 min-w-0">
                   <div class="flex items-start justify-between gap-4 mb-2">
-                    <div class="flex-1">
+                    <div @click="handleNotificacionClick(notificacion)" class="flex-1 cursor-pointer">
                       <div class="flex items-center gap-2 mb-1">
                         <div
                           v-if="!notificacion.leido"
@@ -131,9 +131,9 @@
                     <div class="flex gap-1 flex-shrink-0">
                       <button
                         v-if="!notificacion.leido"
-                        @click="toggleLeido(notificacion)"
+                        @click="handleNotificacionClick(notificacion)"
                         :class="[
-                          'p-2 rounded-lg transition-all duration-200 hover:scale-110',
+                          'p-2 cursor-pointer rounded-lg transition-all duration-200 hover:scale-110',
                           notificacion.leido
                             ? 'text-gray-400 hover:bg-gray-100'
                             : 'text-blue-500 hover:bg-blue-50'
@@ -330,19 +330,16 @@ async function handleNotificacionClick(notificacion) {
 }
 
 const marcarTodasLeidas = () => {
-  notificaciones.value.forEach(n => n.leido = true)
+  notificacionStore.marcarTodasComoLeidas()
 }
 
 const eliminarNotificacion = (id) => {
-  const index = notificaciones.value.findIndex(n => n.id === id)
-  if (index !== -1) {
-    notificaciones.value.splice(index, 1)
-  }
+  notificacionStore.eliminarNotificacion(id)
 }
 
 const eliminarTodas = () => {
   if (confirm('¿Estás seguro de que deseas eliminar todas las notificaciones?')) {
-    notificaciones.value = []
+    notificacionStore.eliminarNotificaciones()
   }
 }
 

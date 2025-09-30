@@ -258,15 +258,18 @@ export const useTableroFunctions = defineStore('tablero-functions',{
             console.log('🔄 Bot actualizado desde socket:', botActualizado);
           }
 
-          // 📄 Agregar o actualizar trazabilidad
-          if (!yaExiste) {
-            this.historias_clinicas.unshift(trazabilidad);
-            console.log('✅ Trazabilidad agregada al state:', trazabilidad);
-          } else {
-            const index = this.historias_clinicas.findIndex(t => t.id === trazabilidad.id);
-            this.historias_clinicas.splice(index, 1, trazabilidad);
-            console.log('🔄 Trazabilidad actualizada en el state:', trazabilidad);
+          if (this.historias_clinicas.length > 0) {
+            // 📄 Agregar o actualizar trazabilidad
+            if (!yaExiste) {
+              this.historias_clinicas.unshift(trazabilidad);
+              console.log('✅ Trazabilidad agregada al state:', trazabilidad);
+            } else {
+              const index = this.historias_clinicas.findIndex(t => t.id === trazabilidad.id);
+              this.historias_clinicas.splice(index, 1, trazabilidad);
+              console.log('🔄 Trazabilidad actualizada en el state:', trazabilidad);
+            }
           }
+          
         } else {
           console.warn('⚠️ Trazabilidad recibida de un bot no registrado:', trazabilidad.bot_id);
         }

@@ -45,7 +45,8 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
         if (response.data.status === 'ok') {
           if (this.notificaciones.length === 0) return;
           this.notificaciones.unshift(response.data.data);
-
+          console.log('tipo: ',tipo);
+          
           // 🔊 Emitir sonido si es notificación de error
           if (tipo === 'error') {
             const audio = new Audio('/sounds/alert.mp3');
@@ -55,6 +56,10 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
               audio.pause();
               audio.currentTime = 0; // reinicia al inicio
             }, 8000); // 8 segundos
+          }else{
+            console.log("Reproduciendo sonido de notificación estándar");
+            const audio = new Audio('/sounds/notificacion.mp3');
+            audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
           }
         }
       } catch (error) {
@@ -83,6 +88,20 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
         }
       } catch (error) {
         console.log('Error al marcar todas como leidas:', error);
+      }
+    },
+    async eliminarNotificacion(id) {
+      try {
+        const response = await axiosInstance.delete(`/${id}`);
+        if (response.data.status === 'ok') {
+          const index = this.notificaciones.findIndex(n => n.id === id);
+          if (index !== -1) {
+            this.notificaciones.splice(index, 1);
+          }
+        }
+
+      } catch (error) {
+        console.log('Error al eliminar la notificacion:', error.response?.data?.message || error.message);
       }
     },
 
