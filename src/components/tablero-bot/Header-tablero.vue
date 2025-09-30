@@ -41,24 +41,20 @@
               </div>
               <div class="max-h-64 overflow-y-auto">
                 <div
-                  v-for="notification in notificaciones"
-                  :key="notification.id"
+                  v-for="notificacion in notificaciones"
+                  :key="notificacion.id"
                   class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
                 >
-                  <div class="flex items-start space-x-3">
+                  <div @click="handleNotificacionClick(notificacion)" class="flex items-start space-x-3">
                     <!-- Puntos o icono segun tipo -->
-                    <div class="flex-shrink-0 mt-1.5">
-                      <component
-                        :is="notificationStyles[notification.tipo]?.icon"
-                        class="w-5 h-5"
-                        :class="notificationStyles[notification.tipo]?.color"
-                      />
+                    <div v-if="!notificacion.leido" class="flex-shrink-0">
+                      <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                     </div>
                     <!-- Contenido -->
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900">{{ notification.titulo }}</p>
-                      <p class="text-sm text-gray-500 mt-1">{{ notification.mensaje }}</p>
-                      <p class="text-xs text-gray-400 mt-1">{{ timeAgo( notification.createdAt ) }}</p>
+                      <p class="text-sm font-medium text-gray-900">{{ notificacion.titulo }}</p>
+                      <p class="text-sm text-gray-500 mt-1">{{ notificacion.mensaje }}</p>
+                      <p class="text-xs text-gray-400 mt-1">{{ timeAgo( notificacion.createdAt ) }}</p>
                     </div>
                   </div>
                 </div>
@@ -126,8 +122,8 @@
           <button @click="toggleNotificationsMobile" class="flex items-center w-full px-4 py-2 text-white hover:bg-white/10 transition-colors duration-150" >
             <Bell class="w-5 h-5 mr-3" />
             Notificaciones
-            <span v-if="notificationCount > 0" class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              {{ notificationCount }}
+            <span v-if="NotificationCount > 0" class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              {{ NotificationCount }}
             </span>
           </button>
           <!-- Notificaciones en Mobile -->
@@ -136,15 +132,15 @@
               <h3 class="text-sm font-semibold text-gray-900">Notificaciones</h3>
             </div>
             <div class="max-h-64 overflow-y-auto">
-              <div v-for="notification in notificaciones" :key="notification.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
-                <div class="flex items-start space-x-3">
-                  <div class="flex-shrink-0">
+              <div v-for="notificacion in notificaciones" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
+                <div @click="handleNotificacionClick(notificacion)" class="flex items-start space-x-3">
+                  <div v-if="!notificacion.leido" class="flex-shrink-0">
                     <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-gray-900">{{ notification.titulo }}</p>
-                    <p class="text-sm text-gray-500 mt-1">{{ notification.mensaje }}</p>
-                    <p class="text-xs text-gray-400 mt-1">{{ timeAgo(notification.createdAt) }}</p>
+                    <p class="text-sm font-medium text-gray-900">{{ notificacion.titulo }}</p>
+                    <p class="text-sm text-gray-500 mt-1">{{ notificacion.mensaje }}</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ timeAgo(notificacion.createdAt) }}</p>
                   </div>
                 </div>
               </div>
@@ -247,6 +243,14 @@ const notificationStyles = {
 }
 
 // Métodos
+async function handleNotificacionClick(notificacion) {
+  if (!notificacion.leido) {
+    notificacion.leido = true
+    notificacionStore.marcarComoLeida(notificacion.id)
+  }
+  // luego decides qué acción tomar (redirigir, abrir modal, etc.)
+}
+
 const NotificationCount = computed(() => {
  // contar las notificaciones no leidas
   let notificacionesNoLeidas = notificaciones.value.filter(n => !n.leido).length 

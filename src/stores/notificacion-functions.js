@@ -36,8 +36,46 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
       } catch (error) {
         throw error;
       }
+    },
+    async createNotificacion(titulo, mensaje, tipo) {
+      try {
+        const response = await axiosInstance.post('/',{ titulo: titulo, mensaje: mensaje, tipo: tipo });
+        console.log('Respuesta al crear notificación:', response.data.data);
+        
+        if (response.data.status === 'ok') {
+          if (this.notificaciones.lenght === 0) return;
+          this.notificaciones.unshift(response.data.data);
+        }
+      } catch (error) {
+        console.log('Error al crear notificación:', error.response?.data?.message || error.message);
+      }
+    },
+    async marcarComoLeida(id) {
+      try {
+        const response = await axiosInstance.patch(`/${id}/leido`);
+        if (response.data.status !== 'ok') {
+          const index = this.notificaciones.findIndex(n => n.id === id);
+          if (index !== -1) {
+            this.notificaciones[index].leido = false;
+          }
+        }
+      } catch (error) {
+        console.log('Error al marcar como leida:', error.response?.data?.message || error.message);
+      }
+    },
+
+    iniciarSocketNotificaciones() {
+      socket.on('nueva_notificacion', (notificacion) => {
+        console.log('Nueva notificación recibida por socket:', notificacion);
+        
+        this.createNotificacion(notificacion.titulo, notificacion.mensaje, notificacion.tipo);
+      });
+
+
+    },
+    resetState(){
+      this.notificaciones = []
     }
     
-
   }
 })

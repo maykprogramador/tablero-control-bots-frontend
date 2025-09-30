@@ -2,11 +2,13 @@
 import { RouterLink, RouterView } from 'vue-router'
 import { onMounted } from 'vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
-const store = useTableroFunctions()
-
+import { useNotificacionesStore } from './stores/notificacion-functions'
+const storeTablero = useTableroFunctions()
+const storeNotificacion = useNotificacionesStore()
 
 onMounted(() => {
-  store.iniciarSocket()
+  storeTablero.iniciarSocket()
+  storeNotificacion.iniciarSocketNotificaciones()
 })
 
 </script>
