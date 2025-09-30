@@ -2,9 +2,9 @@
   <div v-if="user" class="min-h-screen bg-gradient-to-br from-indigo-500 to-indigo-400">
     <div class="max-w-7xl mx-auto rounded-2xl shadow-xl">
       <!-- Header -->
-      <HeaderTablero :openModalOption="openModal"/>
+      <HeaderTablero :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
       <!-- Main Content -->
-      <div :class="[selectedTab !== 'historias'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-white/95 gap-8 p-4 lg:p-10">
+      <div :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-white/95 gap-8 p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
@@ -102,13 +102,17 @@
           <div v-if="selectedTab === 'solicitudes'"> 
             <RegistrosSection />
           </div>
+
+          <div v-if="selectedTab === 'notificaciones'"> 
+            <NotificacionDashboard />
+          </div>
           <!-- Registros Solicitados Section
           <div v-if="selectedTab === 'historias'"> 
             <DashboardHistoriaClinica />
           </div> -->
         </div>
         <!-- Right Panel -->
-        <div v-if="selectedTab !== 'historias'" class="space-y-8">
+        <div v-if="selectedTab !== 'notificaciones'" class="space-y-8">
           <!-- Torre de Control -->
           <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
@@ -338,6 +342,7 @@ import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import DashboardHistoriaClinica from './Dashboard-Historia-Clinica.vue';
 import HeaderTablero from './Header-tablero.vue';
+import NotificacionDashboard from './Notificacion-Dashboard.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()

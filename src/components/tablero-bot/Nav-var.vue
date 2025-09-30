@@ -35,6 +35,19 @@
       </svg>
       Solicitudes
     </button>
+    <!-- Botón Registros -->
+    <button
+      @click="$emit('update:selectedTab', 'notificaciones')"
+      :class="[
+        'flex px-6 py-3 text-sm font-medium focus:outline-none transition-all',
+        selectedTab === 'notificaciones'
+          ? 'border-b-2 border-blue-500 text-blue-600'
+          : 'text-gray-600 hover:text-blue-500'
+      ]"
+    >
+      <BellDot class="w-5 h-5 mr-1"/>
+      Notificaciones
+    </button>
 
     <!-- Botón Historias clinicas 
     <button
@@ -58,6 +71,7 @@
 
 <script setup>
 import { defineProps, defineEmits } from 'vue'
+import { BellDot } from 'lucide-vue-next'
 
 defineProps({
   selectedTab: {

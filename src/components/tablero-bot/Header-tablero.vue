@@ -73,7 +73,7 @@
                 </div>
               </div>
               <div class="px-4 py-2 border-t border-gray-100">
-                <button class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                <button @click="$emit('update:selectedTab', 'notificaciones'),toggleNotifications()" class="text-sm cursor-pointer text-blue-600 hover:text-blue-800 font-medium">
                   Ver todas las notificaciones
                 </button>
               </div>
@@ -179,7 +179,7 @@
               </div>
             </div>
             <div class="px-4 py-2 border-t border-gray-100">
-              <button class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+              <button @click="$emit('update:selectedTab', 'notificaciones'),toggleNotifications()" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
                 Ver todas las notificaciones
               </button>
             </div>
@@ -196,14 +196,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, shallowRef, computed, defineProps } from 'vue'
+import { ref, onMounted, onUnmounted, shallowRef, computed, defineProps, defineEmits} from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/Autentificate/auth'
 import { useNotificacionesStore } from '@/stores/notificacion-functions'
 
 //props
-const props = defineProps(['openModalOption'])
+const props = defineProps(['openModalOption', 'selectedTab'])
+defineEmits(['update:selectedTab'])
 
 // stores
 const authStore = useAuthStore()
