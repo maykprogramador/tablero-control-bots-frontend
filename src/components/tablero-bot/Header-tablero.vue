@@ -24,10 +24,10 @@
             >
               <Bell class="w-5 h-5" />
               <span
-                v-if="notificationCount > 0"
+                v-if="NotificationCount > 0"
                 class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium"
               >
-                {{ notificationCount }}
+                {{ NotificationCount }}
               </span>
             </button>
 
@@ -167,7 +167,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, shallowRef } from 'vue'
+import { ref, onMounted, onUnmounted, shallowRef, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/Autentificate/auth'
@@ -188,7 +188,7 @@ import { timeAgo } from '@/utils/TimeAgo'
 const showNotifications = ref(false)
 const showUserMenu = ref(false)
 const showMobileMenu = ref(false)
-const notificationCount = ref(3)
+const notificationCount = ref(0)
 
 // Datos de notificaciones
 /*
@@ -247,6 +247,13 @@ const notificationStyles = {
 }
 
 // Métodos
+const NotificationCount = computed(() => {
+ // contar las notificaciones no leidas
+  let notificacionesNoLeidas = notificaciones.value.filter(n => !n.leido).length 
+  //console.log('notificacionesNoLeidas', notificacionesNoLeidas);
+  return notificacionesNoLeidas
+})
+
 const toggleNotifications = () => {
   showNotifications.value = !showNotifications.value
   showUserMenu.value = false
