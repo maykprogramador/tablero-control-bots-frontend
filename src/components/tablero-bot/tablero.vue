@@ -104,7 +104,7 @@
           </div>
 
           <div v-if="selectedTab === 'notificaciones'"> 
-            <NotificacionDashboard />
+            <NotificacionDashboard :openModalOption="openModal"/>
           </div>
           <!-- Registros Solicitados Section
           <div v-if="selectedTab === 'historias'"> 

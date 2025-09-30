@@ -48,6 +48,7 @@
           <!-- Acciones -->
           <div class="flex flex-wrap gap-2">
             <button
+              v-if="notificacionesNoLeidas.length > 0"
               @click="marcarTodasLeidas"
               :disabled="notificacionesNoLeidas.length === 0"
               class="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-all duration-200 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed border border-emerald-200"
@@ -74,7 +75,7 @@
             v-for="notificacion in notificacionesFiltradas"
             :key="notificacion.id"
             :class="[
-              'bg-white rounded-2xl shadow-sm border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden',
+              'bg-white rounded-2xl cursor-pointer shadow-sm border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden',
               notificacion.leido ? 'border-gray-200' : getIconConfig(notificacion.tipo).borderColor
             ]"
           >
@@ -84,7 +85,7 @@
               :class="['h-full w-1.5 absolute left-0 top-0 bottom-0', getIconConfig(notificacion.tipo).color.replace('text-', 'bg-')]"
             ></div>
 
-            <div class="p-5 lg:p-6">
+            <div @click="handleNotificacionClick(notificacion)" class="p-5 lg:p-6">
               <div class="flex gap-4">
                 <!-- Icono -->
                 <div class="flex-shrink-0">
@@ -129,6 +130,7 @@
                     <!-- Acciones -->
                     <div class="flex gap-1 flex-shrink-0">
                       <button
+                        v-if="!notificacion.leido"
                         @click="toggleLeido(notificacion)"
                         :class="[
                           'p-2 rounded-lg transition-all duration-200 hover:scale-110',
@@ -160,10 +162,6 @@
                       <Clock class="w-4 h-4" />
                       {{ timeAgo(notificacion.createdAt) }}
                     </span>
-                    <span v-if="notificacion.origen" class="flex items-center gap-1.5">
-                      <Info class="w-4 h-4" />
-                      {{ notificacion.origen }}
-                    </span>
                   </div>
                 </div>
               </div>
@@ -193,7 +191,7 @@
         v-if="notificaciones.length > 0"
         class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6"
       >
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="text-center">
             <p class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               {{ notificaciones.length }}
@@ -213,37 +211,44 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, defineProps } from 'vue'
 import { Bell, Check, Trash2, Clock, Info, AlertCircle, CheckCircle, XCircle, Settings, Search } from 'lucide-vue-next'
+import { storeToRefs } from 'pinia'
+import { useNotificacionesStore } from '@/stores/notificacion-functions'
+import { timeAgo } from '@/utils/TimeAgo'
 
+// props
+const props = defineProps(['openModalOption'])
+
+
+// estados reactivos
 const filtroActivo = ref('todas')
 const busqueda = ref('')
-
+const notificacionStore = useNotificacionesStore()
+const { notificaciones } = storeToRefs(notificacionStore)
+/*
 const notificaciones = ref([
   {
     id: 1,
     titulo: 'Bot de Trading Activado',
     mensaje: 'Tu bot de trading <strong>BTC-Scalper</strong> ha sido activado exitosamente y está operando en el mercado.',
-    tipo: 'Éxito',
-    origen: 'Sistema de Trading',
+    tipo: 'exito',
     leido: false,
     createdAt: new Date(Date.now() - 5 * 60000)
   },
   {
     id: 2,
-    titulo: 'Alerta de Precio',
+    titulo: 'advertencia de Precio',
     mensaje: 'El precio de <strong>Bitcoin</strong> ha alcanzado tu objetivo de $45,000 USD. Considera revisar tu estrategia.',
-    tipo: 'Alerta',
-    origen: 'Monitor de Precios',
+    tipo: 'advertencia',
     leido: false,
     createdAt: new Date(Date.now() - 30 * 60000)
   },
   {
     id: 3,
-    titulo: 'Error en Conexión API',
+    titulo: 'error en Conexión API',
     mensaje: 'No se pudo conectar con la API de Binance. El bot <strong>ETH-Trader</strong> está en pausa. Verifica tu conexión.',
-    tipo: 'Error',
-    origen: 'Sistema de Conexión',
+    tipo: 'error',
     leido: false,
     createdAt: new Date(Date.now() - 2 * 3600000)
   },
@@ -251,8 +256,7 @@ const notificaciones = ref([
     id: 4,
     titulo: 'Actualización Completada',
     mensaje: 'La actualización del sistema v2.5.0 se ha instalado correctamente. Nuevas funciones disponibles.',
-    tipo: 'Información',
-    origen: 'Sistema',
+    tipo: 'info',
     leido: true,
     createdAt: new Date(Date.now() - 24 * 3600000)
   },
@@ -260,8 +264,7 @@ const notificaciones = ref([
     id: 5,
     titulo: 'Ganancia Registrada',
     mensaje: 'Tu bot <strong>SOL-Momentum</strong> ha registrado una ganancia de +12.5% en las últimas 24 horas.',
-    tipo: 'Éxito',
-    origen: 'Sistema de Trading',
+    tipo: 'exito',
     leido: true,
     createdAt: new Date(Date.now() - 48 * 3600000)
   },
@@ -269,12 +272,11 @@ const notificaciones = ref([
     id: 6,
     titulo: 'Límite de Operaciones Alcanzado',
     mensaje: 'Has alcanzado el límite diario de 100 operaciones. El bot se reactivará mañana a las 00:00 UTC.',
-    tipo: 'Alerta',
-    origen: 'Control de Límites',
+    tipo: 'advertencia',
     leido: true,
     createdAt: new Date(Date.now() - 72 * 3600000)
   }
-])
+])*/
 
 const notificacionesNoLeidas = computed(() => notificaciones.value.filter(n => !n.leido))
 
@@ -315,6 +317,18 @@ const toggleLeido = (notificacion) => {
   notificacion.leido = !notificacion.leido
 }
 
+// Métodos
+async function handleNotificacionClick(notificacion) {
+  if (!notificacion.leido) {
+    notificacion.leido = true
+    notificacionStore.marcarComoLeida(notificacion.id)
+  }
+  if (notificacion.destino === 'HistoriaClinica') {
+    props.openModalOption(7)
+  }
+  // luego decides qué acción tomar (redirigir, abrir modal, etc.)
+}
+
 const marcarTodasLeidas = () => {
   notificaciones.value.forEach(n => n.leido = true)
 }
@@ -334,45 +348,24 @@ const eliminarTodas = () => {
 
 const getIconConfig = (tipo) => {
   const configs = {
-    'Éxito': { icono: CheckCircle, color: 'text-emerald-600', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
-    'Error': { icono: XCircle, color: 'text-rose-600', bgColor: 'bg-rose-50', borderColor: 'border-rose-200' },
-    'Alerta': { icono: AlertCircle, color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
-    'Información': { icono: Info, color: 'text-blue-600', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' }
+    'exito': { icono: CheckCircle, color: 'text-emerald-600', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
+    'error': { icono: XCircle, color: 'text-rose-600', bgColor: 'bg-rose-50', borderColor: 'border-rose-200' },
+    'advertencia': { icono: AlertCircle, color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
+    'info': { icono: Info, color: 'text-blue-600', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' }
   }
-  return configs[tipo] || configs['Información']
+  return configs[tipo] || configs['info']
 }
 
 const getTipoBadgeClass = (tipo) => {
   const classes = {
-    'Éxito': 'bg-emerald-100 text-emerald-700 border border-emerald-200',
-    'Error': 'bg-rose-100 text-rose-700 border border-rose-200',
-    'Alerta': 'bg-amber-100 text-amber-700 border border-amber-200',
-    'Información': 'bg-blue-100 text-blue-700 border border-blue-200'
+    'exito': 'bg-emerald-100 text-emerald-700 border border-emerald-200',
+    'error': 'bg-rose-100 text-rose-700 border border-rose-200',
+    'advertencia': 'bg-amber-100 text-amber-700 border border-amber-200',
+    'info': 'bg-blue-100 text-blue-700 border border-blue-200'
   }
-  return classes[tipo] || classes['Información']
+  return classes[tipo] || classes['info']
 }
 
-const timeAgo = (date) => {
-  const seconds = Math.floor((new Date() - date) / 1000)
-  
-  const intervals = {
-    año: 31536000,
-    mes: 2592000,
-    semana: 604800,
-    día: 86400,
-    hora: 3600,
-    minuto: 60
-  }
-  
-  for (const [name, secondsInInterval] of Object.entries(intervals)) {
-    const interval = Math.floor(seconds / secondsInInterval)
-    if (interval >= 1) {
-      return `Hace ${interval} ${name}${interval !== 1 ? (name === 'mes' ? 'es' : 's') : ''}`
-    }
-  }
-  
-  return 'Hace un momento'
-}
 </script>
 
 <style scoped>
