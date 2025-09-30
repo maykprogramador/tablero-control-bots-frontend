@@ -473,7 +473,8 @@ const registrosFiltrados = computed(() => {
     const busqueda = filtros.value.busqueda.toLowerCase()
     registros = registros.filter(r => 
       r.nombre.toLowerCase().includes(busqueda) ||
-      r.numero_identificacion.includes(busqueda)
+      r.numero_identificacion.includes(busqueda)||
+      r.ingreso.toLowerCase().includes(busqueda)
     )
   }
 

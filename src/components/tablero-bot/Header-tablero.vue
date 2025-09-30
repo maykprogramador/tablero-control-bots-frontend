@@ -66,7 +66,7 @@
                     <!-- Contenido -->
                     <div class="flex-1 min-w-0">
                       <p class="text-sm font-medium text-gray-900">{{ notificacion.titulo }}</p>
-                      <p class="text-sm text-gray-500 mt-1">{{ notificacion.mensaje }}</p>
+                      <p class="text-sm text-gray-600 mt-1" v-html="notificacion.mensaje"></p>
                       <p class="text-xs text-gray-400 mt-1">{{ timeAgo( notificacion.createdAt ) }}</p>
                     </div>
                   </div>
@@ -172,7 +172,7 @@
                   </div>
                   <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-gray-900">{{ notificacion.titulo }}</p>
-                    <p class="text-sm text-gray-500 mt-1">{{ notificacion.mensaje }}</p>
+                    <p class="text-sm text-gray-600 mt-1" v-html="notificacion.mensaje"></p>
                     <p class="text-xs text-gray-400 mt-1">{{ timeAgo(notificacion.createdAt) }}</p>
                   </div>
                 </div>
@@ -196,11 +196,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, shallowRef, computed } from 'vue'
+import { ref, onMounted, onUnmounted, shallowRef, computed, defineProps } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/Autentificate/auth'
 import { useNotificacionesStore } from '@/stores/notificacion-functions'
+
+//props
+const props = defineProps(['openModalOption'])
 
 // stores
 const authStore = useAuthStore()
@@ -282,6 +285,10 @@ async function handleNotificacionClick(notificacion) {
     notificacion.leido = true
     notificacionStore.marcarComoLeida(notificacion.id)
   }
+  if (notificacion.destino === 'HistoriaClinica') {
+    props.openModalOption(7)
+  }
+  toggleNotifications()
   // luego decides qué acción tomar (redirigir, abrir modal, etc.)
 }
 

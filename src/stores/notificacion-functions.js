@@ -37,13 +37,13 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
         throw error;
       }
     },
-    async createNotificacion(titulo, mensaje, tipo) {
+    async createNotificacion(titulo, mensaje, tipo, destino) {
       try {
-        const response = await axiosInstance.post('/',{ titulo: titulo, mensaje: mensaje, tipo: tipo });
+        const response = await axiosInstance.post('/',{ titulo: titulo, mensaje: mensaje, tipo: tipo, destino: destino });
         console.log('Respuesta al crear notificación:', response.data.data);
         
         if (response.data.status === 'ok') {
-          if (this.notificaciones.lenght === 0) return;
+          if (this.notificaciones.length === 0) return;
           this.notificaciones.unshift(response.data.data);
         }
       } catch (error) {
@@ -90,7 +90,7 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
       socket.on('nueva_notificacion', (notificacion) => {
         console.log('Nueva notificación recibida por socket:', notificacion);
         
-        this.createNotificacion(notificacion.titulo, notificacion.mensaje, notificacion.tipo);
+        this.createNotificacion(notificacion.titulo, notificacion.mensaje, notificacion.tipo, notificacion.destino);
       });
 
 

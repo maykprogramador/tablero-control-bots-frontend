@@ -2,7 +2,7 @@
   <div v-if="user" class="min-h-screen bg-gradient-to-br from-indigo-500 to-indigo-400">
     <div class="max-w-7xl mx-auto rounded-2xl shadow-xl">
       <!-- Header -->
-      <HeaderTablero />
+      <HeaderTablero :openModalOption="openModal"/>
       <!-- Main Content -->
       <div :class="[selectedTab !== 'historias'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-white/95 gap-8 p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
@@ -553,25 +553,6 @@ const config = reactive({
   userRole: 'admin'
 })
 
-// Bot data
-/*const bots = ref([
-  {
-    id: 1,
-    name: 'Bot Retiro de Usuarios',
-    status: 'ejecucion',
-    lastExecution: '28/01/2025 14:30',
-    records: '1247',
-    recordsProcessed:'820'
-  },
-  {
-    id: 2,
-    name: 'Bot Validador de Datos',
-    status: 'ejecucion',
-    lastExecution: '28/01/2025 15:45',
-    records: '1500',
-    recordsProcessed:'892'
-  },
-])*/
 
 // funcion para filtrar los bots 
 const filteredBots = computed(() => {
