@@ -45,6 +45,17 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
         if (response.data.status === 'ok') {
           if (this.notificaciones.length === 0) return;
           this.notificaciones.unshift(response.data.data);
+
+          // 🔊 Emitir sonido si es notificación de error
+          if (tipo === 'error') {
+            const audio = new Audio('/sounds/alert.mp3');
+            audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
+            // Opcional: detener después de X segundos
+            setTimeout(() => {
+              audio.pause();
+              audio.currentTime = 0; // reinicia al inicio
+            }, 8000); // 8 segundos
+          }
         }
       } catch (error) {
         console.log('Error al crear notificación:', error.response?.data?.message || error.message);
