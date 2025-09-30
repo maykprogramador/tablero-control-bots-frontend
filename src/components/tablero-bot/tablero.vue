@@ -337,7 +337,7 @@ import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 import DashboardHistoriaClinica from './Dashboard-Historia-Clinica.vue';
-import HeaderTablero from './header-tablero.vue';
+import HeaderTablero from './Header-tablero.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
