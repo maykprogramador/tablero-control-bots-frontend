@@ -64,6 +64,28 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
       }
     },
 
+    async marcarTodasComoLeidas() {
+      try {
+        const response = await axiosInstance.post('/mark-all-read');
+        if (response.data.status === 'ok') {
+          this.notificaciones.forEach(n => n.leido = true)
+        }
+      } catch (error) {
+        console.log('Error al marcar todas como leidas:', error);
+      }
+    },
+
+    async eliminarNotificaciones() {
+      try {
+        const response = await axiosInstance.delete('/delete-all');
+        if (response.data.status === 'ok') {
+          this.notificaciones = []
+        }
+      } catch (error) {
+        console.log('Error al eliminar todas:', error);
+      }
+    },
+
     iniciarSocketNotificaciones() {
       socket.on('nueva_notificacion', (notificacion) => {
         console.log('Nueva notificación recibida por socket:', notificacion);

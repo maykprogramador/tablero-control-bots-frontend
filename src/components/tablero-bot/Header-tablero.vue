@@ -32,19 +32,32 @@
             </button>
 
             <!-- Dropdown de Notificaciones -->
-            <div
-              v-if="showNotifications && !showMobileMenu"
-              class="absolute left-1/2 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 transition-all duration-200 ease-in-out transform -translate-x-1/2 z-50"
-            >
-              <div class="px-4 py-2 border-b border-gray-100">
+            <div v-if="showNotifications && !showMobileMenu" class="absolute left-1/2 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 transition-all duration-200 ease-in-out transform -translate-x-1/2 z-50" >
+              <!-- Header con título y menú -->
+              <div class="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
                 <h3 class="text-sm font-semibold text-gray-900">Notificaciones</h3>
+
+                <!-- Botón de opciones (...) -->
+                <div class="relative">
+                  <button @click="toggleMenuAcciones" class="p-1 rounded-full text-black font-bold cursor-pointer hover:bg-gray-300 transition" > 
+                    ⋮ 
+                  </button>
+
+                  <!-- Menú desplegable -->
+                  <div v-if="showMenuAcciones" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50" >
+                    <button @click="marcarTodasLeidas" class="flex items-center cursor-pointer text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150" >
+                      <CheckCheck class="w-4 h-4 inline-block mr-2 text-green-600" />
+                      Marcar como leídas
+                    </button>
+                    <button @click="eliminarTodas" class="flex items-center text-left cursor-pointer px-4 py-2 text-sm hover:bg-gray-50 text-red-600 transition-colors duration-150" >
+                      <Trash class="w-4 h-4 inline-block mr-2 text-red-600" />
+                      Eliminar todas
+                    </button>
+                  </div>
+                </div>
               </div>
               <div class="max-h-64 overflow-y-auto">
-                <div
-                  v-for="notificacion in notificaciones"
-                  :key="notificacion.id"
-                  class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
-                >
+                <div v-for="notificacion in notificaciones" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
                   <div @click="handleNotificacionClick(notificacion)" class="flex items-start space-x-3">
                     <!-- Puntos o icono segun tipo -->
                     <div v-if="!notificacion.leido" class="flex-shrink-0">
@@ -128,8 +141,28 @@
           </button>
           <!-- Notificaciones en Mobile -->
           <div v-if="showNotifications && showMobileMenu" class="mt-2 w-full bg-white rounded-lg shadow-md border border-gray-200 py-2 transition-all duration-200 ease-in-out" >
-            <div class="px-4 py-2 border-b border-gray-100">
+            <!-- Header con título y menú -->
+            <div class="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
               <h3 class="text-sm font-semibold text-gray-900">Notificaciones</h3>
+
+              <!-- Botón de opciones (...) -->
+              <div class="relative">
+                <button @click="toggleMenuAcciones" class="p-1 rounded-full text-black font-bold cursor-pointer hover:bg-gray-300 transition" > 
+                  ⋮ 
+                </button>
+
+                <!-- Menú desplegable -->
+                <div v-if="showMenuAcciones" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50" >
+                  <button @click="marcarTodasLeidas" class="flex items-center cursor-pointer text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150" >
+                    <CheckCheck class="w-4 h-4 inline-block mr-2 text-green-600" />
+                    Marcar como leídas
+                  </button>
+                  <button @click="eliminarTodas" class="flex items-center text-left cursor-pointer px-4 py-2 text-sm hover:bg-gray-50 text-red-600 transition-colors duration-150" >
+                    <Trash class="w-4 h-4 inline-block mr-2 text-red-600" />
+                    Eliminar todas
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="max-h-64 overflow-y-auto">
               <div v-for="notificacion in notificaciones" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
@@ -177,7 +210,7 @@ const { user } = storeToRefs(authStore)
 const { notificaciones } = storeToRefs(notificacionStore)
 
 //iconos de vue
-import { Settings, LogOut, User, Bell, CircleCheck, CircleX, TriangleAlert, Info } from 'lucide-vue-next'
+import { Settings, LogOut, User, Bell, CircleCheck, CircleX, TriangleAlert, Info, Trash, CheckCheck } from 'lucide-vue-next'
 import { timeAgo } from '@/utils/TimeAgo'
 
 // Estados reactivo
@@ -185,6 +218,7 @@ const showNotifications = ref(false)
 const showUserMenu = ref(false)
 const showMobileMenu = ref(false)
 const notificationCount = ref(0)
+const showMenuAcciones = ref(false)
 
 // Datos de notificaciones
 /*
@@ -249,6 +283,22 @@ async function handleNotificacionClick(notificacion) {
     notificacionStore.marcarComoLeida(notificacion.id)
   }
   // luego decides qué acción tomar (redirigir, abrir modal, etc.)
+}
+
+function toggleMenuAcciones() {
+  showMenuAcciones.value = !showMenuAcciones.value
+}
+
+function marcarTodasLeidas() {
+  notificacionStore.marcarTodasComoLeidas()
+  showMenuAcciones.value = false
+  // opcional: llamada a API -> PATCH /notificaciones/leidas
+}
+
+function eliminarTodas() {
+  notificacionStore.eliminarNotificaciones()
+  showMenuAcciones.value = false
+  // opcional: llamada a API -> DELETE /notificaciones
 }
 
 const NotificationCount = computed(() => {
