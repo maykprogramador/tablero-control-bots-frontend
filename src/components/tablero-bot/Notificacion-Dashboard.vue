@@ -153,7 +153,8 @@
                   </div>
 
                   <p
-                    class="text-gray-700 leading-relaxed mb-4 text-sm lg:text-base"
+                    @click="handleNotificacionClick(notificacion)"
+                    class="text-gray-700 leading-relaxed mb-4 text-sm lg:text-base cursor-pointer"
                     v-html="notificacion.mensaje"
                   ></p>
 
