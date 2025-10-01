@@ -26,7 +26,7 @@
           <div 
    
             @click.stop
-            class="bg-white rounded-xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden relative"
+            class="fixed inset-0 bg-white sm:relative sm:rounded-xl shadow-2xl sm:max-w-6xl sm:w-full sm:max-h-[95vh] sm:h-auto overflow-auto sm:overflow-hidden"
           >
             <!-- Close Button -->
             <button 
@@ -51,28 +51,28 @@
               </div>
               
               <!-- Summary Stats -->
-              <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-6">
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                 <div class="bg-white/10 rounded-lg p-3 text-center">
-                  <div class="text-2xl font-bold">{{ registrosDelBot.length}}</div>
+                  <div class="text-lg sm:text-2xl font-bold">{{ registrosDelBot.length}}</div>
                   <div class="text-sm text-blue-100">Total Registros</div>
                 </div>
                 <div class="bg-green-500/20 rounded-lg p-3 text-center">
-                  <div class="text-2xl font-bold text-green-200">{{ getStatusCount('exito') }}</div>
+                  <div class="text-lg sm:text-2xl font-bold text-green-200">{{ getStatusCount('exito') }}</div>
                   <div class="text-sm text-green-100">Exitosos</div>
                 </div>
                 <div class="bg-yellow-500/20 rounded-lg p-3 text-center">
-                  <div class="text-2xl font-bold text-yellow-200">{{ getStatusCount('proceso') }}</div>
+                  <div class="text-lg sm:text-2xl font-bold text-yellow-200">{{ getStatusCount('proceso') }}</div>
                   <div class="text-sm text-yellow-100">En Proceso</div>
                 </div>
                 <div class="bg-red-500/20 rounded-lg p-3 text-center">
-                  <div class="text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
+                  <div class="text-lg sm:text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
                   <div class="text-sm text-red-100">Con Error</div>
                 </div>
               </div>
             </div>
 
             <!-- Modal Body -->
-            <div class="p-6 max-h-[60vh] overflow-y-auto">
+            <div class="p-6 md:max-h-[60vh] sm:overflow-y-auto">
               <!-- Filters -->
               <div class="flex flex-wrap gap-4 mb-6">
                 <div class="flex items-center gap-2">

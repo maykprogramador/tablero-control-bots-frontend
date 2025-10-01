@@ -1,27 +1,10 @@
 <template>
   <div v-if="user" class="min-h-screen bg-gradient-to-br from-indigo-500 to-indigo-400">
-    <div class="max-w-7xl mx-auto bg-white/95 rounded-2xl shadow-xl overflow-hidden">
+    <div class="max-w-7xl mx-auto rounded-2xl shadow-xl">
       <!-- Header -->
-      <div class="relative bg-gradient-to-br from-slate-800 to-blue-500 text-white p-8 text-center overflow-hidden">
-        <!-- Fondo animado -->
-        <div class="absolute inset-0 bg-gradient-radial from-white/10 to-transparent animate-pulse"></div>
-
-        <!-- Botón de cerrar sesión -->
-        <div class="absolute top-4 right-6 z-20">
-          <button @click="logout()" class="flex items-center gap-2 px-3 py-1.5 cursor-pointer text-sm font-semibold text-white bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors duration-200">
-            <LogOut />
-            Cerrar sesión
-          </button>
-        </div>
-
-        <!-- Título y subtítulo -->
-        <h1 class="text-4xl font-bold mb-3 relative z-10">🤖 Tablero de Control de Bots</h1>
-        <p class="text-xl opacity-90 relative z-10">Monitoreo y gestión centralizada de procesos automatizados</p>
-      </div>
-
-
+      <HeaderTablero :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
       <!-- Main Content -->
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px] gap-8 p-4 lg:p-10">
+      <div :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-white/95 gap-8 p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
@@ -119,9 +102,17 @@
           <div v-if="selectedTab === 'solicitudes'"> 
             <RegistrosSection />
           </div>
+
+          <div v-if="selectedTab === 'notificaciones'"> 
+            <NotificacionDashboard :openModalOption="openModal"/>
+          </div>
+          <!-- Registros Solicitados Section
+          <div v-if="selectedTab === 'historias'"> 
+            <DashboardHistoriaClinica />
+          </div> -->
         </div>
         <!-- Right Panel -->
-        <div class="space-y-8">
+        <div v-if="selectedTab !== 'notificaciones'" class="space-y-8">
           <!-- Torre de Control -->
           <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
@@ -193,7 +184,7 @@
             <!-- Botón de Registro -->
             <div class="mb-6">
               <button
-                v-if="control.selectedBot === 1 || control.selectedBot === 2 || control.selectedBot === 3"
+                v-if="botOptions.includes(control.selectedBot)"
                 @click="openDeactivationModal"
                 class="w-full cursor-pointer flex items-center justify-center px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200"
               >
@@ -330,6 +321,7 @@
         </div>
       </div>
     </div>
+    <DashboardHistoriaClinica v-if="showModalHistoriaClinica" :bot="botSelected" :onclose="closeModalHistoriaCLinica"/>
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
     <FormDesactivationPerson v-if="showDeactivationModal" :onClose="closeModalForm" :botSelected="control.selectedBot"/>
@@ -348,6 +340,9 @@ import { LogOut } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
+import DashboardHistoriaClinica from './Dashboard-Historia-Clinica.vue';
+import HeaderTablero from './Header-tablero.vue';
+import NotificacionDashboard from './Notificacion-Dashboard.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -365,6 +360,8 @@ const isModalControlUsersOpen = ref(false)
 const showDeactivationModal = ref(false)
 const executeBot = computed(() => tableroFunctions.executeBot)
 const selectedTab = ref('bots')
+const showModalHistoriaClinica = ref(false)
+const botOptions = [1, 2, 3, 7]
 
 
 // Reactive data
@@ -420,6 +417,14 @@ const loadBots = async() => {
   } catch (err) {
     console.error('Error al cargar los bots:', err)
   }
+}
+const openModalHistoriaClinica = () => {
+  showModalHistoriaClinica.value = true
+}
+
+// funcion para cerrar el modal de historia clinica
+const closeModalHistoriaCLinica = () => {
+  showModalHistoriaClinica.value = false
 }
 
 function descargarFormato() {
@@ -553,25 +558,6 @@ const config = reactive({
   userRole: 'admin'
 })
 
-// Bot data
-/*const bots = ref([
-  {
-    id: 1,
-    name: 'Bot Retiro de Usuarios',
-    status: 'ejecucion',
-    lastExecution: '28/01/2025 14:30',
-    records: '1247',
-    recordsProcessed:'820'
-  },
-  {
-    id: 2,
-    name: 'Bot Validador de Datos',
-    status: 'ejecucion',
-    lastExecution: '28/01/2025 15:45',
-    records: '1500',
-    recordsProcessed:'892'
-  },
-])*/
 
 // funcion para filtrar los bots 
 const filteredBots = computed(() => {
@@ -583,7 +569,12 @@ const filteredBots = computed(() => {
 })
 
 const openModal = (bot_id) => {
+  
   botSelected.value = bots.value.find(bot => bot.id === bot_id)
+  if (botSelected.value.id === 7) {
+    openModalHistoriaClinica()
+    return 
+  }
   tableroFunctions.openModal()
   console.log('isopnemodal: ', tableroFunctions.isModalOpen );
 }
