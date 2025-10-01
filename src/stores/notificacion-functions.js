@@ -26,6 +26,33 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
   }),
 
   actions: {
+    iniciarSocketNotificaciones() {
+      const authStore = useAuthStore();
+
+      socket.on('nueva_notificacion', (notificacion) => {
+        console.log('Nueva notificación recibida via Socket.IO:', notificacion);
+
+        //  Solo agregar si corresponde al usuario logueado
+        if (notificacion.user_id === authStore.user.user_id ) {
+          
+          this.notificaciones.unshift(notificacion);
+
+          // 🔊 Sonidos
+          if (notificacion.tipo === 'error' || notificacion.tipo === 'advertencia') {
+            const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/alert.mp3");
+            audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
+            setTimeout(() => {
+              audio.pause();
+              audio.currentTime = 0;
+            }, 8000);
+          } else {
+            const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/notificacion.mp3");
+            audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
+          }
+        }
+      });
+    },
+
     async fetchNotificaciones() {
       try {
         const response = await axiosInstance.get('/');
@@ -44,22 +71,28 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
         
         if (response.data.status === 'ok') {
           if (this.notificaciones.length === 0) return;
-          this.notificaciones.unshift(response.data.data);
-          console.log('tipo: ',tipo);
-          
-          // 🔊 Emitir sonido si es notificación de error
-          if (tipo === 'error' || tipo === 'advertencia') {
-            const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/alert.mp3");
-            audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
-            // Opcional: detener después de X segundos
-            setTimeout(() => {
-              audio.pause();
-              audio.currentTime = 0; // reinicia al inicio
-            }, 8000); // 8 segundos
-          }else{
-            console.log("Reproduciendo sonido de notificación estándar");
-            const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/notificacion.mp3");
-            audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
+
+          const authStore = useAuthStore();
+          const perteneceAlUsuario = response.data.data.user_id === authStore.user.user_id;
+
+          if (perteneceAlUsuario || authStore.user.rol === 'admin' || authStore.user.rol === 'supervisor') {
+            this.notificaciones.unshift(response.data.data);
+            console.log('tipo: ',tipo);
+            
+            // 🔊 Emitir sonido si es notificación de error
+            if (tipo === 'error' || tipo === 'advertencia') {
+              const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/alert.mp3");
+              audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
+              // Opcional: detener después de X segundos
+              setTimeout(() => {
+                audio.pause();
+                audio.currentTime = 0; // reinicia al inicio
+              }, 8000); // 8 segundos
+            }else{
+              console.log("Reproduciendo sonido de notificación estándar");
+              const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/notificacion.mp3");
+              audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
+            }
           }
         }
       } catch (error) {
@@ -107,8 +140,10 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
 
     async eliminarNotificaciones() {
       try {
-        const response = await axiosInstance.delete('/delete-all');
+        const response = await axiosInstance.delete('/all');
         if (response.data.status === 'ok') {
+          console.log('notificaciones eliminadas', response);
+          
           this.notificaciones = []
         }
       } catch (error) {
@@ -116,15 +151,6 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
       }
     },
 
-    iniciarSocketNotificaciones() {
-      socket.on('nueva_notificacion', (notificacion) => {
-        console.log('Nueva notificación recibida por socket:', notificacion);
-        
-        this.createNotificacion(notificacion.titulo, notificacion.mensaje, notificacion.tipo, notificacion.destino);
-      });
-
-
-    },
     resetState(){
       this.notificaciones = []
     }
