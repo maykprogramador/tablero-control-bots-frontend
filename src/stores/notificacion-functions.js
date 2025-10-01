@@ -48,7 +48,7 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
           console.log('tipo: ',tipo);
           
           // 🔊 Emitir sonido si es notificación de error
-          if (tipo === 'error') {
+          if (tipo === 'error' || tipo === 'pausado') {
             const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/alert.mp3");
             audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
             // Opcional: detener después de X segundos

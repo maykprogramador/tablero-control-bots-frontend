@@ -45,7 +45,7 @@
                   <span class="text-xl">📋</span>
                 </div>
                 <div>
-                  <h2 class="text-2xl font-bold">Detalle del Mensaje</h2>
+                  <h2 class="sm:text-2xl font-bold">Detalle del Mensaje</h2>
                   <p class="text-blue-100 mt-1">
                     Registro #{{ selectedRecord?.id }} - {{ selectedRecord ? formatDate(selectedRecord.fecha_ejecucion) : '' }}
                   </p>
@@ -56,15 +56,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
                 <div class="bg-white/10 rounded-lg p-3">
                   <div class="text-sm text-blue-100">Estado</div>
-                  <div class="text-lg font-semibold">{{ selectedRecord ? getStatusText(selectedRecord.estado) : '' }}</div>
-                </div>
-                <div class="bg-white/10 rounded-lg p-3">
-                  <div class="text-sm text-blue-100">Longitud</div>
-                  <div class="text-lg font-semibold">{{ selectedRecord ? selectedRecord.mensaje.length : 0 }} caracteres</div>
-                </div>
-                <div class="bg-white/10 rounded-lg p-3">
-                  <div class="text-sm text-blue-100">Líneas</div>
-                  <div class="text-lg font-semibold">{{ selectedRecord ? countLines(selectedRecord.mensaje) : 0 }}</div>
+                  <div class="sm:text-lg font-semibold">{{ selectedRecord ? getStatusText(selectedRecord.estado) : '' }}</div>
                 </div>
               </div>
             </div>

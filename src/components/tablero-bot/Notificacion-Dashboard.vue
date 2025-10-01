@@ -211,15 +211,15 @@
 </template>
 
 <script setup>
-import { ref, computed, defineProps } from 'vue'
+import { ref, computed, defineProps, defineEmits } from 'vue'
 import { Bell, Check, Trash2, Clock, Info, AlertCircle, CheckCircle, XCircle, Settings, Search } from 'lucide-vue-next'
 import { storeToRefs } from 'pinia'
 import { useNotificacionesStore } from '@/stores/notificacion-functions'
 import { timeAgo } from '@/utils/TimeAgo'
 
 // props
-const props = defineProps(['openModalOption'])
-
+const props = defineProps(['openModalOption', 'selectedTab'])
+const emit = defineEmits(['update:selectedTab'])
 
 // estados reactivos
 const filtroActivo = ref('todas')
@@ -323,8 +323,19 @@ async function handleNotificacionClick(notificacion) {
     notificacion.leido = true
     notificacionStore.marcarComoLeida(notificacion.id)
   }
-  if (notificacion.destino === 'HistoriaClinica') {
-    props.openModalOption(7)
+  console.log('notificacion.destino', notificacion);
+  
+  if (notificacion.destino?.modal === 'HistoriaClinica') {
+    props.openModalOption(notificacion.destino?.bot_id)
+  }
+  if (notificacion.destino?.modal === 'tablero-bot') {
+    emit('update:selectedTab', 'bots')
+  }
+  if (notificacion.destino?.modal === 'solicitud_usuario') {
+    emit('update:selectedTab', 'solicitudes')
+  }
+  if (notificacion.destino?.modal === 'registros-bot') {
+    props.openModalOption(notificacion.destino?.bot_id)
   }
   // luego decides qué acción tomar (redirigir, abrir modal, etc.)
 }
