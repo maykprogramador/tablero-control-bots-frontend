@@ -172,7 +172,7 @@
                     'font-mono text-sm text-gray-800',
                     wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre'
                   ]"
-                >{{ selectedRecord.Registro?.[0]?.mensaje || 'Sin mensaje disponible' }}</pre>
+                >{{ selectedRecord.Registro?.mensaje || 'Sin mensaje disponible' }}</pre>
               </div>
             </div>
           </div>
@@ -254,7 +254,7 @@ const toastMessage = ref('')
 // Computed
 const hasAlert = computed(() => {
   if (!props.selectedRecord?.mensaje) return false
-  const mensaje = props.selectedRecord.Registro?.[0]?.mensaje.toLowerCase()
+  const mensaje = props.selectedRecord.Registro?.mensaje.toLowerCase()
   return mensaje.includes('error') || mensaje.includes('alerta') || mensaje.includes('warning')
 })
 
@@ -319,10 +319,10 @@ const toggleWordWrap = () => {
 }
 
 const copyToClipboard = async () => {
-  if (!props.selectedRecord?.Registro.mensaje) return
+  if (!props.selectedRecord?.Registro?.mensaje) return
   
   try {
-    await navigator.clipboard.writeText(props.selectedRecord.Registro?.[0]?.mensaje)
+    await navigator.clipboard.writeText(props.selectedRecord.Registro?.mensaje)
     showToastMessage('Contenido copiado al portapapeles')
   } catch (err) {
     console.error('Error al copiar:', err)
@@ -347,7 +347,7 @@ Buzón compartido: ${props.selectedRecord.buzon_compartido ? 'Sí' : 'No'}
 ${props.selectedRecord.cuenta_delegar ? `Cuenta a delegar: ${props.selectedRecord.cuenta_delegar}` : ''}
 
 Mensaje:
-${props.selectedRecord.Registro?.[0]?.mensaje || 'Sin mensaje disponible'}`
+${props.selectedRecord.Registro?.mensaje || 'Sin mensaje disponible'}`
 
   const blob = new Blob([content], { type: 'text/plain' })
   const url = URL.createObjectURL(blob)

@@ -306,7 +306,6 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, defineProps } from 'vue'
-import { ClipboardDocumentListIcon } from "@heroicons/vue/24/outline"
 import ModalDetailsHistoriaClinica from './Modal-details-historia-clinica.vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import { useAuthStore } from '@/stores/Autentificate/auth';
