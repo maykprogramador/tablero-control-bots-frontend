@@ -1,10 +1,10 @@
 <template>
-  <div v-if="user" class="min-h-screen bg-gradient-to-br from-indigo-500 to-indigo-400">
-    <div class="max-w-7xl mx-auto rounded-2xl shadow-xl">
+  <div v-if="user" class="min-h-screen bg-white">
+    <div class="mx-auto rounded-2xl shadow-xl">
       <!-- Header -->
       <HeaderTablero :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
       <!-- Main Content -->
-      <div :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-white/95 gap-8 p-4 lg:p-10">
+      <div :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 gap-8 p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
@@ -86,7 +86,7 @@
                 </div>
                 
                 <div class="flex gap-3">
-                  <button @click="openModal(bot.id)" class="px-4 py-2 cursor-pointer bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                  <button @click="openModal(bot.id)" class="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                     Ver detalles
                   </button>
                   <!-- Botón para abrir el modal (demo) -->

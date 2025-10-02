@@ -24,7 +24,7 @@
               :class="[
                 'px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105',
                 filtroActivo === filtro.valor
-                  ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white shadow-lg shadow-blue-500/30'
+                  ? 'bg-gradient-to-r from-[#80006A] to-[#FF5F3F] text-white shadow-lg shadow-blue-500/30'
                   : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
               ]"
             >

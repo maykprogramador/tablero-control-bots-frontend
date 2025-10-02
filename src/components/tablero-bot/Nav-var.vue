@@ -7,8 +7,8 @@
         :class="[ 
           'flex items-center px-6 py-3 text-sm font-medium focus:outline-none transition-all whitespace-nowrap',
           selectedTab === 'bots'
-            ? 'border-b-2 border-blue-500 text-blue-600'
-            : 'text-gray-600 hover:text-blue-500'
+            ? 'border-b-2 border-[#A65C99] text-[#9e378b]'
+            : 'text-gray-600 hover:text-[#9e378b]'
         ]"
       >
         <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,8 +25,8 @@
         :class="[ 
           'flex items-center px-6 py-3 text-sm font-medium focus:outline-none transition-all whitespace-nowrap',
           selectedTab === 'solicitudes'
-            ? 'border-b-2 border-blue-500 text-blue-600'
-            : 'text-gray-600 hover:text-blue-500'
+            ? 'border-b-2 border-[#A65C99] text-[#9e378b]'
+            : 'text-gray-600 hover:text-[#9e378b]'
         ]"
       >
         <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -43,8 +43,8 @@
         :class="[ 
           'flex items-center px-6 py-3 text-sm font-medium focus:outline-none transition-all whitespace-nowrap',
           selectedTab === 'notificaciones'
-            ? 'border-b-2 border-blue-500 text-blue-600'
-            : 'text-gray-600 hover:text-blue-500'
+            ? 'border-b-2 border-[#A65C99] text-[#9e378b]'
+            : 'text-gray-600 hover:text-[#9e378b]'
         ]"
       >
         <BellDot class="w-5 h-5 mr-1"/>

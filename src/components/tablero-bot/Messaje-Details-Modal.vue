@@ -39,7 +39,7 @@
             </button>
 
             <!-- Modal Header -->
-            <div class="bg-gradient-to-r from-slate-800 to-blue-600 text-white p-6 pr-16">
+            <div class="bg-gradient-to-r from-slate-800 to-[#80006A] text-white p-6 pr-16">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                   <span class="text-xl">📋</span>

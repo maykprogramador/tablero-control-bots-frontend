@@ -36,7 +36,7 @@
           </button>
 
           <!-- Modal Header -->
-          <div class="bg-gradient-to-r from-slate-800 to-blue-600 text-white p-3 sm:p-6 pr-12 sm:pr-16">
+          <div class="bg-gradient-to-r from-slate-800 to-[#80006A] text-white p-3 sm:p-6 pr-12 sm:pr-16">
             <div class="flex items-center gap-2 sm:gap-3">
               <div class="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
                 <svg class="w-4 h-4 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

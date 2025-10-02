@@ -103,7 +103,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               <button
                 @click="viewRegistroDetails(record)"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-blue-700 bg-blue-100 hover:bg-blue-200 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200 group-hover:scale-105"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-[#80006A] bg-[#F5E6F1] hover:bg-[#E6CCE4] hover:text-[#A65C99] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A65C99] transition-all duration-200 group-hover:scale-105"
               >
                 <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -183,7 +183,7 @@
               :class="[
                 'px-3 py-1.5 text-sm rounded-lg transition-colors duration-200',
                 page === currentPage 
-                  ? 'bg-blue-600 text-white' 
+                  ? 'bg-[#80006A] text-white' 
                   : 'border border-gray-300 hover:bg-gray-50'
               ]"
             >

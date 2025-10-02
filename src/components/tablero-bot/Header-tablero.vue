@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-gradient-to-br from-slate-800 to-blue-500 text-white sticky top-0 z-50">
+  <header class="bg-[#80006A] text-white sticky top-0 z-50">
     <div>
       <div class="flex items-center justify-between h-16 px-6">
         <!-- Sección Izquierda: Branding -->
@@ -25,7 +25,7 @@
               <Bell class="w-5 h-5" />
               <span
                 v-if="NotificationCount > 0"
-                class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium"
+                class="absolute -top-1 -right-1 bg-[#FF5F3F] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium"
               >
                 {{ NotificationCount }}
               </span>
@@ -135,7 +135,7 @@
           <button @click="toggleNotificationsMobile" class="flex items-center w-full px-4 py-2 text-white hover:bg-white/10 transition-colors duration-150" >
             <Bell class="w-5 h-5 mr-3" />
             Notificaciones
-            <span v-if="NotificationCount > 0" class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            <span v-if="NotificationCount > 0" class="ml-auto bg-[#FF5F3F] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
               {{ NotificationCount }}
             </span>
           </button>
@@ -266,7 +266,7 @@ const notificationStyles = {
   error: {
     icon: CircleX ,
     color: "text-red-700 border-red-200",
-    dot: "bg-red-500"
+    dot: "bg-[#FF5F3F]"
   },
   advertencia: {
     icon: TriangleAlert,

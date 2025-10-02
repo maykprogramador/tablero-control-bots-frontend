@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-800 flex items-center justify-center p-4">
+  <div class="min-h-screen bg-gradient-to-br from-[#80006A] via-[#A65C99] to-[#FF5F3F] flex items-center justify-center p-4">
     <!-- Background Decorative Elements -->
     <div class="absolute inset-0 overflow-hidden">
       <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
@@ -16,7 +16,8 @@
       >
         <!-- Logo/Icon Section -->
         <div class="text-center mb-8">
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-teal-500 to-blue-800 rounded-full mb-4 shadow-lg">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#80006A] to-[#FF5F3F] rounded-full mb-4 shadow-lg">
+
             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
             </svg>
