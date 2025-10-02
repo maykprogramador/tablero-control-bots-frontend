@@ -34,23 +34,21 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
 
         //  Solo agregar si corresponde al usuario logueado
         if (notificacion.user_id === authStore.user.user_id ) {
-          
           this.notificaciones.unshift(notificacion);
-
-          // 🔊 Sonidos
-          if (notificacion.tipo === 'error' || notificacion.tipo === 'advertencia') {
-            const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/alert.mp3");
-            audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
-            setTimeout(() => {
-              audio.pause();
-              audio.currentTime = 0;
-            }, 8000);
-          } else {
-            const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/notificacion.mp3");
-            audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
-          }
+          // Sonidos
+          this.reproducirSonido(notificacion.tipo);
         }
       });
+    },
+    reproducirSonido(tipo) {
+      if (tipo === 'error' || tipo === 'advertencia') {
+        const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/alert.mp3");
+        audio.play().catch(err => console.log("No se pudo reproducir sonido:", err));
+        setTimeout(() => { audio.pause(); audio.currentTime = 0; }, 8000);
+      } else {
+        const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/notificacion.mp3");
+        audio.play().catch(err => console.log("No se pudo reproducir sonido:", err));
+      }
     },
 
     async fetchNotificaciones() {
