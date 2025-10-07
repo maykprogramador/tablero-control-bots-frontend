@@ -12,8 +12,8 @@
           <!-- Panel de Monitoreo -->
           <div v-if="selectedTab === 'bots'" class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
-              <div class="bg-gradient-to-r from-green-500 to-green-400 text-white p-3 rounded-lg mr-4 text-xl">
-                🖥
+              <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
+                <Monitor/>
               </div>
               <h2 class="text-xl font-semibold text-slate-800">Panel de Monitoreo</h2>
             </div>
@@ -116,8 +116,8 @@
           <!-- Torre de Control -->
           <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
-              <div class="bg-gradient-to-r from-blue-500 to-blue-400 text-white p-3 rounded-lg mr-4 text-xl">
-                🧩
+              <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
+                <Cog/> 
               </div>
               <h2 class="text-xl font-semibold text-slate-800">Torre de Control</h2>
             </div>
@@ -224,13 +224,11 @@
 
           <!-- Control de Usuarios -->
           <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-            <div class="flex items-center mb-4">
-              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
-                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                </svg>
+            <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
+              <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
+                <UserCog /> 
               </div>
-              <h4 class="font-semibold text-slate-800">Control de Usuarios</h4>
+              <h2 class="text-xl font-semibold text-slate-800">Control de Usuarios</h2>
             </div>
             
             <div class="space-y-4">
@@ -261,8 +259,8 @@
           <!-- Configuración -->
           <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
-              <div class="bg-gradient-to-r from-orange-500 to-orange-400 text-white p-3 rounded-lg mr-4 text-xl">
-                ⚙️
+              <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
+               <Bolt />
               </div>
               <h2 class="text-xl font-semibold text-slate-800">Configuración</h2>
             </div>
@@ -336,7 +334,7 @@ import ControlUsersModal from './Control-Users-Modal.vue';
 import FormDesactivationPerson from './Form-Desactivation-Person.vue';
 import RegistrosSection from './Registros-section.vue';
 import NavVar from './Nav-var.vue';
-import { LogOut } from 'lucide-vue-next';
+import { LogOut, Monitor, Cog, UserCog, Bolt } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
