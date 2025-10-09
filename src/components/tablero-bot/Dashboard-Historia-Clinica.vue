@@ -158,7 +158,7 @@
                     {{ registro.folio }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                    {{ formatearFecha(registro.fecha_historia) }}
+                    {{ formatearFechaHora(registro.fecha_historia) }}
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap">
                     <span 
@@ -310,7 +310,7 @@ import ModalDetailsHistoriaClinica from './Modal-details-historia-clinica.vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
-import { formatDate } from '@/utils/FormatDate';
+import { formatDate, formatearFechaHora } from '@/utils/FormatDate';
 import * as XLSX from 'xlsx';
 
 const authStore = useAuthStore()

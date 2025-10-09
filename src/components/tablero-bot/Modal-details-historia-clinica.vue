@@ -80,7 +80,7 @@
               </div>
               <div>
                 <label class="block text-sm font-semibold text-gray-600 mb-1">Fecha</label>
-                <p class="text-gray-900 font-semibold">{{ formatDate(registroSeleccionado.fecha_historia) }}</p>
+                <p class="text-gray-900 font-semibold">{{ formatearFechaHora(registroSeleccionado.fecha_historia) }}</p>
               </div>
             </div>
           </div>
@@ -89,29 +89,49 @@
           <div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-6 border border-orange-100">
             <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <svg class="h-6 w-6 mr-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               Trazabilidad del Envío
             </h3>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <!-- Estado del envío -->
               <div>
                 <label class="block text-sm font-semibold text-gray-600 mb-2">Estado del Envío</label>
-                <span :class="getBadgeClass(registroSeleccionado.estado_envio)" class="inline-block px-4 py-2 text-sm font-bold rounded-xl">
+                <span :class="getBadgeClass(registroSeleccionado.estado_envio)"
+                  class="inline-block px-4 py-2 text-sm font-bold rounded-xl">
                   {{ getEstadoTexto(registroSeleccionado.estado_envio) }}
                 </span>
               </div>
+
+              <!-- Bot responsable -->
               <div>
                 <label class="block text-sm font-semibold text-gray-600 mb-1">Bot Responsable</label>
                 <p class="text-purple-600 font-mono font-bold">{{ registroSeleccionado.bot }}</p>
               </div>
+
+              <!-- Fecha de envío -->
+              <div
+                v-if="registroSeleccionado.fecha_envio || registroSeleccionado.estado_envio !== 'pendiente'">
+                <label class="block text-sm font-semibold text-gray-600 mb-1">Fecha de Envío</label>
+                <p class="text-gray-800 font-medium">
+                  {{ formatDate(registroSeleccionado.fecha_envio) }}
+                </p>
+              </div>
+
+              <!-- Motivo de fallo -->
               <div v-if="registroSeleccionado.motivo_fallo" class="md:col-span-2">
                 <label class="block text-sm font-semibold text-gray-600 mb-2">Motivo de Fallo</label>
                 <div class="bg-red-100 border-l-4 border-red-500 p-4 rounded-lg">
                   <p class="text-red-800 font-medium">{{ registroSeleccionado.motivo_fallo }}</p>
                 </div>
               </div>
+
             </div>
           </div>
+
         </div>
 
         <!-- Footer del modal -->
@@ -138,7 +158,7 @@
 </template>
 
 <script setup>
-import { formatDate } from '@/utils/FormatDate'
+import { formatDate, formatearFechaHora } from '@/utils/FormatDate'
 import { ref, computed, defineProps} from 'vue'
 
 // Props
