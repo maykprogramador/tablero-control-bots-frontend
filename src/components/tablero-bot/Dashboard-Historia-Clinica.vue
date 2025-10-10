@@ -342,6 +342,7 @@ const registrosTrazabilidad = computed(() =>
     correo_electronico: t.HistoriaClinica.Paciente.correo_electronico,
     ingreso: t.HistoriaClinica.ingreso,
     fecha_historia: t.HistoriaClinica.fecha_historia,
+    fecha_envio: t.fecha_envio,
     folio: t.HistoriaClinica.folio,
     estado_envio: t.estado_envio,
     motivo_fallo: t.motivo_fallo,
@@ -498,7 +499,7 @@ const cerrarModalDashboard = () => {
 const abrirModal = (registro) => {
   registroSeleccionado.value = registro
   mostrarModal.value = true
-  console.log('se abrio el modal');
+  console.log('se abrio el modal', registroSeleccionado.value);
   
 }
 

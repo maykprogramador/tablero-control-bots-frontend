@@ -1,12 +1,14 @@
 
 import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 export function formatDate(date) {
   return dayjs(date).format('DD/MM/YYYY')
 }
 
 export function formatearFechaHora(fecha) {
-  console.log('fecha: ', fecha);
+  console.log('fecha: ', fecha.toLocaleString('es-CO'));
   
   if (!fecha) return '—'
 
@@ -27,5 +29,10 @@ export function formatearFechaHora(fecha) {
   const mes = meses[parseInt(month) - 1]
 
   return `${parseInt(day)} ${mes} ${year}, ${hour}:${minute}`
+}
+
+export function mostrarFecha(fechaISO) {
+  if (!fechaISO) return '—'
+  return dayjs.utc(fechaISO).format('D MMM YYYY, h:mm a')
 }
 

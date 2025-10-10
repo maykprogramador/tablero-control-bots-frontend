@@ -117,7 +117,7 @@
                 v-if="registroSeleccionado.fecha_envio || registroSeleccionado.estado_envio !== 'pendiente'">
                 <label class="block text-sm font-semibold text-gray-600 mb-1">Fecha de Envío</label>
                 <p class="text-gray-800 font-medium">
-                  {{ formatDate(registroSeleccionado.fecha_envio) }}
+                  {{ formatearFechaHora(registroSeleccionado.fecha_envio) }}
                 </p>
               </div>
 
@@ -158,7 +158,7 @@
 </template>
 
 <script setup>
-import { formatDate, formatearFechaHora } from '@/utils/FormatDate'
+import { formatDate, formatearFechaHora, mostrarFecha } from '@/utils/FormatDate'
 import { ref, computed, defineProps} from 'vue'
 
 // Props
