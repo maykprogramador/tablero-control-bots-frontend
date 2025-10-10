@@ -499,7 +499,7 @@ const cerrarModalDashboard = () => {
 const abrirModal = (registro) => {
   registroSeleccionado.value = registro
   mostrarModal.value = true
-  console.log('se abrio el modal', registroSeleccionado.value);
+  //console.log('se abrio el modal', registroSeleccionado.value);
   
 }
 
@@ -558,8 +558,8 @@ const exportData = () => {
     Correo_Electrónico: record.correo_electronico || '—',
     Ingreso: record.ingreso,
     Folio: record.folio,
-    Fecha_Historia: formatDate(record.fecha_historia),
-    fecha_envio: formatDate(record.fecha_envio),
+    Fecha_Historia: record.fecha_historia,
+    fecha_envio: record.fecha_envio || '—',
     Estado: record.estado_envio,
     Motivo_Fallo: record.motivo_fallo || '—',
     Bot: record.bot

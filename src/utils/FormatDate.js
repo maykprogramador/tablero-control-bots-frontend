@@ -8,7 +8,7 @@ export function formatDate(date) {
 }
 
 export function formatearFechaHora(fecha) {
-  console.log('fecha: ', fecha.toLocaleString('es-CO'));
+  //console.log('fecha: ', fecha.toLocaleString('es-CO'));
   
   if (!fecha) return '—'
 
