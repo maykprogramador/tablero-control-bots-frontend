@@ -336,7 +336,7 @@ onMounted(async() => {
 
 const registrosTrazabilidad = computed(() => 
   tableroFunctions.historias_clinicas.map(t => ({
-    empresa: t.HistoriaClinica.Paciente.empresa,
+    empresa: t.HistoriaClinica.empresa,
     numero_identificacion: t.HistoriaClinica.Paciente.numero_identificacion,
     nombre: t.HistoriaClinica.Paciente.nombre,
     correo_electronico: t.HistoriaClinica.Paciente.correo_electronico,
