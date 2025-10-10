@@ -13,6 +13,7 @@
      
         class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         @click="closeModal"
+        @keydown.esc="closeModal" tabindex="0"
       >
         <!-- Modal Content -->
         <Transition

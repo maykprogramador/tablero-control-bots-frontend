@@ -2,7 +2,7 @@
   <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100">
     <!-- Offcanvas modal para gestión de bots -->
     <!-- Bot Management Offcanvas -->
-    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" @click="closeBotManagement" >
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" @keydown.esc="closeBotManagement" tabindex="0" @click="closeBotManagement" >
       <div class="fixed inset-y-0 right-0 w-full bg-white shadow-xl transform transition-transform duration-300 ease-in-out" @click.stop>
         <!-- Header -->
         <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">

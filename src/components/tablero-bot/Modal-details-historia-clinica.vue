@@ -2,6 +2,7 @@
   <div
     class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
     @click="cerrarModal"
+    @keydown.esc="cerrarModal" tabindex="0"
   >
     <div
       class="fixed inset-0 bg-white w-screen h-screen 

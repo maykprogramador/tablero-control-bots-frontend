@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-violet-600 p-5 overflow-auto">
+  <div @click.stop class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-violet-600 p-5 overflow-auto">
     <!-- Modal de Detalle del Mensaje -->
     <Transition
       enter-active-class="transition-all duration-300 ease-out"
@@ -13,6 +13,7 @@
       
         class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         @click="closeMessageModal"
+        @keydown.esc="closeMessageModal" tabindex="0"
       >
         <!-- Modal Content -->
         <Transition
@@ -24,8 +25,6 @@
           leave-to-class="opacity-0 scale-95 translate-y-4"
         >
           <div 
-      
-            @click.stop
             class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden relative"
           >
             <!-- Close Button -->
