@@ -418,9 +418,10 @@ const exportData = () => {
     Nombre_Bot: props.bot.nombre,
     Estado: record.estado,
     Fecha: record.fecha_ejecucion,
-    Duración: record.duracion,
-    Mensaje: record.mensaje
+    Mensaje: record.mensaje,
+    ...(record.bot_id !== 8 && { Duración: record.duracion }) // 👈 se agrega solo si bot_id ≠ 8
   }));
+
 
   // 2️⃣ Crear hoja de cálculo a partir de los datos
   const worksheet = XLSX.utils.json_to_sheet(data);
