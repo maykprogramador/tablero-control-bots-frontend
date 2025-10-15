@@ -283,6 +283,8 @@ const currentPage = ref(1)
 const recordsPerPage = 10
 const dateFilterInitial = ref('')
 const dateFilterFinal = ref('')
+const botOptions = [1, 2]
+
 
 
 watch(
@@ -419,7 +421,7 @@ const exportData = () => {
     Estado: record.estado,
     Fecha: record.fecha_ejecucion,
     Mensaje: record.mensaje,
-    ...(record.bot_id !== 8 && { Duración: record.duracion }) // 👈 se agrega solo si bot_id ≠ 8
+    ...(botOptions.includes(record.bot_id)  && { Duración: record.duracion }) // 👈 se agrega solo si bot_id ≠ 8
   }));
 
 
