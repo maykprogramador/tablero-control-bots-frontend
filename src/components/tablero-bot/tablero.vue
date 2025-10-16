@@ -224,7 +224,7 @@
           </div>
 
           <!-- Control de Usuarios -->
-          <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div v-if="user.rol === 'admin'" class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                 <UserCog /> 
@@ -246,7 +246,7 @@
               
               <!-- Botón para abrir modal de gestión -->
               <button
-                v-if="user.rol === 'admin' || user.rol === 'supervisor'"
+                v-if="user.rol === 'admin'"
                 @click="openUserManagementModal"
                 class="w-full cursor-pointer flex items-center justify-center px-4 py-2.5 border-2 border-blue-200 text-blue-700 rounded-lg font-medium hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 group"
               >
