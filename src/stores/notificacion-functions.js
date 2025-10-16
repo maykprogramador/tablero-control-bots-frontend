@@ -62,41 +62,6 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
         throw error;
       }
     },
-    async createNotificacion(titulo, mensaje, tipo, destino) {
-      try {
-        const response = await axiosInstance.post('/',{ titulo: titulo, mensaje: mensaje, tipo: tipo, destino: destino });
-        console.log('Respuesta al crear notificación:', response.data.data);
-        
-        if (response.data.status === 'ok') {
-          if (this.notificaciones.length === 0) return;
-
-          const authStore = useAuthStore();
-          const perteneceAlUsuario = response.data.data.user_id === authStore.user.user_id;
-
-          if (perteneceAlUsuario || authStore.user.rol === 'admin' || authStore.user.rol === 'supervisor') {
-            this.notificaciones.unshift(response.data.data);
-            console.log('tipo: ',tipo);
-            
-            // 🔊 Emitir sonido si es notificación de error
-            if (tipo === 'error' || tipo === 'advertencia') {
-              const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/alert.mp3");
-              audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
-              // Opcional: detener después de X segundos
-              setTimeout(() => {
-                audio.pause();
-                audio.currentTime = 0; // reinicia al inicio
-              }, 8000); // 8 segundos
-            }else{
-              console.log("Reproduciendo sonido de notificación estándar");
-              const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/notificacion.mp3");
-              audio.play().catch(err => console.log("No se pudo reproducir el sonido:", err));
-            }
-          }
-        }
-      } catch (error) {
-        console.log('Error al crear notificación:', error.response?.data?.message || error.message);
-      }
-    },
     async marcarComoLeida(id) {
       try {
         const response = await axiosInstance.patch(`/${id}/leido`);

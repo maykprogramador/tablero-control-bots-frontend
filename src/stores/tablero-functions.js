@@ -258,8 +258,34 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           }
         }
       });
-       // 👉 Evento para historias clínicas
-      // 👉 Evento para trazabilidades
+      // Evento para logs generales del bot
+      socket.on('nuevo_log', (log, bot) => {
+        console.log('🆕 Log recibido desde socket:', log);
+        // Verificar si el log pertenece a un bot que el usuario tiene en su lista
+        const perteneceABot = this.bots.some(b => b.id === log.bot_id);
+        const yaTieneLogs = this.logs.some(l => l.bot_id === log.bot_id);
+
+        if (perteneceABot) {
+          // ✅ Actualizar información del bot en el store si cambió algo
+          const indexBot = this.bots.findIndex(b => b.id === bot.id);
+          if (indexBot !== -1) {
+            this.bots[indexBot] = bot;
+            console.log('🔄 Bot actualizado desde socket:', bot);
+          }
+
+          // ✅ Agregar log al inicio de la lista si ya hay logs de ese bot
+          if (yaTieneLogs) {
+            this.logs.unshift(log);
+            console.log('✅ Log agregado desde socket:', log);
+          } else {
+            console.log('⚠️ Log ignorado: no hay historial previo para este bot:', log.bot_id);
+          }
+        } else {
+          console.log('⚠️ Log ignorado: no pertenece a un bot del usuario actual');
+        }
+      });
+
+      // 👉 Evento para historias clínicas
       socket.on('nueva_historia', (trazabilidad, botActualizado) => {
         console.log('📩 Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
 
@@ -305,6 +331,9 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       this.botsDisponibles = [];
       this.formInactivation = [];
       this.solicitudes = [];
+      this.historias_clinicas = [];
+      this.logs = [];
+      this.SolicitudInactivacion = [],
       this.executeBot = false;  
     }
 

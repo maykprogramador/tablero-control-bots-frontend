@@ -327,7 +327,7 @@ async function handleNotificacionClick(notificacion) {
   console.log('notificacion.destino', notificacion);
   
   if (notificacion.destino?.modal === 'HistoriaClinica') {
-    props.openModalOption(notificacion.destino?.bot_id)
+    props.openModalOption(notificacion.destino?.bot_id, 'detalles')
   }
   if (notificacion.destino?.modal === 'tablero-bot') {
     emit('update:selectedTab', 'bots')
@@ -336,7 +336,10 @@ async function handleNotificacionClick(notificacion) {
     emit('update:selectedTab', 'solicitudes')
   }
   if (notificacion.destino?.modal === 'registros-bot') {
-    props.openModalOption(notificacion.destino?.bot_id)
+    props.openModalOption(notificacion.destino?.bot_id, 'detalles')
+  }
+  if (notificacion.destino?.modal === 'logs-bot') {
+    props.openModalOption(notificacion.destino?.bot_id, 'logs')
   }
   // luego decides qué acción tomar (redirigir, abrir modal, etc.)
 }

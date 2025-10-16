@@ -86,12 +86,12 @@
                 </div>
                 
                 <div class="flex gap-3">
-                  <button @click="openModal(bot.id)" class="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                  <button @click="openModal(bot.id, 'detalles')" class="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                     Ver detalles
                   </button>
                   <!-- Botón para abrir el modal (demo) -->
                   
-                  <button @click="openModalLog(bot.id)" class="px-4 py-2 cursor-pointer bg-gray-200 text-slate-800 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                  <button @click="openModal(bot.id, 'logs')" class="px-4 py-2 cursor-pointer bg-gray-200 text-slate-800 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                     Logs
                   </button>
                 </div>
@@ -560,21 +560,20 @@ const filteredBots = computed(() => {
   })
 })
 
-const openModal = (bot_id) => {
-  
+const openModal = (bot_id, tipo) => {
   botSelected.value = bots.value.find(bot => bot.id === bot_id)
-  if (botSelected.value.id === 7) {
-    openModalHistoriaClinica()
-    return 
+  if (tipo === 'detalles'){
+    if (botSelected.value.id === 7) {
+      openModalHistoriaClinica()
+      return 
+    }
+    tableroFunctions.openModal()
+    //console.log('isopnemodal: ', tableroFunctions.isModalOpen );
   }
-  tableroFunctions.openModal()
-  console.log('isopnemodal: ', tableroFunctions.isModalOpen );
-}
-
-// funcion para abrir el modal de logs
-const openModalLog = (bot_id) => {
-  botSelected.value = bots.value.find(bot => bot.id === bot_id)
-  isLogsModalOpen.value = true
+  if (tipo === 'logs'){
+    isLogsModalOpen.value = true
+  }
+  
 }
 
 const formatearRol = (rol) => {
