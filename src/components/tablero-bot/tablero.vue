@@ -65,9 +65,10 @@
                   <div class="flex items-center gap-2">
                     <p class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-200 text-gray-800">{{ obtener_porcentaje(bot.procesados , bot.total_registros)}}%</p>
                     <span 
-                      :class="getStatusClass(bot.estado)"
-                      class="px-3 py-1 rounded-full text-xs font-semibold uppercase"
+                      :class="getStatusBadgeClass(bot.estado)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                     >
+                      <span :class="getStatusDotClass(bot.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
                       {{ getStatusText(bot.estado) }}
                     </span>
                   </div>
@@ -444,6 +445,8 @@ const ejecutarBot = async () => {
   }
 };
 
+
+
 // Methods
 const openDeactivationModal = () => {
   showDeactivationModal.value = true
@@ -588,7 +591,7 @@ const formatearRol = (rol) => {
 // Helper functions
 const getStatusClass = (status) => {
   const classes = {
-    exito: 'bg-green-100 text-green-800',
+    activo: 'bg-green-100 text-green-800',
     error: 'bg-red-100 text-red-800',
     ejecucion: 'bg-yellow-100 text-yellow-800',
     pausado: 'bg-blue-100 text-blue-800'
@@ -598,12 +601,31 @@ const getStatusClass = (status) => {
 
 const getStatusText = (status) => {
   const texts = {
-    exito: 'Éxito',
+    activo: 'En linea',
     error: 'Error',
-    ejecucion: 'En proceso',
+    ejecucion: 'En ejecucion',
     pausado: 'En pausa'
   }
   return texts[status] || 'Desconocido'
+}
+
+
+const getStatusBadgeClass = (estado) => {
+  const classes = {
+    activo: 'bg-green-100 text-green-700',
+    error: 'bg-red-100 text-red-700',
+    ejecucion: 'bg-yellow-100 text-yellow-700'
+  }
+  return classes[estado] || 'bg-gray-100 text-gray-700'
+}
+
+const getStatusDotClass = (estado) => {
+  const classes = {
+    activo: 'bg-green-500',
+    error: 'bg-red-500',
+    ejecucion: 'bg-yellow-500'
+  }
+  return classes[estado] || 'bg-gray-500'
 }
 </script>
 <!-- CSS adicional para asegurar que funcione -->
