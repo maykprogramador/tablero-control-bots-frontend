@@ -144,6 +144,11 @@
                             </span>
                           </div>
                         </div>
+                        <div class="ml-2 sm:ml-3">
+                          <div class="text-xs sm:text-sm font-medium text-gray-900">{{ capitalizarNombre(user.nombre)}}</div>
+                          <!-- Show email on mobile in user cell when email column is hidden -->
+                          <div class="sm:hidden text-xs text-gray-500 truncate max-w-[120px]">{{ user.email }}</div>
+                        </div>
                       </div>
                     </td>
                     <td class="hidden sm:table-cell px-4 py-4 whitespace-nowrap text-sm text-gray-700">
