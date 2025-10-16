@@ -121,15 +121,7 @@ onMounted(async () => {
   await tableroFunctions.getAllBots()
   console.log('botsDisponibles: ', botsDisponibles.value)
 
-  botsDisponibles.value.forEach(bot => {
-    if (selectedUser.rol === 'admin') {
-      // Admin: todos seleccionados
-      tempBotAssignments.value[bot.id] = true
-    } else {
-      // Otros roles: solo los que ya tiene asignados
-      tempBotAssignments.value[bot.id] = selectedUser.Bots?.some(b => b.id === bot.id) || false
-    }
-  })
+  botsDisponibles.value.forEach(bot => { tempBotAssignments.value[bot.id] = selectedUser.Bots?.some(b => b.id === bot.id) || false })
   console.log('tempBotAssignments: ', tempBotAssignments.value)
 })
 

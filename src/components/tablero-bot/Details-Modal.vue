@@ -123,7 +123,7 @@
                       <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
                       <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Ejecución</th>
                       <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Mensaje</th>
-                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Duración</th>
+                      <th v-if="bot.id === 1" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Duración</th>
                       <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Estado</th>
                     </tr>
                   </thead>
@@ -163,7 +163,7 @@
                         </div>
                       </td>
 
-                      <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <td v-if="bot.id === 1" class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
                           <div class="flex items-center gap-1">
                             <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -283,6 +283,8 @@ const currentPage = ref(1)
 const recordsPerPage = 10
 const dateFilterInitial = ref('')
 const dateFilterFinal = ref('')
+const botOptions = [1, 2]
+
 
 
 watch(
@@ -418,9 +420,10 @@ const exportData = () => {
     Nombre_Bot: props.bot.nombre,
     Estado: record.estado,
     Fecha: record.fecha_ejecucion,
-    Duración: record.duracion,
-    Mensaje: record.mensaje
+    Mensaje: record.mensaje,
+    ...(botOptions.includes(record.bot_id)  && { Duración: record.duracion }) // 👈 se agrega solo si bot_id ≠ 8
   }));
+
 
   // 2️⃣ Crear hoja de cálculo a partir de los datos
   const worksheet = XLSX.utils.json_to_sheet(data);

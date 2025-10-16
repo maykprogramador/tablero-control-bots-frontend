@@ -212,7 +212,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         
     
         // verificar si la solicitud pertenece al usuario autenticado
-        const perteneceASolicitud = solicitud.user_id === user.user_id  
+        const perteneceASolicitud = solicitud?.user_id === user.user_id  
         // Verificar si el registro pertenece a un bot en el estado y si ya tiene registros
         const perteneceABot = this.bots.some(bot => bot.id === registro.bot_id)
         //const yaExiste = this.registros.some(r => r.id === registro.id)
@@ -227,6 +227,8 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           if (yaTieneRegistros) {
             this.registros.unshift(registro)
             console.log('✅ Registro agregado desde socket:', registro)
+          }else{
+            console.log('⚠️ Registro ignorado porque no existe historial para este bot:', registro.bot_id)
           }
           // 👉 actualizar solicitudes si pertenece al usuario autenticado
           if (perteneceASolicitud) {
@@ -235,9 +237,6 @@ export const useTableroFunctions = defineStore('tablero-functions',{
               this.solicitudes[indexSolicitud] = solicitud; // actualizamos datos del bot
               console.log('🔄 Solicitud actualizado desde socket:', solicitud);
             }
-          }
-          else{
-            console.log('⚠️ Registro ignorado porque no existe historial para este bot:', registro.bot_id)
           }
         }
       });
