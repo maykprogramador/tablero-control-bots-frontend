@@ -21,14 +21,14 @@
             
             <!-- Filters -->
             <div class="flex flex-wrap gap-4 mb-5">
-              <div class="flex flex-col gap-1">
+              <!--<div class="flex flex-col gap-1">
                 <label class="text-sm text-gray-600 font-medium">Fecha</label>
                 <input 
                   v-model="filters.date" 
                   type="date" 
                   class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
-              </div>
+              </div>-->
               <div class="flex flex-col gap-1">
                 <label class="text-sm text-gray-600 font-medium">Estado</label>
                 <select 
@@ -256,7 +256,7 @@
               </button>
             </div>
           </div>
-          <!-- Configuración -->
+          <!-- Configuración 
           <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
@@ -265,7 +265,7 @@
               <h2 class="text-xl font-semibold text-slate-800">Configuración</h2>
             </div>
             
-            <!-- Parámetros por Bot -->
+            <!-- Parámetros por Bot 
             <div class="bg-gray-50 rounded-lg p-4 mb-4">
               <h4 class="font-semibold text-slate-800 mb-3">Parámetros por Bot</h4>
               <div class="space-y-3">
@@ -288,7 +288,7 @@
               </div>
             </div>
 
-            <!-- Reglas de Ejecución -->
+            <!-- Reglas de Ejecución 
             <div class="bg-gray-50 rounded-lg p-4 mb-4">
               <h4 class="font-semibold text-slate-800 mb-3">Reglas de Ejecución</h4>
               <div class="space-y-3">
@@ -315,7 +315,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </div>
     </div>

@@ -38,7 +38,7 @@
           </div>
           <div class="bg-yellow-500/20 rounded-lg p-3 text-center">
             <div class="text-lg sm:text-2xl font-bold text-yellow-200">{{ getStatusCount('pendiente') }}</div>
-            <div class="text-xs sm:text-sm text-yellow-100">En Proceso</div>
+            <div class="text-xs sm:text-sm text-yellow-100">Pendiente</div>
           </div>
           <div class="bg-red-500/20 rounded-lg p-3 text-center">
             <div class="text-lg sm:text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
