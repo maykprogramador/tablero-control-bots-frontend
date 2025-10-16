@@ -38,7 +38,7 @@
                   <option value="">Todos</option>
                   <option value="activo">En linea</option>
                   <option value="error">Error</option>
-                  <option value="ejecucion">En Proceso</option>
+                  <option value="ejecucion">En Ejecucion</option>
                   <option value="pausado">En Pausa</option>
                 </select>
               </div>
