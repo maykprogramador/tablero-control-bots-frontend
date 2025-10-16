@@ -57,7 +57,7 @@
                 </div>
               </div>
               <div class="max-h-64 overflow-y-auto">
-                <div v-for="notificacion in notificaciones" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
+                <div v-for="notificacion in notificaciones.slice(0, 30)" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
                   <div @click="handleNotificacionClick(notificacion)" class="flex items-start space-x-3">
                     <!-- Puntos o icono segun tipo -->
                     <div v-if="!notificacion.leido" class="flex-shrink-0">
@@ -165,7 +165,7 @@
               </div>
             </div>
             <div class="max-h-64 overflow-y-auto">
-              <div v-for="notificacion in notificaciones" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
+              <div v-for="notificacion in notificaciones.slice(0, 30)" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
                 <div @click="handleNotificacionClick(notificacion)" class="flex items-start space-x-3">
                   <div v-if="!notificacion.leido" class="flex-shrink-0">
                     <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
