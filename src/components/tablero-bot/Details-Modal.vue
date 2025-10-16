@@ -122,7 +122,7 @@
                     <tr>
                       <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
                       <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Ejecución</th>
-                      <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Mensaje</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Mensaje</th>
                       <th v-if="bot.id === 1" class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Duración</th>
                       <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Estado</th>
                     </tr>
