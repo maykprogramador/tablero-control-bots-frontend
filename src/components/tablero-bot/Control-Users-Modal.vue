@@ -127,25 +127,22 @@
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                  <tr 
-                    v-for="(user, index) in paginatedUsers" 
-                    :key="user.id"
-                    class="hover:bg-gray-50 transition-colors duration-150"
-                  >
+                  <tr v-for="(user, index) in paginatedUsers" :key="user.id"class="hover:bg-gray-50 transition-colors duration-150">
                     <td class="px-2 sm:px-4 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
                       {{ (currentPage - 1) * usersPerPage + index + 1 }}
                     </td>
                     <td class="px-2 sm:px-4 py-4 whitespace-nowrap">
                       <div class="flex items-center">
-                        <div class="flex-shrink-0 h-6 w-6 sm:h-8 sm:w-8">
-                          <div class="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 flex items-center justify-center">
-                            <span class="text-xs font-medium text-white">{{ getUserInitials('Nombre De Usuario') }}</span>
+                        <!-- Contenedor de la imagen o las iniciales -->
+                        <div class="flex-shrink-0 h-6 w-6 sm:h-8 sm:w-8"> 
+                          <!-- Si el usuario tiene foto de perfil -->
+                          <img v-if="user.foto_perfil" :src="user.foto_perfil" alt="Foto de perfil" class="h-6 w-6 sm:h-8 sm:w-8 rounded-full object-cover border border-gray-300" />
+                          <!-- Si no tiene foto de perfil -->
+                          <div v-else class="h-6 w-6 sm:h-8 sm:w-8 rounded-full bg-gradient-to-r from-blue-500 to-teal-500 flex items-center justify-center" >
+                            <span class="text-xs font-medium text-white">
+                              {{ getUserInitials(user.nombre? user.nombre : 'Nombre De Usuario') }}
+                            </span>
                           </div>
-                        </div>
-                        <div class="ml-2 sm:ml-3">
-                          <div class="text-xs sm:text-sm font-medium text-gray-900">{{ capitalizarNombre(user.nombre)}}</div>
-                          <!-- Show email on mobile in user cell when email column is hidden -->
-                          <div class="sm:hidden text-xs text-gray-500 truncate max-w-[120px]">{{ user.email }}</div>
                         </div>
                       </div>
                     </td>
