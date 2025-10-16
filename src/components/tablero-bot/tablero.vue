@@ -91,7 +91,7 @@
                   </button>
                   <!-- Botón para abrir el modal (demo) -->
                   
-                  <button class="px-4 py-2 bg-gray-200 text-slate-800 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                  <button @click="openModalLog(bot.id)" class="px-4 py-2 cursor-pointer bg-gray-200 text-slate-800 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
                     Logs
                   </button>
                 </div>
@@ -323,6 +323,7 @@
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
     <FormDesactivationPerson v-if="showDeactivationModal" :onClose="closeModalForm" :botSelected="control.selectedBot"/>
+    <LogModal v-if="isLogsModalOpen" :bot="botSelected" @close="isLogsModalOpen = false"/>
   </div>
 </template>
 
@@ -341,6 +342,7 @@ import dayjs from 'dayjs'
 import DashboardHistoriaClinica from './Dashboard-Historia-Clinica.vue';
 import HeaderTablero from './Header-tablero.vue';
 import NotificacionDashboard from './Notificacion-Dashboard.vue';
+import LogModal from './Log-Modal.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -359,6 +361,7 @@ const showDeactivationModal = ref(false)
 const executeBot = computed(() => tableroFunctions.executeBot)
 const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
+const isLogsModalOpen = ref(false)
 const botOptions = [1, 2, 3, 7]
 
 
@@ -396,15 +399,6 @@ onMounted(async () => {
   );*/
 });
 
-// funcion para cerrar la sesion
-const logout = async () => {
-  try {
-    await authStore.logoutUser()
-    await router.push('/')
-  } catch (err) {
-    console.error('Error al cerrar sesión:', err)
-  }
-}
 
 // funcion para cargar los bots 
 const loadBots = async() => { 
@@ -575,6 +569,12 @@ const openModal = (bot_id) => {
   }
   tableroFunctions.openModal()
   console.log('isopnemodal: ', tableroFunctions.isModalOpen );
+}
+
+// funcion para abrir el modal de logs
+const openModalLog = (bot_id) => {
+  botSelected.value = bots.value.find(bot => bot.id === bot_id)
+  isLogsModalOpen.value = true
 }
 
 const formatearRol = (rol) => {

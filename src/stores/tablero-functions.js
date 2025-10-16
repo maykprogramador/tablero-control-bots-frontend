@@ -25,6 +25,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     isModalOpen: false,
     bots: [],
     registros: [],
+    logs: [],
     users: [],
     botsDisponibles: [],
     SolicitudInactivacion:[],
@@ -64,6 +65,43 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         this.bots = response.data;
       } catch (error) {
         console.error('Error al cargar los bots:', error);
+      }
+    },
+    async loadRegistros({ bot_id }) {
+      try {
+        const yaExisten = this.registros.some(r => r.bot_id === bot_id)
+        if (!yaExisten) {
+          console.log('entro');
+          const nuevosRegistros = await axiosInstance.get('get/registros', { params: { bot_id } });
+          if (nuevosRegistros.data.length > 0) {
+            this.registros.push(...nuevosRegistros.data)  // sin sobrescribir
+            console.log('Registros cargados de db: ',this.registros);
+            
+          }
+          return;
+        }
+        console.log('Registros cargados del estado: ',this.registros);
+        /*const response = await axiosInstance.get('get/registros', { params: { bot_id } });
+        this.registros = response.data;*/
+      } catch (error) {
+        console.error('Error al cargar los bots:', error);
+      }
+    },
+
+    async loadLogs({ bot_id }) {
+      try {
+        const yaExisten = this.logs.some(l => l.bot_id === bot_id)
+        if (!yaExisten) {
+          const logs = await axiosInstance.get('logs', { params: { bot_id } });
+          if (logs.data.length > 0) {
+            this.logs.push(...logs.data)  // sin sobrescribir
+            console.log('Logs cargados de db: ',this.logs);
+          }
+          return;
+        }
+        console.log('Logs cargados del estado: ',this.logs);
+      } catch (error) {
+        console.error('Error al cargar los logs:', error);
       }
     },
   
@@ -125,26 +163,6 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       }
     },
 
-    async loadRegistros({ bot_id }) {
-      try {
-        const yaExisten = this.registros.some(r => r.bot_id === bot_id)
-        if (!yaExisten) {
-          console.log('entro');
-          const nuevosRegistros = await axiosInstance.get('get/registros', { params: { bot_id } });
-          if (nuevosRegistros.data.length > 0) {
-            this.registros.push(...nuevosRegistros.data)  // sin sobrescribir
-            console.log('Registros cargados de db: ',this.registros);
-            
-          }
-          return;
-        }
-        console.log('Registros cargados del estado: ',this.registros);
-        /*const response = await axiosInstance.get('get/registros', { params: { bot_id } });
-        this.registros = response.data;*/
-      } catch (error) {
-        console.error('Error al cargar los bots:', error);
-      }
-    },
     async createSolicitud(form, user_id, bot_id) {
       try {
         const response = await axiosInstance.post('create/solicitud', { formArray: form, user_id: user_id, bot_id: bot_id });
