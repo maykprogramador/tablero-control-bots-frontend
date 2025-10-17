@@ -116,6 +116,18 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         throw error;
       }
     },
+    async deleteUser(userId) {
+      try {
+        console.log('Eliminando usuario con ID:', userId);
+        await axiosInstance.delete(`delete/user`, { params: { userId: userId } });
+        // Eliminar el usuario del estado local
+        this.users = this.users.filter(u => u.id !== userId);
+        console.log('Usuario eliminado con éxito:', userId);
+      } catch (error) {
+        console.error('Error al eliminar el usuario:', error);
+        throw error;
+      }
+    },
     async getAllBots() {
       try {
         const response = await axiosInstance.get('get/bots');
