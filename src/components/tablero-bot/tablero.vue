@@ -211,15 +211,28 @@
             <!-- Status Summary -->
             <div class="bg-gray-50 rounded-lg p-4 mt-4">
               <h4 class="font-semibold text-slate-800 mb-2">Estado de Ejecución</h4>
+
               <p class="text-sm text-gray-700 mb-1">
-                <span v-if="control.selectedBot">
-                  ✅ {{ selectedBotData.nombre  }} listo para ejecutar
-                </span>
-                <span v-else>
+                <!-- Si hay bot seleccionado -->
+                <template v-if="control.selectedBot">
+                  <span class="flex flex-col">
+                    <span>✅ {{ selectedBotData.nombre }} listo</span>
+                    <!-- Mostrar estado dinámico según condiciones -->
+                    <span v-if="botEstado === 'pendiente'">⏳ Pendiente Formulario</span>
+                    <span v-if="botEstado === 'ejecutable'">✅ Formulario listo</span>
+                    <span v-if="botEstado === 'ejecutable'">✅ Bot Listo para ejecución</span>
+                  </span>
+                  <!-- Archivo -->
+                  <p v-if="botEstado === 'archivo'" class="text-sm text-gray-700 mb-1">
+                    📄 Archivo: {{ control.fileName || 'No seleccionado' }}
+                  </p>
+                </template>
+                <!-- Si no hay bot seleccionado -->
+                <template v-else>
                   ⏳ Ningún bot seleccionado
-                </span>
+                </template>
               </p>
-              <p class="text-sm text-gray-700 mb-1">📄 Archivo: {{ control.fileName || 'No seleccionado' }}</p>
+              
             </div>
           </div>
 
@@ -363,7 +376,7 @@ const executeBot = computed(() => tableroFunctions.executeBot)
 const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
 const isLogsModalOpen = ref(false)
-const botOptions = [1, 2, 3, 7]
+const botOptions = [1, 2, 3]
 
 
 // Reactive data
@@ -400,7 +413,15 @@ onMounted(async () => {
   );*/
 });
 
+// Estado del bot basado en tus condiciones
+const botEstado = computed(() => {
 
+  if (!botOptions.includes(selectedBotData.value?.id)) return 'archivo'
+  if (formInactivation.value.length === 0) return 'pendiente'
+
+  if (formInactivation.value.length > 0) return 'ejecutable'
+  return null
+})
 // funcion para cargar los bots 
 const loadBots = async() => { 
   try {
@@ -468,7 +489,7 @@ const closeModalForm = () => {
 function resetControlSelected () {
   control.fileName = ''
   control.archivo = null // reiniciar archivo
-  tableroFunctions.setFormInactivation([])
+  tableroFunctions.setSolicitudInactivacion([])
   tableroFunctions.setExecuteBot(false)
 }
 

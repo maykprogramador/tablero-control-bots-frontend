@@ -39,9 +39,6 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     openModal() {
       this.isModalOpen = true
     },
-    setFormInactivation(form){
-      this.formInactivation = form
-    },
     setSolicitudes(solicitudes){
       this.solicitudes = solicitudes
     },
@@ -341,7 +338,6 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       this.registros = [];
       this.users = [];
       this.botsDisponibles = [];
-      this.formInactivation = [];
       this.solicitudes = [];
       this.historias_clinicas = [];
       this.logs = [];
