@@ -49,61 +49,54 @@
 
       <!-- Cuerpo del dashboard -->
       <div class="p-6 md:max-h-[65vh] md:overflow-y-auto">
-        <!-- Barra de búsqueda y filtros -->
-        <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 p-6 mb-6 backdrop-blur-sm bg-white/80">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <!-- Campo de búsqueda -->
-            <div class="md:col-span-2">
-              <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Buscar por nombre o identificación
-              </label>
-              <div class="relative">
-                <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-                <input
-                  v-model="filtros.busqueda"
-                  type="text"
-                  placeholder="Buscar..."
-                  class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-white"
-                />
-              </div>
-            </div>
-
-            <!-- Filtro por estado -->
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Estado
-              </label>
-              <select
-                v-model="filtros.estado"
-                class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-white"
-              >
-                <option value="">Todos los estados</option>
-                <option value="exito">Éxito</option>
-                <option value="error">Error</option>
-                <option value="pendiente">Pendiente</option>
-              </select>
-            </div>
-
-            <!-- Filtro por empresa -->
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-2">
-                Empresa
-              </label>
-              <select
-                v-model="filtros.empresa"
-                class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 hover:bg-white"
-              >
-                <option value="">Todas las empresas</option>
-                <option v-for="empresa in empresasUnicas" :key="empresa" :value="empresa">
-                  {{ empresa }}
-                </option>
-              </select>
+        <!-- Barra de búsqueda y filtros (versión compacta) -->
+        <div class="flex flex-wrap gap-3 items-end bg-white/70 backdrop-blur-sm px-3 py-4 rounded-xl shadow border border-gray-100 mx-4">
+          <!-- Campo de búsqueda -->
+          <div class="flex-1 min-w-[200px]">
+            <label class="block text-xs font-bold text-gray-600 mb-1">
+              Buscar por nombre o identificación
+            </label>
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+              <input v-model="filtros.busqueda" type="text" placeholder="Buscar..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500 focus:border-blue-400 transition" />
             </div>
           </div>
+
+          <!-- Estado -->
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Estado</label>
+            <select v-model="filtros.estado"
+              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500">
+              <option value="">Todos</option>
+              <option value="exito">Éxito</option>
+              <option value="error">Error</option>
+              <option value="pendiente">Pendiente</option>
+            </select>
+          </div>
+
+          <!-- Empresa -->
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Empresa</label>
+            <select v-model="filtros.empresa"
+              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500">
+              <option value="">Todas</option>
+              <option v-for="empresa in empresasUnicas" :key="empresa" :value="empresa">{{ empresa }}</option>
+            </select>
+          </div>
+
+          <!-- Sede -->
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Sede</label>
+            <select v-model="filtros.sede"
+              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500">
+              <option value="">Todas</option>
+              <option v-for="sede in sedesUnicas" :key="sede" :value="sede">{{ sede }}</option>
+            </select>
+          </div>
         </div>
-        
+
         <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 overflow-hidden backdrop-blur-sm bg-white/90">
           <!-- Tabla principal -->
           <div class="overflow-x-auto">
@@ -356,7 +349,8 @@ const registroSeleccionado = ref(null)
 const filtros = ref({
   busqueda: '',
   estado: '',
-  empresa: ''
+  empresa: '',
+  sede: ''
 })
 const isLoading = ref(false)
 const currentPage = ref(1)
@@ -465,6 +459,12 @@ const empresasUnicas = computed(() => {
   return empresas.sort()
 })
 
+const sedesUnicas = computed(() => {
+  const sedes = [...new Set(registrosTrazabilidad.value.map(r => r.sede).filter(Boolean))]
+  return sedes.sort()
+})
+
+
 const registrosFiltrados = computed(() => {
   let registros = registrosTrazabilidad.value
 
@@ -486,6 +486,11 @@ const registrosFiltrados = computed(() => {
   // Filtro por empresa
   if (filtros.value.empresa) {
     registros = registros.filter(r => r.empresa === filtros.value.empresa)
+  }
+
+  // Filtro por sede
+  if (filtros.value.sede) {
+    registros = registros.filter(r => r.sede === filtros.value.sede)
   }
 
   return registros
