@@ -4,13 +4,13 @@
       <!-- Header -->
       <HeaderTablero :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
       <!-- Main Content -->
-      <div :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 gap-8 p-4 lg:p-10">
+      <div :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 gap-8 sm:p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
           <NavVar v-model:selectedTab="selectedTab"/><!-- aqui se esta enviando el selectedTab a el hijo y con v-model recibe el evento de update que emite el hijo -->
           <!-- Panel de Monitoreo -->
-          <div v-if="selectedTab === 'bots'" class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div v-if="selectedTab === 'bots'" class="bg-white rounded-xl shadow-md p-2 sm:p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                 <Monitor/>
@@ -58,41 +58,83 @@
               <div 
                 v-for="bot in filteredBots" 
                 :key="bot.id"
-                class="bg-gray-50 rounded-xl p-5 border-2 border-transparent transition-all duration-300 cursor-pointer hover:border-blue-500 hover:bg-blue-50 hover:translate-x-1"
+                class="bg-gray-50 rounded-xl p-2 sm:p-5 border-2 border-transparent transition-all duration-300 cursor-pointer hover:border-blue-500 hover:bg-blue-50 hover:translate-x-1"
               >
                 <div class="flex justify-between items-center mb-4">
                   <h3 class="font-semibold text-lg text-slate-800">{{ bot.nombre }}</h3>
-                  <div class="flex items-center gap-2">
-                    <p class="px-3 py-1 rounded-full text-sm font-semibold bg-gray-200 text-gray-800">{{ obtener_porcentaje(bot.procesados , bot.total_registros)}}%</p>
-                    <span 
+                 <div class="flex flex-wrap sm:flex-nowrap items-center sm:justify-between gap-2 sm:gap-3">
+                    <!-- Procesados / Total -->
+                    <div class="flex items-center gap-2">
+                      <div class="px-3 py-0.5 rounded-full bg-blue-100 border-blue-200">
+                        <span class="text-xs sm:text-sm font-semibold text-blue-800">
+                          {{ bot.procesados }} / {{ bot.total_registros }}
+                        </span>
+                      </div>
+
+                      <!-- Porcentaje -->
+                      <p class="px-3 py-1 rounded-full text-xs sm:text-sm font-semibold bg-gray-200 text-gray-800">
+                        {{ obtener_porcentaje(bot.procesados, bot.total_registros) }}%
+                      </p>
+                    </div>
+                    <!-- Estado -->
+                    <span
                       :class="getStatusBadgeClass(bot.estado)"
                       class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                     >
-                      <span :class="getStatusDotClass(bot.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                      <span
+                        :class="getStatusDotClass(bot.estado)"
+                        class="w-1.5 h-1.5 rounded-full mr-1.5"
+                      ></span>
                       {{ getStatusText(bot.estado) }}
                     </span>
                   </div>
-                  
+
                 </div>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div class="flex flex-col gap-1">
                     <span class="text-xs text-gray-600 font-medium">Última ejecución</span>
                     <span class="font-semibold text-slate-800">{{ formatDate(bot.updatedAt) }}</span>
                   </div>
-                  <div class="flex flex-col gap-1">
-                    <span class="text-xs text-gray-600 font-medium">Registros procesados</span>
-                    <span class="font-semibold text-slate-800">{{ bot.procesados }} / {{ bot.total_registros}}</span>
+                  <div class="flex flex-col gap-1 ml-auto">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <!-- Total registros -->
+                      <div class="px-3 py-0.5 rounded-full bg-gray-100 border-gray-200">
+                        <span class="text-xs font-medium text-gray-600">Total: </span>
+                        <span class="text-xs font-semibold text-gray-800">{{ bot.total_registros }}</span>
+                      </div>
+                      
+                      <!-- Exitosos -->
+                      <div class="px-3 py-0.5 rounded-full bg-green-100  border-green-200">
+                        <span class="text-xs font-medium text-green-600">Exitosos: </span>
+                        <span class="text-xs font-semibold text-green-800">346</span>
+                      </div>
+                      
+                      <!-- Pendientes -->
+                      <div class="px-3 py-0.5 rounded-full bg-amber-100  border-amber-200">
+                        <span class="text-xs font-medium text-amber-600">Pendientes: </span>
+                        <span class="text-xs font-semibold text-amber-800">676</span>
+                      </div>
+                      
+                      <!-- Error -->
+                      <div class="px-3 py-0.5 rounded-full bg-red-100  border-red-200">
+                        <span class="text-xs font-medium text-red-600">Error: </span>
+                        <span class="text-xs font-semibold text-red-800">68</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                
                 <div class="flex gap-3">
-                  <button @click="openModal(bot.id, 'detalles')" class="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                  <button
+                    @click="openModal(bot.id, 'detalles')"
+                    class="px-4 py-2 cursor-pointer bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                  >
                     Ver detalles
                   </button>
-                  <!-- Botón para abrir el modal (demo) -->
-                  
-                  <button @click="openModal(bot.id, 'logs')" class="px-4 py-2 cursor-pointer bg-gray-200 text-slate-800 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+                  <button
+                    @click="openModal(bot.id, 'logs')"
+                    class="px-4 py-2 cursor-pointer bg-gray-200 text-slate-800 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                  >
                     Logs
                   </button>
                 </div>
@@ -240,6 +282,8 @@
                     <span v-if="botEstado === 'pendiente'">⏳ Pendiente Formulario</span>
                     <span v-if="botEstado === 'ejecutable'">✅ Formulario listo</span>
                     <span v-if="botEstado === 'ejecutable'">✅ Bot Listo para ejecución</span>
+                    <span v-if="botEstado === 'pendiente_fecha'">⏳ Pendiente Fecha</span>
+                    <span v-if="botEstado === 'ejecutable_p'">✅ Bot Listo para ejecución</span>
                   </span>
                   <!-- Archivo -->
                   <p v-if="botEstado === 'archivo'" class="text-sm text-gray-700 mb-1">
@@ -477,12 +521,21 @@ const filteredBots = computed(() => {
 
 // Estado del bot basado en condiciones esta funcion es para la parte de torre de control en la parte estado de Ejecucion
 const botEstado = computed(() => {
+  if (BOTS_RETIRO.includes(selectedBotName.value)){
+    if (formInactivation.value.length === 0) return 'pendiente'
 
-  if (!botOptions.includes(selectedBotData.value?.id)) return 'archivo'
-  if (formInactivation.value.length === 0) return 'pendiente'
+    if (formInactivation.value.length > 0) return 'ejecutable'
+    return null
+  }
+    
+  if (BOTS_MASIVOS.includes(selectedBotName.value) && !control.archivo) {
+    return 'archivo'
+  }
 
-  if (formInactivation.value.length > 0) return 'ejecutable'
-  return null
+  if (selectedBotName.value === BOT_TYPES.SOPORTE_PATOLOGIA ) {
+    if (!selectedDate.value) return 'pendiente_fecha'
+    if (selectedDate.value) return 'ejecutable_p'
+  }
 })
 const filters = reactive({
   date: '2025-01-28',
@@ -699,6 +752,8 @@ function descargarFormato() {
 function resetControlSelected () {
   control.fileName = ''
   control.archivo = null // reiniciar archivo
+  selectedDate.value = null
+  selectedLogId.value = null
   tableroFunctions.setSolicitudInactivacion([])
   tableroFunctions.setExecuteBot(false)
 }

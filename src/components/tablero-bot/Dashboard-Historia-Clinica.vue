@@ -32,15 +32,15 @@
             <div class="text-lg sm:text-2xl font-bold">{{ registrosTrazabilidad.length }}</div>
             <div class="text-xs sm:text-sm text-blue-100">Total Registros</div>
           </div>
-          <div class="bg-green-500/20 rounded-lg p-3 text-center">
+          <div @click="filtros.estado = 'exito'" class="bg-green-500/20 rounded-lg p-3 cursor-pointer text-center">
             <div class="text-lg sm:text-2xl font-bold text-green-200">{{ getStatusCount('exito') }}</div>
             <div class="text-xs sm:text-sm text-green-100">Exitosos</div>
           </div>
-          <div class="bg-yellow-500/20 rounded-lg p-3 text-center">
+          <div @click="filtros.estado = 'pendiente'" class="bg-yellow-500/20 rounded-lg p-3 cursor-pointer text-center">
             <div class="text-lg sm:text-2xl font-bold text-yellow-200">{{ getStatusCount('pendiente') }}</div>
             <div class="text-xs sm:text-sm text-yellow-100">Pendiente</div>
           </div>
-          <div class="bg-red-500/20 rounded-lg p-3 text-center">
+          <div @click="filtros.estado = 'error'" class="bg-red-500/20 rounded-lg p-3 cursor-pointer text-center">
             <div class="text-lg sm:text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
             <div class="text-xs sm:text-sm text-red-100">Con Error</div>
           </div>
