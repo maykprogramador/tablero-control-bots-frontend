@@ -220,12 +220,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     async loadHistoriasClinicas(user) {
       try {
           if (this.historias_clinicas.length === 0) {
-              const response = await axiosInstance.get('get/historiasClinicas', {
-                params: {
-                  user_id: user.user_id,
-                  rol: user.rol
-                }
-              });
+              const response = await axiosInstance.get('get/historiasClinicas', { params: { user_id: user.user_id, } });
               this.historias_clinicas = response.data;
             console.log('historias cargadas de la DB: ',this.historias_clinicas);
           }
