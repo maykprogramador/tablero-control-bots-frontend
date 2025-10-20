@@ -204,6 +204,7 @@
                 :disabled-dates="isDisabled"
                 auto-apply
                 inline
+                @update:model-value="handleDateSelect"
               />
 
               <p v-if="selectedDate" class="mt-4 text-gray-700 text-center">
@@ -279,7 +280,7 @@
               <button
                 v-if="user.rol === 'admin'"
                 @click="openUserManagementModal"
-                class="w-full cursor-pointer flex items-center justify-center px-4 py-2.5 border-2 border-blue-200 text-blue-700 rounded-lg font-medium hover:bg-blue-50 hover:border-blue-300 transition-all duration-200 group"
+                class="w-full cursor-pointer flex items-center justify-center px-4 py-2.5 border-2 border-[#92658b] text-[#80006A] rounded-lg font-medium hover:bg-[#a789a275] hover:border-[#a789a254] transition-all duration-200 group"
               >
                 <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
@@ -361,7 +362,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch} from 'vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import DetailsModal from './Details-Modal.vue'
 import ControlUsersModal from './Control-Users-Modal.vue';
@@ -398,6 +399,8 @@ const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
 const isLogsModalOpen = ref(false)
 const botOptions = [1, 2, 3]
+const fechasError = ref([])
+const selectedLogId = ref(null)
 // ENUMERACION DE LOS BOTS --------------------------------------------------------------------------------------------------------------------------------
 const BOT_TYPES = Object.freeze({
   RETIRO_USUARIO_AVIDANTI: 'RETIRO_USUARIO_AVIDANTI',
@@ -436,32 +439,7 @@ const BOTS_RETIRO = [
 const selectedBotName = computed(() => BOT_MAP[control.selectedBot] || null);
 //--------------------------------------------------------------------------------------------------------------------------------
 // Reactive data
-const filters = reactive({
-  date: '2025-01-28',
-  estado: '',
-  nombre: ''
-})
 
-// fecha seleccionada
-const selectedDate = ref(null)
-
-// Fechas desde el backend (formato YYYY-MM-DD)
-const fechasError = ['2025-10-21', '2025-10-25']
-const fechasListo = ['2025-10-22', '2025-10-26']
-
-// Asignar clases según el estado
-function getDayClass(date) {
-  const d = date.toISOString().split('T')[0]
-  if (fechasError.includes(d)) return 'bg-red-500 text-white rounded-full'
-  //if (fechasListo.includes(d)) return 'bg-green-500 text-white rounded-full'
-  return ''
-}
-
-// Deshabilitar días que NO estén en fechasError
-function isDisabled(date) {
-  const d = date.toISOString().split('T')[0]
-  return !fechasError.includes(d)
-}
 //verificar si el usuario esta autentificado
 const checkSession = async () => { 
   try {
@@ -488,7 +466,16 @@ onMounted(async () => {
   );*/
 });
 
-// Estado del bot basado en tus condiciones
+// funcion para filtrar los bots 
+const filteredBots = computed(() => {
+  return bots.value.filter(bot => {
+    const matchesStatus = !filters.estado || bot.estado === filters.estado
+    const matchesName = !filters.nombre || bot.nombre.toLowerCase().includes(filters.nombre.toLowerCase())
+    return matchesStatus && matchesName
+  })
+})
+
+// Estado del bot basado en condiciones esta funcion es para la parte de torre de control en la parte estado de Ejecucion
 const botEstado = computed(() => {
 
   if (!botOptions.includes(selectedBotData.value?.id)) return 'archivo'
@@ -497,86 +484,11 @@ const botEstado = computed(() => {
   if (formInactivation.value.length > 0) return 'ejecutable'
   return null
 })
-// funcion para cargar los bots 
-const loadBots = async() => { 
-  try {
-    await tableroFunctions.loadbots({ user_id: user.value.user_id, rol: user.value.rol })
-    console.log('Bots cargados:', bots.value);
-    
-  } catch (err) {
-    console.error('Error al cargar los bots:', err)
-  }
-}
-const openModalHistoriaClinica = () => {
-  showModalHistoriaClinica.value = true
-}
-
-// funcion para cerrar el modal de historia clinica
-const closeModalHistoriaCLinica = () => {
-  showModalHistoriaClinica.value = false
-}
-
-function descargarFormato() {
-  tableroFunctions.descargarFormato()
-}
-
-const ejecutarBot = async () => { 
-  console.log('ejecutar bot: ', formInactivation.value);
-
-  if (formInactivation.value !== null && formInactivation.value.length > 0) {
-    console.log('registros a inactivar: ', formInactivation.value);
-    try {
-      await tableroFunctions.createSolicitud(formInactivation.value, authStore.user.user_id, control.selectedBot);
-      tableroFunctions.setSolicitudInactivacion([]);
-      alert('Registro guardado satisfactoriamente');
-      executeBot.value = false;
-    } catch (error) {
-      //console.log(error.message); // 👈 aquí capturas el mensaje
-      alert(error.message);       // 👈 y lo muestras en el alert
-    }
-  }
-
-  if (control.archivo != null) {
-    console.log('archivo a procesar: ', control.archivo);
-  }
-};
-
-
-
-// Methods
-const openDeactivationModal = () => {
-  showDeactivationModal.value = true
-
-}
-
-const openUserManagementModal = async () => {
-  isModalControlUsersOpen.value = true
-}
-
-const closeModal = () => {
-  isModalControlUsersOpen.value = false
-}
-
-const closeModalForm = () => {
-  showDeactivationModal.value = false
-}
-
-function resetControlSelected () {
-  control.fileName = ''
-  control.archivo = null // reiniciar archivo
-  tableroFunctions.setSolicitudInactivacion([])
-  tableroFunctions.setExecuteBot(false)
-}
-
-const obtener_porcentaje = (procesados, total) => {
-  if (total === 0) return 0
-  return Math.round((procesados / total) * 100)
-}
-
-//funcion para formatear la fecha en formato 'DD/MM/YYYY HH:mm'
-function formatDate(date) {
-  return dayjs(date).format('DD/MM/YYYY HH:mm')
-}
+const filters = reactive({
+  date: '2025-01-28',
+  estado: '',
+  nombre: ''
+})
 
 const selectedBotData = computed(() => {
   return bots.value.find(bot => bot.id === control.selectedBot) || null
@@ -640,6 +552,168 @@ const control = reactive({
   archivo: null // aquí se guarda el archivo
 })
 
+//  Watch que se activa al cambiar el bot seleccionado
+watch(() => selectedBotName.value,
+  async (newVal) => {
+    if (newVal === BOT_TYPES.SOPORTE_PATOLOGIA) {
+      loadFechasPatologia()
+    }
+  }
+)
+
+const loadFechasPatologia = async () => {
+  try {
+    fechasError.value = await tableroFunctions.LoadFechasSoportePatologia()
+    //console.log('Fechas recibidas del backend:', data)
+
+  } catch (err) {
+    console.error('❌ Error al obtener fechas:', err)
+  }
+}
+// fecha seleccionada
+const selectedDate = ref(null)
+
+// Fechas desde el backend (formato YYYY-MM-DD)
+const fechasListo = ['2025-10-22', '2025-10-26']
+
+// Asignar clases según el estado
+function getDayClass(date) {
+  if (!date) return ''
+
+  const d = date.toISOString().split('T')[0]
+
+  // Busca si existe un registro con esa fecha
+  const log = fechasError.value.find(f => f.fecha === d)
+
+  if (log) return 'bg-red-500 text-white rounded-full' // marcar en rojo
+
+  // Ejemplo si luego agregas fechas “listas”
+  // if (fechasListo.value.find(f => f.fecha === d)) return 'bg-green-500 text-white rounded-full'
+  return ''
+}
+
+// Deshabilitar días que NO estén en fechasError
+function isDisabled(date) {
+  const d = date.toISOString().split('T')[0]
+  return !fechasError.value.some(f => f.fecha === d)
+}
+
+//  Dispara el bot de patologias al seleccionar una fecha
+async function handleDateSelect(date) {
+  if (!date) return
+
+  const fechaSeleccionada = date.toLocaleDateString('sv-SE').split('T')[0]
+  const logSeleccionado = fechasError.value.find(f => f.fecha === fechaSeleccionada)
+
+  if (logSeleccionado) {
+    selectedLogId.value = logSeleccionado.id
+    console.log('✅ Log seleccionado:', selectedLogId.value)
+    tableroFunctions.setExecuteBot(true);
+  } else {
+    console.warn('⚠️ No hay log con error para esa fecha')
+  }
+}
+
+
+// funcion para cargar los bots 
+const loadBots = async() => { 
+  try {
+    await tableroFunctions.loadbots({ user_id: user.value.user_id, rol: user.value.rol })
+    console.log('Bots cargados:', bots.value);
+    
+  } catch (err) {
+    console.error('Error al cargar los bots:', err)
+  }
+}
+
+const ejecutarBot = async () => { 
+  //console.log('ejecutar bot: ', formInactivation.value);
+
+  if (formInactivation.value !== null && formInactivation.value.length > 0) {
+    console.log('registros a inactivar: ', formInactivation.value);
+    try {
+      await tableroFunctions.createSolicitud(formInactivation.value, authStore.user.user_id, control.selectedBot);
+      tableroFunctions.setSolicitudInactivacion([]);
+      alert('Registro guardado satisfactoriamente');
+      tableroFunctions.setExecuteBot(false);
+    } catch (error) {
+      //console.log(error.message); //  aquí captura el mensaje
+      alert(error.message);       //  y lo muestra en el alert
+    }
+  }
+
+  if (control.archivo != null) {
+    console.log('archivo a procesar: ', control.archivo);
+  }
+  // Lógica para ejecutar el bot de patologias aqui
+  if (selectedBotName.value === BOT_TYPES.SOPORTE_PATOLOGIA && selectedDate.value) {
+    const fechaSeleccionada = selectedDate.value.toLocaleDateString('sv-SE').split('T')[0]
+    try {
+      await tableroFunctions.activateSoportePatologiaBot(selectedLogId.value, fechaSeleccionada)
+      // actualizar la fecha de error para que no se pueda volver a seleccionar
+      fechasError.value = fechasError.value.filter(f => f.id !== selectedLogId.value)
+      selectedDate.value = null
+      selectedLogId.value = null
+      tableroFunctions.setExecuteBot(false);
+      alert('Bot de Soporte de Patologías activado para la fecha ' + fechaSeleccionada)
+    } catch (error) {
+      alert('Ocurrió un error al activar el bot')
+    }
+  }
+};
+
+
+
+// Methods
+const openDeactivationModal = () => {
+  showDeactivationModal.value = true
+
+}
+
+const openUserManagementModal = async () => {
+  isModalControlUsersOpen.value = true
+}
+
+const closeModal = () => {
+  isModalControlUsersOpen.value = false
+}
+
+const closeModalForm = () => {
+  showDeactivationModal.value = false
+}
+
+const openModalHistoriaClinica = () => {
+  showModalHistoriaClinica.value = true
+}
+
+// funcion para cerrar el modal de historia clinica
+const closeModalHistoriaCLinica = () => {
+  showModalHistoriaClinica.value = false
+}
+
+function descargarFormato() {
+  tableroFunctions.descargarFormato()
+}
+
+
+function resetControlSelected () {
+  control.fileName = ''
+  control.archivo = null // reiniciar archivo
+  tableroFunctions.setSolicitudInactivacion([])
+  tableroFunctions.setExecuteBot(false)
+}
+
+const obtener_porcentaje = (procesados, total) => {
+  if (total === 0) return 0
+  return Math.round((procesados / total) * 100)
+}
+
+//funcion para formatear la fecha en formato 'DD/MM/YYYY HH:mm'
+function formatDate(date) {
+  return dayjs(date).format('DD/MM/YYYY HH:mm')
+}
+
+
 const config = reactive({
   timeout: 300,
   retries: 3,
@@ -649,15 +723,6 @@ const config = reactive({
   userRole: 'admin'
 })
 
-
-// funcion para filtrar los bots 
-const filteredBots = computed(() => {
-  return bots.value.filter(bot => {
-    const matchesStatus = !filters.estado || bot.estado === filters.estado
-    const matchesName = !filters.nombre || bot.nombre.toLowerCase().includes(filters.nombre.toLowerCase())
-    return matchesStatus && matchesName
-  })
-})
 
 const openModal = (bot_id, tipo) => {
   botSelected.value = bots.value.find(bot => bot.id === bot_id)

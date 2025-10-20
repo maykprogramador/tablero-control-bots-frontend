@@ -232,6 +232,36 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         console.error('Error al cargar las historias clinicas:', error);
         throw error;
       }
+    }, 
+    // cargar las fechas de soporte patologia con error  o listo
+    async LoadFechasSoportePatologia() {
+      try {
+        const { data } = await axiosInstance.get('logs/fechas', { params: { estado: 'error' } });
+        return data;
+      } catch (error) {
+        console.error('Error al cargar las fechas de soporte patologia:', error);
+        throw error;
+      }
+    },
+    // activar el bot de soporte patologia para una fecha
+    async activateSoportePatologiaBot(id_log,fecha) {
+      console.log('fechaSelected: ',fecha, ' id_log: ',id_log);
+      
+      try {
+        const { data } = await axiosInstance.post('activar-bot-patologia', { id: id_log, fecha: fecha });
+        //console.log('data: ',data.log);
+        // actualizar el log en el estado
+        const index = this.logs.findIndex(l => l.id === data.log.id);
+        if (index !== -1) {
+          this.logs[index] = data.log;
+          console.log('Log actualizado en el estado:', data.log);
+        }
+        return data;
+        
+      } catch (error) {
+        console.error('Error al activar el bot de soporte patologia:', error);
+        throw error;
+      }
     },
 
     iniciarSocket() { 
