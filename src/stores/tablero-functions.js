@@ -39,9 +39,6 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     openModal() {
       this.isModalOpen = true
     },
-    setFormInactivation(form){
-      this.formInactivation = form
-    },
     setSolicitudes(solicitudes){
       this.solicitudes = solicitudes
     },
@@ -113,6 +110,18 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         this.users = response.data;
       } catch (error) {
         //console.error('Error al cargar los usuarios:', error);
+        throw error;
+      }
+    },
+    async deleteUser(userId) {
+      try {
+        console.log('Eliminando usuario con ID:', userId);
+        await axiosInstance.delete(`delete/user`, { params: { userId: userId } });
+        // Eliminar el usuario del estado local
+        this.users = this.users.filter(u => u.id !== userId);
+        console.log('Usuario eliminado con éxito:', userId);
+      } catch (error) {
+        console.error('Error al eliminar el usuario:', error);
         throw error;
       }
     },
@@ -329,7 +338,6 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       this.registros = [];
       this.users = [];
       this.botsDisponibles = [];
-      this.formInactivation = [];
       this.solicitudes = [];
       this.historias_clinicas = [];
       this.logs = [];

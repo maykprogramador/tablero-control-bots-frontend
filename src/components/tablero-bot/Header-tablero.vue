@@ -3,15 +3,11 @@
     <div>
       <div class="flex items-center justify-between h-16 px-6">
         <!-- Sección Izquierda: Branding -->
-        <div class="flex items-center space-x-3">
-          <span class="text-2xl">🤖</span>
-          <h1 class="text-xl font-bold text-white hidden sm:block">
-            Tablero de Control de Bots
-          </h1>
-          <h1 class="text-lg font-bold text-white sm:hidden">
-            Control Bots
-          </h1>
-        </div>
+        
+        <h1 class="text-4xl font-semibold tracking-tight">
+          <span class="text-[#FF5F3F]">Heli</span><span class="text-white">xa</span>
+          <span class="bg-[#FF5F3F] text-white text-sm font-bold rounded px-2 py-0.5 ml-1 align-top">SGB</span>
+        </h1>
 
         <!-- Sección  Desktop -->
         <div class="hidden md:flex items-center space-x-4">

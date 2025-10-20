@@ -230,6 +230,11 @@
                           <option value="usuario">Usuario</option>
                           <option value="supervisor">Supervisor</option>
                         </select>
+                        <button @click="deleteUser(user)" class="text-red-600 hover:text-red-800 transition-colors duration-200 p-1" title="Eliminar usuario" >
+                          <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862 a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4 a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h10"/>
+                          </svg>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -379,6 +384,19 @@ const ChangeRol = async (user) => {
   } catch (error) {
     console.error('Error updating user role:', error)
   } 
+}
+
+const deleteUser = async (user) => {
+  console.log('user: ', user);
+  
+  if (confirm(`¿Estás seguro de que deseas eliminar al usuario ${user.email}? Esta acción no se puede deshacer.`)) {
+    try {
+      await tableroFunctions.deleteUser(user.id)
+      showToast(`Usuario ${user.email} eliminado correctamente`)
+    } catch (error) {
+      console.error('Error deleting user:', error)
+    }
+  }
 }
 
 const openBotManagement = (user) => {
