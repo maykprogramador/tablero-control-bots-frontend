@@ -136,9 +136,8 @@
               </select>
             </div>
 
-            <!-- Cargar Archivo -->
-            <!-- Cargar Archivo  -->
-            <div v-if="control.selectedBot === 4 || control.selectedBot === 5 || control.selectedBot === 6"  class="mb-6">
+            <!-- Si los bots son de envio masivo o carga de archivo  -->
+            <div v-if="BOTS_MASIVOS.includes(selectedBotName)"  class="mb-6">
               <div class="mb-4">
                 <button
                   @click="descargarFormato"
@@ -180,12 +179,10 @@
                 </button>
               </div>
             </div>
-
-            <!-- Parámetros -->
-            <!-- Botón de Registro -->
+            <!-- Botón de Registro solo para los bots de retiro de usuario -->
             <div class="mb-6">
               <button
-                v-if="botOptions.includes(control.selectedBot)"
+                v-if="BOTS_RETIRO.includes(selectedBotName)"
                 @click="openDeactivationModal"
                 class="w-full cursor-pointer flex items-center justify-center px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200"
               >
@@ -193,6 +190,28 @@
                 Registrar personas a inactivar
               </button>
             </div>
+
+            <!-- funcionalidad para el soporte de patologias-->
+            <div class="max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg">
+              <h2 class="text-xl font-bold mb-4 text-gray-800">
+                Selecciona una fecha con error
+              </h2>
+
+              <Datepicker
+                v-model="selectedDate"
+                :day-class="getDayClass"
+                :enable-time-picker="false"
+                :disabled-dates="isDisabled"
+                auto-apply
+                inline
+              />
+
+              <p v-if="selectedDate" class="mt-4 text-gray-700 text-center">
+                Fecha seleccionada:
+                <strong>{{ selectedDate.toLocaleDateString() }}</strong>
+              </p>
+            </div>
+
             <!-- Execute Button -->
             <button
               @click="ejecutarBot()"
@@ -206,7 +225,6 @@
             >
               🚀 Ejecutar Bot
             </button>
-
 
             <!-- Status Summary -->
             <div class="bg-gray-50 rounded-lg p-4 mt-4">
@@ -333,6 +351,7 @@
         </div>
       </div>
     </div>
+    
     <DashboardHistoriaClinica v-if="showModalHistoriaClinica" :bot="botSelected" :onclose="closeModalHistoriaCLinica"/>
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
@@ -357,6 +376,8 @@ import DashboardHistoriaClinica from './Dashboard-Historia-Clinica.vue';
 import HeaderTablero from './Header-tablero.vue';
 import NotificacionDashboard from './Notificacion-Dashboard.vue';
 import LogModal from './Log-Modal.vue';
+import Datepicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -377,8 +398,43 @@ const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
 const isLogsModalOpen = ref(false)
 const botOptions = [1, 2, 3]
+// ENUMERACION DE LOS BOTS --------------------------------------------------------------------------------------------------------------------------------
+const BOT_TYPES = Object.freeze({
+  RETIRO_USUARIO_AVIDANTI: 'RETIRO_USUARIO_AVIDANTI',
+  RETIRO_USUARIO_ODO: 'RETIRO_USUARIO_ODO',
+  AUTOMATIZACION_FACTURAS: 'AUTOMATIZACION_FACTURAS',
+  MASIVO_AVIDANTI: 'MASIVO_AVIDANTI',
+  MASIVO_ODO: 'MASIVO_ODO',
+  DESCARGA_HC: 'DESCARGA_HC',
+  ENVIO_HC: 'ENVIO_HC',
+  SOPORTE_PATOLOGIA: 'SOPORTE_PATOLOGIA',
+  RETIRO_USUARIO_GOMEDYS: 'RETIRO_USUARIO_GOMEDYS'
+});
+const BOT_MAP = {
+  1: BOT_TYPES.RETIRO_USUARIO_AVIDANTI,
+  2: BOT_TYPES.AUTOMATIZACION_FACTURAS,
+  3: BOT_TYPES.RETIRO_USUARIO_ODO,
+  4: BOT_TYPES.MASIVO_AVIDANTI,
+  5: BOT_TYPES.MASIVO_ODO,
+  6: BOT_TYPES.DESCARGA_HC,
+  7: BOT_TYPES.ENVIO_HC,
+  8: BOT_TYPES.SOPORTE_PATOLOGIA,
+  9: BOT_TYPES.RETIRO_USUARIO_GOMEDYS
+};
+const BOTS_MASIVOS = [
+  BOT_TYPES.MASIVO_AVIDANTI,
+  BOT_TYPES.MASIVO_ODO,
+  BOT_TYPES.DESCARGA_HC,
+];
 
+const BOTS_RETIRO = [
+  BOT_TYPES.RETIRO_USUARIO_AVIDANTI,
+  BOT_TYPES.AUTOMATIZACION_FACTURAS,
+  BOT_TYPES.RETIRO_USUARIO_ODO,
+];
 
+const selectedBotName = computed(() => BOT_MAP[control.selectedBot] || null);
+//--------------------------------------------------------------------------------------------------------------------------------
 // Reactive data
 const filters = reactive({
   date: '2025-01-28',
@@ -386,7 +442,26 @@ const filters = reactive({
   nombre: ''
 })
 
+// fecha seleccionada
+const selectedDate = ref(null)
 
+// Fechas desde el backend (formato YYYY-MM-DD)
+const fechasError = ['2025-10-21', '2025-10-25']
+const fechasListo = ['2025-10-22', '2025-10-26']
+
+// Asignar clases según el estado
+function getDayClass(date) {
+  const d = date.toISOString().split('T')[0]
+  if (fechasError.includes(d)) return 'bg-red-500 text-white rounded-full'
+  //if (fechasListo.includes(d)) return 'bg-green-500 text-white rounded-full'
+  return ''
+}
+
+// Deshabilitar días que NO estén en fechasError
+function isDisabled(date) {
+  const d = date.toISOString().split('T')[0]
+  return !fechasError.includes(d)
+}
 //verificar si el usuario esta autentificado
 const checkSession = async () => { 
   try {
@@ -686,4 +761,14 @@ const getStatusDotClass = (estado) => {
 .overflow-x-auto::-webkit-scrollbar-track {
   background-color: #f9fafb;
 }
+
+/* puedes ajustar el tamaño de los días si lo deseas */
+.dp__calendar_item {
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 </style>

@@ -12,6 +12,7 @@
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
     "@tailwindcss/vite": "^4.1.11",
+    "@vuepic/vue-datepicker": "^11.0.3",
     "axios": "^1.11.0",
     "dayjs": "^1.11.13",
     "lucide-vue-next": "^0.533.0",
