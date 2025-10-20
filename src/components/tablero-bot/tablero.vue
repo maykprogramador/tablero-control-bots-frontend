@@ -194,7 +194,7 @@
             <!-- funcionalidad para el soporte de patologias-->
             <div class="max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg">
               <h2 class="text-xl font-bold mb-4 text-gray-800">
-                Selecciona una fecha con error
+                Selecciona una fecha
               </h2>
 
               <Datepicker
