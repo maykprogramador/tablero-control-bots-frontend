@@ -11,6 +11,7 @@
     <div
       class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-auto"
       @click="closeModal"
+      @keydown.esc="closeModal" tabindex="0"
     >
       <!-- Modal Content -->
       <Transition
@@ -97,6 +98,18 @@
                   class="w-full sm:w-auto px-3 py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
               </div>
+              <!-- boton de nuevo usuario-->
+              <div class="sm:ml-auto">
+                <button 
+                  @click="openAddUserModal()"
+                  class="px-3 sm:px-4 py-1.5 cursor-pointer bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 text-sm flex items-center gap-2"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                  </svg>
+                  <span>Usuario</span>
+                </button>
+              </div>
             </div>
 
             <!-- Loading State -->
@@ -168,8 +181,8 @@
                     <!-- Nueva celda para mostrar bots asignados y botón gestionar -->
                     <td class="hidden md:table-cell px-4 py-4 whitespace-nowrap">
                       <div class="flex items-center gap-1">
-                        <span v-if="user.rol !== 'admin'" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                          {{ user.Bots?.length }}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          {{ user.Bots?.length || 0 }}
                         </span>
                         <button
                           @click="openBotManagement(user)"
@@ -219,6 +232,11 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                           </svg>
                         </button>
+                        <button @click="deleteUser(user)" class="text-red-600 hover:text-red-800 transition-colors duration-200 p-1" title="Eliminar usuario" >
+                          <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862 a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4 a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h10"/>
+                          </svg>
+                        </button>
                         <!-- Show role selector on mobile in actions column -->
                         <select 
                           v-model="user.rol"
@@ -230,11 +248,7 @@
                           <option value="usuario">Usuario</option>
                           <option value="supervisor">Supervisor</option>
                         </select>
-                        <button @click="deleteUser(user)" class="text-red-600 hover:text-red-800 transition-colors duration-200 p-1" title="Eliminar usuario" >
-                          <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862 a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4 a1 1 0 011-1h4a1 1 0 011 1v3m-9 0h10"/>
-                          </svg>
-                        </button>
+                        
                       </div>
                     </td>
                   </tr>
@@ -342,6 +356,7 @@
       <span class="text-sm sm:text-base">{{ successMessage }}</span>
     </div>
   </Transition>
+  <ModalAddUser v-if="showModalAddUser" @close="showModalAddUser = false"/>
 </template>
 
 <script setup>
@@ -351,6 +366,7 @@ import { useAuthStore } from '@/stores/Autentificate/auth'
 import ManagmentBotsUser from './Managment-Bots-User.vue' // se importa el componente de administracion de los bots
 import { capitalizarNombre } from '@/utils/CapitalizarNombre'
 import { useRouter } from 'vue-router'
+import ModalAddUser from './control-users/Modal-Add-User.vue'
 
 // UI State
 const isModalOpen = ref(false)
@@ -360,6 +376,7 @@ const successMessage = ref('')
 const props = defineProps(['onClose'])
 const tableroFunctions = useTableroFunctions()
 const showBotManagement = ref(false)
+const showModalAddUser = ref(false)
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -407,6 +424,11 @@ const openBotManagement = (user) => {
 
 const closeModalBotManagment = () => {
   showBotManagement.value = false
+}
+
+// logica para abrir el modal de agregar usuario
+const openAddUserModal = () => {
+  showModalAddUser.value = true
 }
 
 /*function capitalizarNombre(nombre) {  

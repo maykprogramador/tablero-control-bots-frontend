@@ -171,6 +171,17 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         console.error('Error al cambiar el rol del usuario:', error);
       }
     },
+    // agregar nuevo usuario 
+    async addNewUser(nuevoUsuario) {
+      try {
+        const response = await axiosInstance.post('create/user', nuevoUsuario);
+        console.log('Nuevo usuario creado:', response.data.user);
+        // Agregar el nuevo usuario al estado
+        this.users.push(response.data.user);
+      } catch (error) {
+        throw error;
+      }
+    },
 
     async createSolicitud(form, user_id, bot_id) {
       try {

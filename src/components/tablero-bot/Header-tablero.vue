@@ -23,7 +23,7 @@
                 v-if="NotificationCount > 0"
                 class="absolute -top-1 -right-1 bg-[#FF5F3F] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium"
               >
-                {{ NotificationCount }}
+                {{ NotificationCount > 99 ? '99+' : NotificationCount }}
               </span>
             </button>
 
@@ -133,7 +133,7 @@
             <Bell class="w-5 h-5 mr-3" />
             Notificaciones
             <span v-if="NotificationCount > 0" class="ml-auto bg-[#FF5F3F] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              {{ NotificationCount }}
+              {{ NotificationCount > 99 ? '99+' : NotificationCount }}
             </span>
           </button>
           <!-- Notificaciones en Mobile -->
