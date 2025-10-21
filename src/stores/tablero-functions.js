@@ -63,7 +63,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         this.bots = response.data;
         this.inicializarMetricas(this.bots);
         //carga las métricas desde la API
-        await this.loadMetricasIniciales(user_id);
+        this.loadMetricasIniciales(user_id);
       } catch (error) {
         console.error('Error al cargar los bots:', error);
       }
