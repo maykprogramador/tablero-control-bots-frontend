@@ -101,25 +101,25 @@
                       <!-- Total registros -->
                       <div class="px-3 py-0.5 rounded-full bg-gray-100 border-gray-200">
                         <span class="text-xs font-medium text-gray-600">Total: </span>
-                        <span class="text-xs font-semibold text-gray-800">{{ bot.total_registros }}</span>
+                        <span class="text-xs font-semibold text-gray-800">{{ getMetricas(bot.id).total_registros }}</span>
                       </div>
                       
                       <!-- Exitosos -->
                       <div class="px-3 py-0.5 rounded-full bg-green-100  border-green-200">
                         <span class="text-xs font-medium text-green-600">Exitosos: </span>
-                        <span class="text-xs font-semibold text-green-800">346</span>
+                        <span class="text-xs font-semibold text-green-800">{{ getMetricas(bot.id).exito }}</span>
                       </div>
                       
                       <!-- Pendientes -->
                       <div class="px-3 py-0.5 rounded-full bg-amber-100  border-amber-200">
                         <span class="text-xs font-medium text-amber-600">Pendientes: </span>
-                        <span class="text-xs font-semibold text-amber-800">676</span>
+                        <span class="text-xs font-semibold text-amber-800">{{ getMetricas(bot.id).pendiente ||  getMetricas(bot.id).proceso}}</span>
                       </div>
                       
                       <!-- Error -->
                       <div class="px-3 py-0.5 rounded-full bg-red-100  border-red-200">
                         <span class="text-xs font-medium text-red-600">Error: </span>
-                        <span class="text-xs font-semibold text-red-800">68</span>
+                        <span class="text-xs font-semibold text-red-800">{{ getMetricas(bot.id).error }}</span>
                       </div>
                     </div>
                   </div>
@@ -407,6 +407,7 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted, watch} from 'vue'
+import { storeToRefs } from 'pinia';
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import DetailsModal from './Details-Modal.vue'
 import ControlUsersModal from './Control-Users-Modal.vue';
@@ -433,6 +434,7 @@ const bots = computed(() => tableroFunctions.bots)
 const isModalOpen = computed(() => tableroFunctions.isModalOpen)
 const provider = computed(() => authStore.provider) 
 const formInactivation = computed(() => tableroFunctions.SolicitudInactivacion)
+const { metricasBots } = storeToRefs(tableroFunctions)
 const botSelected = ref(null)
 const fileInput = ref(null)
 const isDragging = ref(false)
@@ -518,6 +520,13 @@ const filteredBots = computed(() => {
     return matchesStatus && matchesName
   })
 })
+
+// funcion para obtener la metrica del bot_id
+function getMetricas(botId) {
+  return metricasBots.value.find(m => m.bot_id === botId) || {
+    exito: 0, error: 0, pendiente: 0, proceso: 0, procesados: 0, total_registros: 0
+  };
+}
 
 // Estado del bot basado en condiciones esta funcion es para la parte de torre de control en la parte estado de Ejecucion
 const botEstado = computed(() => {

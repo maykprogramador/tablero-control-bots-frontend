@@ -30,6 +30,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     botsDisponibles: [],
     SolicitudInactivacion:[],
     solicitudes: [],
+    metricasBots: [],
     historias_clinicas: [],
     formSolicitudes: [],
     executeBot: false,
@@ -60,10 +61,14 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           }
         });
         this.bots = response.data;
+        this.inicializarMetricas(this.bots);
+        //carga las métricas desde la API
+        await this.loadMetricasIniciales(user_id);
       } catch (error) {
         console.error('Error al cargar los bots:', error);
       }
     },
+    
     async loadRegistros({ bot_id }) {
       try {
         const yaExisten = this.registros.some(r => r.bot_id === bot_id)
@@ -263,6 +268,77 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         throw error;
       }
     },
+    inicializarMetricas(bots) {
+      this.metricasBots = bots.map(bot => ({
+        bot_id: bot.id,
+        exito: 0,
+        error: 0,
+        pendiente: 0,
+        proceso: 0,
+        procesados: bot.procesados || 0,
+        total_registros: bot.total_registros || 0
+      }));
+    },
+    async loadMetricasIniciales(userId) {
+      try {
+        const response = await axiosInstance.get('allmetricas', { params: { userId} }); // ajusta el endpoint real
+        const metricasData = response.data;
+
+        // Sincronizamos las métricas reales con las que ya existen
+        this.metricasBots = this.metricasBots.map(botMetricas => {
+          const nuevasMetricas = metricasData.find(m => m.bot_id === botMetricas.bot_id);
+          return nuevasMetricas
+            ? { ...botMetricas, ...nuevasMetricas } // actualizamos los valores reales
+            : botMetricas; // dejamos los que no tengan datos
+        });
+
+        console.log('✅ Métricas iniciales cargadas:', this.metricasBots);
+      } catch (error) {
+        console.error('❌ Error al cargar métricas iniciales:', error);
+      }
+    },
+
+    actualizarMetricasIncremental(botId, registro) {
+      const botMetricas = this.metricasBots.find(m => m.bot_id === botId);
+      if (!botMetricas) return;
+
+      // Incrementamos total_registros
+      botMetricas.total_registros++;
+
+      // Determinar estado
+      const estado = registro.estado || registro.estado_envio;
+
+      switch (estado) {
+        case 'exito':
+          botMetricas.exito++;
+          break;
+        case 'error':
+          botMetricas.error++;
+          break;
+        case 'pendiente':
+          botMetricas.pendiente++;
+          break;
+        case 'proceso':
+          botMetricas.proceso++;
+          break;
+        default:
+          break;
+      }
+    },
+    async actualizarMetricaBot(botId) {
+      try {
+        const response = await axiosInstance.get('metricas/bot', { params: { botId } });
+        const nuevasMetricas = response.data;
+
+        const botMetricas = this.metricasBots.find(m => m.bot_id === botId);
+        if (botMetricas) {
+          Object.assign(botMetricas, nuevasMetricas);
+          console.log(`Métricas actualizadas para bot ${botId}:`, botMetricas);
+        }
+      } catch (error) {
+        console.error(`Error al actualizar métricas para bot ${botId}:`, error);
+      } 
+    },
 
     iniciarSocket() { 
       socket.on('nuevo_registro', (registro, bot, solicitud) => {
@@ -271,9 +347,6 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         // usuario actual desde el store de auth
         const authStore = useAuthStore()
         const user = authStore.user 
-        console.log('usuario a comparar:', user);
-        
-    
         // verificar si la solicitud pertenece al usuario autenticado
         const perteneceASolicitud = solicitud?.user_id === user.user_id  
         // Verificar si el registro pertenece a un bot en el estado y si ya tiene registros
@@ -285,20 +358,21 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           const indexBot = this.bots.findIndex(b => b.id === bot.id);
           if (indexBot !== -1) {
             this.bots[indexBot] = bot; // actualizamos datos del bot
-            console.log('🔄 Bot actualizado desde socket:', bot);
+            console.log('Bot actualizado desde socket:', bot);
+            this.actualizarMetricasIncremental(bot.id, registro);
           }
           if (yaTieneRegistros) {
             this.registros.unshift(registro)
-            console.log('✅ Registro agregado desde socket:', registro)
+            console.log('Registro agregado desde socket:', registro)
           }else{
-            console.log('⚠️ Registro ignorado porque no existe historial para este bot:', registro.bot_id)
+            console.log('Registro ignorado porque no existe historial para este bot:', registro.bot_id)
           }
           // 👉 actualizar solicitudes si pertenece al usuario autenticado
           if (perteneceASolicitud) {
             const indexSolicitud = this.solicitudes.findIndex(s => s.id === solicitud.id);
             if (indexSolicitud !== -1) {
               this.solicitudes[indexSolicitud] = solicitud; // actualizamos datos del bot
-              console.log('🔄 Solicitud actualizado desde socket:', solicitud);
+              console.log('Solicitud actualizado desde socket:', solicitud);
             }
           }
         }
@@ -330,9 +404,9 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         }
       });
 
-      // 👉 Evento para historias clínicas
+      // Evento para historias clínicas
       socket.on('nueva_historia', (trazabilidad, botActualizado) => {
-        console.log('📩 Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
+        console.log('Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
 
         // Verificar si el bot está en el estado
         const perteneceABot = this.bots.some(b => b.id === trazabilidad.bot_id);
@@ -343,8 +417,9 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           const indexBot = this.bots.findIndex(b => b.id === botActualizado.id);
           if (indexBot !== -1) {
             this.bots.splice(indexBot, 1, botActualizado);
-            console.log('🔄 Bot actualizado desde socket:', botActualizado);
+            console.log('Bot actualizado desde socket:', botActualizado);
           }
+          this.actualizarMetricaBot(botActualizado.id);
 
           if (this.historias_clinicas.length > 0) {
             // 📄 Agregar o actualizar trazabilidad
