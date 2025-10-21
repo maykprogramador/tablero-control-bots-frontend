@@ -428,8 +428,13 @@ export const useTableroFunctions = defineStore('tablero-functions',{
               console.log('✅ Trazabilidad agregada al state:', trazabilidad);
             } else {
               const index = this.historias_clinicas.findIndex(t => t.id === trazabilidad.id);
-              this.historias_clinicas.splice(index, 1, trazabilidad);
-              console.log('🔄 Trazabilidad actualizada en el state:', trazabilidad);
+              if (index !== -1) {
+                // Eliminar la historia antigua
+                this.historias_clinicas.splice(index, 1);
+              }
+              // Insertar la historia actualizada al inicio
+              this.historias_clinicas.unshift(trazabilidad);
+              console.log('🔄 Trazabilidad actualizada y movida al inicio del state:', trazabilidad);
             }
           }
           
