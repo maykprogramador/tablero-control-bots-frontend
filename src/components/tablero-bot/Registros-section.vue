@@ -1,10 +1,10 @@
 <template>
   <div class="bg-white w-full rounded-xl shadow-md p-6  border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">        
     <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
-      <div class="bg-gradient-to-r from-green-500 to-green-400 text-white p-3 rounded-lg mr-4 text-xl">
-        🖥
+      <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
+        <Monitor/>
       </div>
-      <h2 class="text-xl font-semibold text-slate-800">Panel de Registros</h2>
+      <h2 class="text-xl font-semibold text-slate-800">Panel de Solicitudes</h2>
     </div>
     
     <!-- Filtros -->
@@ -206,7 +206,7 @@
     <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
       <button 
         @click="exportData"
-        class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 flex items-center gap-2"
+        class="px-4 py-2 bg-[#00B094] text-white rounded-lg font-medium hover:bg-[#0e8571] transition-colors duration-200 flex items-center gap-2"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -228,6 +228,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import { useAuthStore } from '@/stores/Autentificate/auth';
+import { Monitor} from 'lucide-vue-next';
 import { useRouter } from 'vue-router'
 import solicitudDetailsModal from './solicitud-details-modal.vue'
 import dayjs from 'dayjs'

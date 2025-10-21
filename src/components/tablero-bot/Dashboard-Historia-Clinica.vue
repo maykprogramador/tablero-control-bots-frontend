@@ -30,19 +30,19 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
           <div class="bg-white/10 rounded-lg p-3 text-center">
             <div class="text-lg sm:text-2xl font-bold">{{ registrosTrazabilidad.length }}</div>
-            <div class="text-xs sm:text-sm text-blue-100">Total Registros</div>
+            <div class="text-xs sm:text-sm text-white">Total Registros</div>
           </div>
-          <div @click="filtros.estado = 'exito'" class="bg-green-500/20 rounded-lg p-3 cursor-pointer text-center">
-            <div class="text-lg sm:text-2xl font-bold text-green-200">{{ getStatusCount('exito') }}</div>
-            <div class="text-xs sm:text-sm text-green-100">Exitosos</div>
+          <div @click="filtros.estado = 'exito'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center">
+            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('exito') }}</div>
+            <div class="text-xs sm:text-sm text-white">Exitosos</div>
           </div>
-          <div @click="filtros.estado = 'pendiente'" class="bg-yellow-500/20 rounded-lg p-3 cursor-pointer text-center">
-            <div class="text-lg sm:text-2xl font-bold text-yellow-200">{{ getStatusCount('pendiente') }}</div>
-            <div class="text-xs sm:text-sm text-yellow-100">Pendiente</div>
+          <div @click="filtros.estado = 'pendiente'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center">
+            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('pendiente') }}</div>
+            <div class="text-xs sm:text-sm text-white">Pendiente</div>
           </div>
           <div @click="filtros.estado = 'error'" class="bg-red-500/20 rounded-lg p-3 cursor-pointer text-center">
-            <div class="text-lg sm:text-2xl font-bold text-red-200">{{ getStatusCount('error') }}</div>
-            <div class="text-xs sm:text-sm text-red-100">Con Error</div>
+            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('error') }}</div>
+            <div class="text-xs sm:text-sm text-white">Con Error</div>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@
       <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
         <button 
           @click="exportData"
-          class="px-4 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-200 flex items-center gap-2"
+          class="px-4 py-2 bg-[#00B094] text-white rounded-lg font-medium hover:bg-[#0e8571] transition-colors duration-200 flex items-center gap-2"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
