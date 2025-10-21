@@ -226,7 +226,6 @@
                     v-model="form.fecha_inactivacion"
                     type="date"
                     required
-                    :min="today"
                     class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                     :class="{ 'border-red-500 focus:border-red-500 focus:ring-red-200': hasError('fecha_inactivacion') }"
                   >
@@ -602,15 +601,6 @@ const validateForm = () => {
     errors.push('La fecha de inactivación es obligatoria')
   }
   
-  // Validate date is not in the past
- if (form.fecha_inactivacion) {
-    const hoy = new Date().toISOString().split('T')[0]; // "2025-08-06"
-    const fecha = form.fecha_inactivacion;              // también "2025-08-06"
-    //console.log('fecha inactivacion (string):', fecha, 'hoy (string):', hoy);
-    if (fecha < hoy) {
-      errors.push('La fecha de inactivación no puede ser anterior a hoy');
-    }
-  }
   // funcion para validar si hay un archivo subido
   if (!form.archivo && botSelected !== 3) {
     errors.push('Debe subir un archivo antes de agregar el usuario')
