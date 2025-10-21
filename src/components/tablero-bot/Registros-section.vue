@@ -46,7 +46,7 @@
             <option value="">Todos</option>
             <option value="exito">Éxito</option>
             <option value="error">Error</option>
-            <option value="proceso">En Proceso</option>
+            <option value="pendiente">Pendiente</option>
           </select>
         </div>
       </div>
@@ -358,7 +358,7 @@ const exportData = () => {
 //--------------------------------------------------
 const getRegistroStatusClass = (estado) => {
   const classes = {
-    proceso: 'bg-yellow-100 text-yellow-800',
+    pendiente: 'bg-yellow-100 text-yellow-800',
     exito: 'bg-green-100 text-green-800',
     error: 'bg-red-100 text-red-800'
   }
@@ -369,7 +369,7 @@ const getStatusBadgeClass = (estado) => {
   const classes = {
     exito: 'bg-green-100 text-green-700',
     error: 'bg-red-100 text-red-700',
-    proceso: 'bg-yellow-100 text-yellow-700'
+    pendiente: 'bg-yellow-100 text-yellow-700'
   }
   return classes[estado] || 'bg-gray-100 text-gray-700'
 }
@@ -384,7 +384,7 @@ const getStatusDotClass = (estado) => {
   const classes = {
     exito: 'bg-green-500',
     error: 'bg-red-500',
-    proceso: 'bg-yellow-500'
+    pendiente: 'bg-yellow-500'
   }
   return classes[estado] || 'bg-gray-500'
 }
@@ -393,7 +393,7 @@ const getStatusText = (estado) => {
   const texts = {
     exito: 'Éxito',
     error: 'Error',
-    proceso: 'En Proceso'
+    pendiente: 'Pendiente'
   }
   return texts[estado] || 'Desconocido'
 }
