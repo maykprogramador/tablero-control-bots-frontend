@@ -325,7 +325,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, defineProps } from 'vue'
+import { ref, computed, onMounted, onUnmounted, defineProps, watch } from 'vue'
 import ModalDetailsHistoriaClinica from './Modal-details-historia-clinica.vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import { useAuthStore } from '@/stores/Autentificate/auth';
@@ -539,6 +539,11 @@ const registrosFiltrados = computed(() => {
   return registros
 })
 
+watch(() => filtros.value.estado, (nuevoValor) => {
+  if (nuevoValor !== 'error') {
+    filtros.value.motivo_fallo = ''
+  }
+})
 // Métodos
 const cerrarModalDashboard = () => {
   props.onclose()
