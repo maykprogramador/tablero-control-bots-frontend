@@ -2,7 +2,7 @@
   <div @keydown.esc="cerrarModalDashboard" tabindex="0" @click="cerrarModalDashboard" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div @click.stop class="fixed inset-0 bg-white rounded-none shadow-2xl 
          w-screen h-screen sm:relative sm:rounded-xl 
-         sm:max-w-7xl sm:max-h-[95vh] sm:w-full sm:h-auto 
+         sm:max-w-8xl sm:max-h-[95vh] sm:w-full sm:h-auto 
          overflow-auto sm:overflow-hidden">
       <!-- Close Button -->
       <button 
@@ -48,9 +48,9 @@
       </div>
 
       <!-- Cuerpo del dashboard -->
-      <div class="p-6 md:max-h-[65vh] md:overflow-y-auto">
+      <div class="sm:p-6 md:max-h-[65vh] md:overflow-y-auto">
         <!-- Barra de búsqueda y filtros (versión compacta) -->
-        <div class="flex flex-wrap gap-3 items-end bg-white/70 backdrop-blur-sm px-3 py-4 rounded-xl shadow border border-gray-100 mx-4">
+        <div class="flex flex-wrap gap-3 items-end bg-white/70 backdrop-blur-sm px-3 py-4 rounded-xl shadow border border-gray-100 sm:mx-4">
           <!-- Campo de búsqueda -->
           <div class="flex-1 min-w-[200px]">
             <label class="block text-xs font-bold text-gray-600 mb-1">
@@ -73,6 +73,24 @@
               <option value="exito">Éxito</option>
               <option value="error">Error</option>
               <option value="pendiente">Pendiente</option>
+            </select>
+          </div>
+
+          <!-- Filtro dinámico de Motivo de fallo -->
+          <div v-if="filtros.estado === 'error'">
+            <label class="block text-xs font-bold text-gray-600 mb-1">Motivo de fallo</label>
+            <select
+              v-model="filtros.motivo_fallo"
+              class="w-48 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500"
+            >
+              <option value="">Todos</option>
+              <option
+                v-for="motivo in motivosFallosUnicos"
+                :key="motivo"
+                :value="motivo"
+              >
+                {{ motivo }}
+              </option>
             </select>
           </div>
 
@@ -124,6 +142,9 @@
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Estado
                   </th>
+                  <th v-if="filtros.estado === 'error'" class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    Motivo Fallo
+                  </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Acciones
                   </th>
@@ -161,6 +182,12 @@
                       <span :class="getStatusDotClass(registro.estado_envio)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
                       {{ getStatusText(registro.estado_envio) }}
                     </span>
+                  </td>
+                  <td v-if="filtros.estado === 'error'"  class="px-6 py-4 whitespace-nowrap text-sm">
+                    <span class="px-2.5 py-0.5 rounded-full mr-1.5 bg-red-100 text-red-700 text-xs font-medium">
+                      {{ registro.motivo_fallo || '—' }}
+                    </span>
+                    
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm">
                     <button
@@ -305,6 +332,8 @@ import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import { formatDate, formatearFechaHora } from '@/utils/FormatDate';
 import * as XLSX from 'xlsx';
+import { capitalizarPrimeraLetra } from '@/utils/CapitalizarPalabras';
+import { capitalizarNombre } from '@/utils/CapitalizarNombre';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -351,7 +380,8 @@ const filtros = ref({
   busqueda: '',
   estado: '',
   empresa: '',
-  sede: ''
+  sede: '',
+  motivo_fallo: ''
 })
 const isLoading = ref(false)
 const currentPage = ref(1)
@@ -455,14 +485,22 @@ const visiblePages = computed(() => {
 })
 
 // Computed properties
+// Empresas únicas
 const empresasUnicas = computed(() => {
   const empresas = [...new Set(registrosTrazabilidad.value.map(r => r.empresa))]
   return empresas.sort()
 })
 
+// Sedes únicas
 const sedesUnicas = computed(() => {
   const sedes = [...new Set(registrosTrazabilidad.value.map(r => r.sede).filter(Boolean))]
   return sedes.sort()
+})
+
+// Motivos únicos (solo si hay errores)
+const motivosFallosUnicos = computed(() => {
+  const errores = registrosTrazabilidad.value.filter(r => r.estado_envio === 'error' && r.motivo_fallo)
+  return [...new Set(errores.map(e => e.motivo_fallo))]
 })
 
 
@@ -492,6 +530,10 @@ const registrosFiltrados = computed(() => {
   // Filtro por sede
   if (filtros.value.sede) {
     registros = registros.filter(r => r.sede === filtros.value.sede)
+  }
+  // Filtro por motivo de fallo
+  if (filtros.value.motivo_fallo) {
+    registros = registros.filter(r => r.motivo_fallo === filtros.value.motivo_fallo)
   }
 
   return registros
@@ -555,19 +597,21 @@ const formatearFecha = (fecha) => {
   })
 }
 
+
 const exportData = () => {
   // 1️⃣ Obtener los datos filtrados
   const data = registrosFiltrados.value.map(record => ({
     Empresa: record.empresa,
+    Sede: record.sede || '—',
     Identificación: record.numero_identificacion,
-    Nombre: record.nombre,
+    Nombre: capitalizarNombre(record.nombre),
     Correo_Electrónico: record.correo_electronico || '—',
     Ingreso: record.ingreso,
     Folio: record.folio,
     Fecha_Historia: record.fecha_historia,
     fecha_envio: record.fecha_envio || '—',
-    Estado: record.estado_envio,
-    Motivo_Fallo: record.motivo_fallo || '—',
+    Estado: capitalizarPrimeraLetra(record.estado_envio), // Capitalizar primer letra a mayuscula
+    Motivo_Fallo: capitalizarPrimeraLetra(record.motivo_fallo) || '—',
     Bot: record.bot
   }));
 
