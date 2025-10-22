@@ -84,7 +84,7 @@
           <tr v-for="(record, index) in paginatedRecords" :key="index" class="hover:bg-gray-50 transition-colors duration-150">
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ index + 1 }}</td>
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ capitalizarNombre(record.User.nombre) }}</td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ capitalizarNombre(record.nombre) }}</td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">{{ capitalizarNombre(record.nombre) }}</td>
             <td class="px-4 py-4 text-sm text-gray-700">
               <div class="truncate max-w-[108px]" :title="record.Bot.nombre">
                 {{ record.Bot.nombre }}
