@@ -72,6 +72,7 @@
           <tr>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Solicitante</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Usuario</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Bot</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Creacion</th>
             <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Inactivacion</th>
@@ -83,6 +84,7 @@
           <tr v-for="(record, index) in paginatedRecords" :key="index" class="hover:bg-gray-50 transition-colors duration-150">
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ index + 1 }}</td>
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ capitalizarNombre(record.User.nombre) }}</td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ capitalizarNombre(record.nombre) }}</td>
             <td class="px-4 py-4 text-sm text-gray-700">
               <div class="truncate max-w-[108px]" :title="record.Bot.nombre">
                 {{ record.Bot.nombre }}
