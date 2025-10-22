@@ -664,7 +664,7 @@ function isDisabled(date) {
 async function handleDateSelect(date) {
   if (!date) return
 
-  const fechaSeleccionada = date.toLocaleDateString('sv-SE').split('T')[0]
+  const fechaSeleccionada = date.toLocaleDateString('sv-SE').split('T')[0] // formato YYYY-MM-DD en fecha local
   const logSeleccionado = fechasError.value.find(f => f.fecha === fechaSeleccionada)
 
   if (logSeleccionado) {
