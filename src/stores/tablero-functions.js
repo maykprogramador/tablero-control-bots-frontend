@@ -339,7 +339,8 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         console.error(`Error al actualizar métricas para bot ${botId}:`, error);
       } 
     },
-
+    
+    
     iniciarSocket() { 
       socket.on('nuevo_registro', (registro, bot, solicitud) => {
         console.log('registro recibido desde el store: ', registro);
@@ -367,7 +368,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           }else{
             console.log('Registro ignorado porque no existe historial para este bot:', registro.bot_id)
           }
-          // 👉 actualizar solicitudes si pertenece al usuario autenticado
+          //actualizar solicitudes si pertenece al usuario autenticado
           if (perteneceASolicitud) {
             const indexSolicitud = this.solicitudes.findIndex(s => s.id === solicitud.id);
             if (indexSolicitud !== -1) {
@@ -377,6 +378,33 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           }
         }
       });
+      // evento para agregar nueva solicituden tiempo real
+      socket.on('nueva_solicitud', (solicitudes, user_id) => {
+        const authStore = useAuthStore()
+        const user = authStore.user 
+        //console.log('Solicitudes recibida desde socket:', solicitudes);
+        if (user.user_id === user_id) return;
+        // validar si la socicitud es un array y si no convertirlo a uno para recorrerlo
+        for (const solicitud of solicitudes) {
+          //validar si la solicitud ya existe
+          const yaExiste = this.solicitudes.some(s => s.id === solicitud.id);
+          //validar si la solicitud pertenece al usuario actual
+          const perteneceABot = this.bots.some(bot => bot.id === solicitud.bot_id)
+          const yaTieneSolicitudes = this.solicitudes.some(s => s.bot_id === solicitud.bot_id)
+
+          if (perteneceABot) {
+            if (user.rol === 'admin' || user.rol === 'supervisor') {
+              if (yaTieneSolicitudes) {
+                if (!yaExiste) {
+                  this.solicitudes.unshift(solicitud);
+                  //console.log('Solicitud agregada desde socket (admin):', solicitud);
+                }
+              }
+            }
+          }
+        }
+      });
+      
       // Evento para logs generales del bot
       socket.on('nuevo_log', (log, bot) => {
         console.log('🆕 Log recibido desde socket:', log);

@@ -80,7 +80,8 @@
           <div class="relative">
             <!-- Avatar -->
             <button @click="toggleUserMenu" class="flex items-center space-x-2 text-white hover:text-blue-200 transition-all duration-200 ease-in-out hover:bg-white/10 rounded-lg p-2">
-              <img :src="user.foto_perfil" class="h-8 w-8 rounded-full border-2 border-white/20" alt="Avatar del usuario" />
+              <img v-if="!user.foto_perfil" class="h-8 w-8 rounded-full border-2 border-white/20" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" alt="Avatar del usuario" />
+              <img v-else :src="user.foto_perfil" class="h-8 w-8 rounded-full border-2 border-white/20" alt="Avatar del usuario" />
               <span class="text-sm font-medium">{{ user.nombre }}</span>
               <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': showUserMenu }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
