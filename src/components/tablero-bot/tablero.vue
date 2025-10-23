@@ -48,7 +48,7 @@
               </div>
 
               <!-- Botón Nuevo Bot -->
-              <div class="w-full sm:w-auto sm:ml-auto">
+              <div v-if="user.rol === 'admin'" class="w-full sm:w-auto sm:ml-auto">
                 <button @click="showModalNewBot = true" class="w-full sm:w-auto cursor-pointer flex items-center justify-center px-4 py-2 bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200" >
                   <span class="text-sm mr-2">+</span>
                   Nuevo Bot
@@ -400,7 +400,7 @@
       </div>
     </div>
     <!-- Modals -->
-    <ModalNewBot v-if="showModalNewBot" @close="showModalNewBot = false"/>
+    <ModalNewBot v-if="showModalNewBot && user.rol === 'admin'" @close="showModalNewBot = false"/>
     <DashboardHistoriaClinica v-if="showModalHistoriaClinica" :bot="botSelected" :onclose="closeModalHistoriaCLinica"/>
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
