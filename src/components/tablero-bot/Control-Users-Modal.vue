@@ -9,7 +9,7 @@
     leave-to-class="opacity-0"
   >
     <div
-      class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-2 sm:p-4 overflow-auto"
+      class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center sm:p-4 overflow-auto"
       @click="closeModal"
       @keydown.esc="closeModal" tabindex="0"
     >
@@ -24,7 +24,7 @@
       >
         <div 
           @click.stop
-          class="bg-white rounded-xl shadow-2xl w-full  sm:max-w-2xl md:max-w-4xl lg:max-w-6xl max-h-[95vh] sm:max-h-[100vh] overflow-hidden relative"
+          class="bg-white rounded-xl sm:rounded-xl shadow-2xl w-full h-full sm:max-w-6xl sm:max-h-[95vh] sm:h-auto overflow-auto sm:overflow-hidden relative"
         >
           <!-- Close Button -->
           <button 
@@ -336,7 +336,6 @@
           </div>
         </div>
       </Transition>
-      <ManagmentBotsUser v-if="showBotManagement" :selectedUser="selectedUser" :onCloseManagment="closeModalBotManagment"/>
     </div>
   </Transition>
   <!-- Success Toast -->
@@ -357,6 +356,7 @@
     </div>
   </Transition>
   <ModalAddUser v-if="showModalAddUser" @close="showModalAddUser = false"/>
+  <ManagmentBotsUser v-if="showBotManagement" :selectedUser="selectedUser" :onCloseManagment="closeModalBotManagment"/>
 </template>
 
 <script setup>

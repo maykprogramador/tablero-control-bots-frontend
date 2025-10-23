@@ -20,36 +20,39 @@
             
             
             <!-- Filters -->
-            <div class="flex flex-wrap gap-4 mb-5">
-              <!--<div class="flex flex-col gap-1">
-                <label class="text-sm text-gray-600 font-medium">Fecha</label>
-                <input 
-                  v-model="filters.date" 
-                  type="date" 
-                  class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-              </div>-->
-              <div class="flex flex-col gap-1">
+            <div class="flex flex-wrap items-end gap-4 mb-5">
+              <!-- Filtro Estado -->
+              <div class="flex flex-col gap-1 w-full sm:w-auto">
                 <label class="text-sm text-gray-600 font-medium">Estado</label>
                 <select 
                   v-model="filters.estado" 
                   class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">Todos</option>
-                  <option value="activo">En linea</option>
+                  <option value="activo">En línea</option>
                   <option value="error">Error</option>
-                  <option value="ejecucion">En Ejecucion</option>
+                  <option value="ejecucion">En Ejecución</option>
                   <option value="pausado">En Pausa</option>
                 </select>
               </div>
-              <div class="flex flex-col gap-1">
+
+              <!-- Filtro Nombre -->
+              <div class="flex flex-col gap-1 w-full sm:w-56">
                 <label class="text-sm text-gray-600 font-medium">Nombre</label>
                 <input 
                   v-model="filters.nombre" 
                   type="text" 
                   placeholder="Buscar bot..." 
-                  class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"
                 >
+              </div>
+
+              <!-- Botón Nuevo Bot -->
+              <div class="w-full sm:w-auto sm:ml-auto">
+                <button @click="showModalNewBot = true" class="w-full sm:w-auto cursor-pointer flex items-center justify-center px-4 py-2 bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200" >
+                  <span class="text-sm mr-2">+</span>
+                  Nuevo Bot
+                </button>
               </div>
             </div>
 
@@ -396,7 +399,8 @@
         </div>
       </div>
     </div>
-    
+    <!-- Modals -->
+    <ModalNewBot v-if="showModalNewBot" @close="showModalNewBot = false"/>
     <DashboardHistoriaClinica v-if="showModalHistoriaClinica" :bot="botSelected" :onclose="closeModalHistoriaCLinica"/>
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
@@ -424,6 +428,7 @@ import NotificacionDashboard from './Notificacion-Dashboard.vue';
 import LogModal from './Log-Modal.vue';
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import ModalNewBot from './Modal-New-Bot.vue';
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -443,6 +448,7 @@ const showDeactivationModal = ref(false)
 const executeBot = computed(() => tableroFunctions.executeBot)
 const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
+const showModalNewBot = ref(false)
 const isLogsModalOpen = ref(false)
 const botOptions = [1, 2, 3]
 const fechasError = ref([])
@@ -555,6 +561,8 @@ const filters = reactive({
 const selectedBotData = computed(() => {
   return bots.value.find(bot => bot.id === control.selectedBot) || null
 })
+
+// funcion para abrir modal de nuevo bot
 
 function triggerFileSelect() {
   fileInput.value.click()

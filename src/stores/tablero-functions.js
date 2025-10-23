@@ -187,6 +187,16 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         throw error;
       }
     },
+    async addNewBot(nuevoBot) {
+      try {
+        const response = await axiosInstance.post('/', nuevoBot);
+        console.log('Nuevo bot creado:', response.data.bot);
+        // Agregar el nuevo bot al estado
+        this.bots.unshift(response.data.bot);
+      } catch (error) {
+        throw error;
+      }
+    },
 
     async createSolicitud(form, user_id, bot_id) {
       try {
@@ -200,8 +210,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         console.error('Error al crear la solicitud', error);
         throw new Error('No se pudo crear la solicitud intente nuevamente');
       }
-    }
-    ,
+    },
     async loadSolicitudes(user) {
       try {
           if (this.solicitudes.length === 0) {
