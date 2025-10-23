@@ -286,7 +286,7 @@
                     :class="[
                       'px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-lg transition-colors duration-200',
                       page === currentPage 
-                        ? 'bg-blue-600 text-white' 
+                        ? 'bg-[#80006A] text-white' 
                         : 'border border-gray-300 hover:bg-gray-50'
                     ]"
                   >
