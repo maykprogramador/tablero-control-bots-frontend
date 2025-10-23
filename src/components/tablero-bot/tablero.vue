@@ -49,7 +49,7 @@
 
               <!-- Botón Nuevo Bot -->
               <div v-if="user.rol === 'admin'" class="w-full sm:w-auto sm:ml-auto">
-                <button @click="showModalNewBot = true" class="w-full sm:w-auto cursor-pointer flex items-center justify-center px-4 py-2 bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200" >
+                <button @click="NuevoBot()" class="w-full sm:w-auto cursor-pointer flex items-center justify-center px-4 py-2 bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200" >
                   <span class="text-sm mr-2">+</span>
                   Nuevo Bot
                 </button>
@@ -64,8 +64,23 @@
                 class="bg-gray-50 rounded-xl p-2 sm:p-5 border-2 border-transparent transition-all duration-300 cursor-pointer hover:border-blue-500 hover:bg-blue-50 hover:translate-x-1"
               >
                 <div class="flex justify-between items-center mb-4">
-                  <h3 class="font-semibold text-lg text-slate-800">{{ bot.nombre }}</h3>
-                 <div class="flex flex-wrap sm:flex-nowrap items-center sm:justify-between gap-2 sm:gap-3">
+                  <!-- Nombre editable -->
+                  <!-- Modo visualización -->
+                  <div class="flex items-center gap-2 group">
+                    <h3 class="font-semibold text-lg text-slate-800 group-hover:text-[#80006A] transition-colors duration-200">
+                      {{ bot.nombre }}
+                    </h3>
+                    <div v-if="user.rol === 'admin'" class="space-x-2">
+                      <button v-if="user.rol === 'admin'" @click="EditarBot(bot)" class="text-[#80006A] hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95" title="Editar Bot" >
+                        <SquarePen class="w-4 h-4" />
+                      </button>
+                      <button v-if="user.rol === 'admin'" @click="EliminarBot(bot)" class="text-red-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95" title="Eliminar Bot" >
+                        <Trash class="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+          
+                  <div class="flex flex-wrap sm:flex-nowrap items-center sm:justify-between gap-2 sm:gap-3">
                     <!-- Procesados / Total -->
                     <div class="flex items-center gap-2">
                       <div class="px-3 py-0.5 rounded-full bg-blue-100 border-blue-200">
@@ -73,25 +88,17 @@
                           {{ bot.procesados }} / {{ bot.total_registros }}
                         </span>
                       </div>
-
                       <!-- Porcentaje -->
                       <p class="px-3 py-1 rounded-full text-xs sm:text-sm font-semibold bg-gray-200 text-gray-800">
                         {{ obtener_porcentaje(bot.procesados, bot.total_registros) }}%
                       </p>
                     </div>
                     <!-- Estado -->
-                    <span
-                      :class="getStatusBadgeClass(bot.estado)"
-                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                    >
-                      <span
-                        :class="getStatusDotClass(bot.estado)"
-                        class="w-1.5 h-1.5 rounded-full mr-1.5"
-                      ></span>
+                    <span :class="getStatusBadgeClass(bot.estado)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" >
+                      <span :class="getStatusDotClass(bot.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5" ></span>
                       {{ getStatusText(bot.estado) }}
                     </span>
                   </div>
-
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -400,7 +407,7 @@
       </div>
     </div>
     <!-- Modals -->
-    <ModalNewBot v-if="showModalNewBot && user.rol === 'admin'" @close="showModalNewBot = false"/>
+    <ModalNewBot v-if="showModalNewBot && user.rol === 'admin'" :bot="botSelected" @close="showModalNewBot = false"/>
     <DashboardHistoriaClinica v-if="showModalHistoriaClinica" :bot="botSelected" :onclose="closeModalHistoriaCLinica"/>
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
@@ -418,7 +425,7 @@ import ControlUsersModal from './Control-Users-Modal.vue';
 import FormDesactivationPerson from './Form-Desactivation-Person.vue';
 import RegistrosSection from './Registros-section.vue';
 import NavVar from './Nav-var.vue';
-import { LogOut, Monitor, Cog, UserCog, Bolt } from 'lucide-vue-next';
+import { LogOut, Monitor, Cog, UserCog, Bolt, SquarePen, Trash  } from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
@@ -430,22 +437,25 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import ModalNewBot from './Modal-New-Bot.vue';
 
+// Stores--------------------------------------------------------------------------------------
 const authStore = useAuthStore()
 const router = useRouter()
-
 const tableroFunctions = useTableroFunctions()
+const { metricasBots } = storeToRefs(tableroFunctions)
+//variables computed-----------------------------------------------------------------------------
 const user = computed(() => authStore.user)
 const bots = computed(() => tableroFunctions.bots)
 const isModalOpen = computed(() => tableroFunctions.isModalOpen)
 const provider = computed(() => authStore.provider) 
 const formInactivation = computed(() => tableroFunctions.SolicitudInactivacion)
-const { metricasBots } = storeToRefs(tableroFunctions)
+const executeBot = computed(() => tableroFunctions.executeBot)
+const selectedBotName = computed(() => BOT_MAP[control.selectedBot] || null);
+// Variables reactivas--------------------------------------------------------------------------------------
 const botSelected = ref(null)
 const fileInput = ref(null)
 const isDragging = ref(false)
 const isModalControlUsersOpen = ref(false)
 const showDeactivationModal = ref(false)
-const executeBot = computed(() => tableroFunctions.executeBot)
 const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
 const showModalNewBot = ref(false)
@@ -453,6 +463,9 @@ const isLogsModalOpen = ref(false)
 const botOptions = [1, 2, 3]
 const fechasError = ref([])
 const selectedLogId = ref(null)
+const botEnEdicion = ref(null)
+const nombreEditado = ref('')
+
 // ENUMERACION DE LOS BOTS --------------------------------------------------------------------------------------------------------------------------------
 const BOT_TYPES = Object.freeze({
   RETIRO_USUARIO_AVIDANTI: 'RETIRO_USUARIO_AVIDANTI',
@@ -488,10 +501,8 @@ const BOTS_RETIRO = [
   BOT_TYPES.RETIRO_USUARIO_ODO,
 ];
 
-const selectedBotName = computed(() => BOT_MAP[control.selectedBot] || null);
 //--------------------------------------------------------------------------------------------------------------------------------
-// Reactive data
-
+// funciones ---------------------------------------------------------------------------------------------------------------------
 //verificar si el usuario esta autentificado
 const checkSession = async () => { 
   try {
@@ -533,6 +544,27 @@ function getMetricas(botId) {
     exito: 0, error: 0, pendiente: 0, proceso: 0, procesados: 0, total_registros: 0
   };
 }
+
+// funcion para editar bot
+const EditarBot = (bot) => {
+  botSelected.value = bot
+  showModalNewBot.value = true
+  //console.log('bot seleccionado: ',botSelected.value)
+}
+// funcion para eliminar bot
+const EliminarBot = (bot) => {
+  const confirmar = confirm(`¿Estás seguro de eliminar el bot "${bot.nombre}"?`)
+  if (!confirmar) return
+  tableroFunctions.deleteBot(bot.id)
+}
+
+// funcion para crear nuevo bot
+const NuevoBot = () => {
+  botSelected.value = null
+  showModalNewBot.value = true
+  //console.log('bot seleccionado: ',botSelected.value)
+}
+
 
 // Estado del bot basado en condiciones esta funcion es para la parte de torre de control en la parte estado de Ejecucion
 const botEstado = computed(() => {

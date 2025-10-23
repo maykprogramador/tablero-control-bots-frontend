@@ -7,15 +7,24 @@
         <button @click="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600" > 
           ✕
         </button>
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">Agregar Bot</h2>
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">
+          {{ bot ? 'Editar Bot' : 'Agregar Bot' }}
+        </h2>
         <!-- Formulario -->
-        <form @submit.prevent="agregarBot">
+        <form @submit.prevent="agregaroEditarBot">
           <!-- Nombre -->
           <div class="mb-3">
             <label class="block text-sm font-medium text-gray-700 mb-1">
               Nombre completo
             </label>
-            <input v-model="nuevoBot.nombre" type="text" pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$" minlength="7" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <input 
+              v-model="nuevoBot.nombre" 
+              type="text" 
+              pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$" 
+              minlength="7" 
+              required 
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            />
           </div>
 
           <!-- Descripción -->
@@ -32,16 +41,22 @@
               style="field-sizing: content;"
               rows="2"
             ></textarea>
-
           </div>
 
           <!-- Botones -->
           <div class="flex justify-end gap-2">
-            <button type="button" @click="closeModal" class="px-3 py-1.5 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 text-sm" >
+            <button 
+              type="button" 
+              @click="closeModal" 
+              class="px-3 py-1.5 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 text-sm" 
+            >
               Cancelar
             </button>
-            <button type="submit" class="px-4 py-1.5 text-white bg-gradient-to-r from-[#A65C99] to-[#80006A] rounded-lg hover:opacity-90 text-sm" >
-              Guardar
+            <button 
+              type="submit" 
+              class="px-4 py-1.5 text-white bg-gradient-to-r from-[#A65C99] to-[#80006A] rounded-lg hover:opacity-90 text-sm" 
+            >
+              {{ bot ? 'Actualizar' : 'Guardar' }}
             </button>
           </div>
         </form>
@@ -50,34 +65,64 @@
   </transition>
 </template>
 
-
 <script setup>
 import { useTableroFunctions } from '@/stores/tablero-functions'
-import { ref, defineEmits } from 'vue'
+import { ref, defineEmits, defineProps, onMounted } from 'vue'
+
 const tableroFunctions = useTableroFunctions()
+
+const props = defineProps({
+  bot: {
+    type: Object,
+    default: null
+  }
+})
 
 const emit = defineEmits(['close'])
 
 const nuevoBot = ref({
   nombre: '',
+  descripcion: '',
 })
 
+// Inicializar los datos cuando el componente se monta
+onMounted(() => {
+  if (props.bot) {
+    // Si existe bot, estamos en modo edición
+    nuevoBot.value = {
+      nombre: props.bot.nombre || '',
+      descripcion: props.bot.descripcion || '',
+    }
+  }
+})
 
 const closeModal = () => {
   emit('close')
   nuevoBot.value = { nombre: '', descripcion: '' }
 }
 
-const agregarBot = async() => {
-  // Aquí iría tu lógica para guardar el usuario vía API o store
+const agregaroEditarBot = async () => {
   try {
-    await tableroFunctions.addNewBot(nuevoBot.value)
+    if (props.bot) {
+      // Modo edición: actualizar bot existente
+      const botActualizado = {
+        ...props.bot,
+        nombre: nuevoBot.value.nombre,
+        descripcion: nuevoBot.value.descripcion,
+      }
+      await tableroFunctions.updateBot(botActualizado)
+    } else {
+      // Modo agregar: crear nuevo bot
+      await tableroFunctions.addNewBot(nuevoBot.value)
+    }
+    // reiniciamos el formulario
+    nuevoBot.value = { nombre: '', descripcion: '' }
+    // Cerramos el modal
     closeModal()
   } catch (err) {
-    alert(err.response.data.error || 'Error al agregar usuario')
-    console.error('Error al agregar usuario:', err)
+    alert(err.response?.data?.error || `Error al ${props.bot ? 'actualizar' : 'agregar'} bot`)
+    console.error(`Error al ${props.bot ? 'actualizar' : 'agregar'} bot:`, err)
   }
-  
 }
 </script>
 
@@ -88,4 +133,4 @@ const agregarBot = async() => {
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
-</style>  
+</style>

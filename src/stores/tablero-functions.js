@@ -197,6 +197,29 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         throw error;
       }
     },
+    async updateBot(bot) {
+      try {
+        const response = await axiosInstance.put('/', bot);
+        console.log('Bot actualizado:', response.data.bot);
+        //
+        const index = this.bots.findIndex(b => b.id === bot.id);
+        if (index !== -1) {
+          this.bots[index] = response.data.bot;
+        }
+      } catch (error) {
+        throw error;
+      }
+    },
+    async deleteBot(botId) {
+      try {
+        await axiosInstance.delete('/', { params: { botId } });
+        console.log('Bot eliminado:', botId);
+        // Eliminar el bot del estado
+        this.bots = this.bots.filter(b => b.id !== botId);
+      } catch (error) {
+        throw error;
+      }
+    },
 
     async createSolicitud(form, user_id, bot_id) {
       try {
