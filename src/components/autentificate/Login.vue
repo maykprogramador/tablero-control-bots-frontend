@@ -10,21 +10,13 @@
     <!-- Login Card -->
     <div class="relative z-10 w-full max-w-md">
       <!-- Animated Card Container -->
-      <div 
-        class="bg-white rounded-2xl shadow-2xl p-8"
-        :class="{ 'animate-pulse': isLoading }"
-      >
+      <div class="bg-white rounded-2xl shadow-2xl p-8":class="{ 'animate-pulse': isLoading }">
         <!-- Logo/Icon Section -->
         <div class="text-center mb-8">
           <!-- Logo circular con degradado -->
-          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-[#80006A] to-[#FF5F3F] rounded-full mb-4 shadow-md">
-            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z">
-              </path>
-            </svg>
+          <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4 shadow-md">
+            <img src="https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/Logo/HelixaLogo.png" class="w-9" alt="Logo">
           </div>
-
           <!-- Título Helixa GLPI -->
           <h1 class="text-4xl font-semibold tracking-tight">
             <span class="text-[#FF5F3F]">Heli</span><span class="text-[#80006A]">xa</span>
