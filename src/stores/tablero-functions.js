@@ -404,7 +404,10 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           if (perteneceASolicitud) {
             const indexSolicitud = this.solicitudes.findIndex(s => s.id === solicitud.id);
             if (indexSolicitud !== -1) {
-              this.solicitudes[indexSolicitud] = solicitud; // actualizamos datos del bot
+              // eliminar la solicitud antigua
+              this.solicitudes.splice(indexSolicitud, 1);
+              // insertar la solicitud actualizada al inicio
+              this.solicitudes.unshift(solicitud);// actualizamos datos de la solicitud
               console.log('Solicitud actualizado desde socket:', solicitud);
             }
           }
