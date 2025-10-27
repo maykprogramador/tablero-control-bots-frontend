@@ -10,7 +10,7 @@
   >
     <div
       v-if="showModal"
-      class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+      class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center sm:p-4"
       @click="closeModal"
       @keydown.esc="closeModal" tabindex="0"
     >
@@ -25,7 +25,7 @@
       >
         <div
           v-if="showModal && selectedRecord"
-          class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col relative overflow-hidden"
+          class="bg-white sm:rounded-xl shadow-2xl w-full sm:max-w-4xl h-full sm:max-h-[90vh] flex flex-col relative overflow-hidden"
           @click.stop
         >
           <!-- Header - Fijo -->
@@ -67,7 +67,13 @@
                   <!-- Solicitante -->
                   <div class="bg-gray-50 rounded-lg p-4">
                     <label class="text-xs uppercase tracking-wide text-gray-500 font-medium">Solicitante</label>
-                    <div class="font-semibold text-slate-800 mt-1">{{ selectedRecord.User?.nombre || 'N/A' }}</div>
+                    <div class="font-semibold text-slate-800 mt-1 flex items-center gap-2">
+                      {{ capitalizarNombre(selectedRecord.User?.nombre) || 'N/A' }}
+                      <template v-if="selectedRecord.User?.cargo">
+                        <span class="inline-block w-1.5 h-1.5 rounded-full bg-gray-500"></span>
+                        <span>{{ selectedRecord.User?.cargo }}</span>
+                      </template>
+                    </div>
                   </div>
 
                   <!-- Bot responsable -->
@@ -230,6 +236,7 @@
 </template>
 
 <script setup>
+import { capitalizarNombre } from '@/utils/CapitalizarNombre'
 import { ref, computed } from 'vue'
 
 // Props
@@ -248,7 +255,7 @@ const props = defineProps({
 const emit = defineEmits(['close'])
 
 // Reactive data
-const wordWrap = ref(true)
+const wordWrap = ref(false)
 const showToast = ref(false)
 const toastMessage = ref('')
 
