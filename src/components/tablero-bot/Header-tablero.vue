@@ -4,7 +4,7 @@
       <div class="flex items-center justify-between h-16 px-6">
         <!-- Sección Izquierda: Branding -->
         
-        <h1 class="text-4xl font-semibold tracking-tight">
+        <h1 @click="$emit('update:selectedTab', 'bots')" class="text-4xl font-semibold tracking-tight cursor-pointer">
           <span class="text-[#FF5F3F]">Heli</span><span class="text-white">xa</span>
           <span class="bg-[#FF5F3F] text-white text-sm font-bold rounded px-2 py-0.5 ml-1 align-top">SGB</span>
         </h1>
@@ -365,7 +365,7 @@ const handleMenuClick = (action) => {
   switch (action) {
     case 'profile':
       // redirigir con vue router a la ruta de perfil
-      router.push('/perfil')
+      emit('update:selectedTab', 'perfil')
       break
     case 'settings':
       alert('Navegando a Configuración')

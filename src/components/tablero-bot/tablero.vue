@@ -4,7 +4,8 @@
       <!-- Header -->
       <HeaderTablero :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
       <!-- Main Content -->
-      <div :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 gap-8 sm:p-4 lg:p-10">
+      <perfil v-if="selectedTab === 'perfil'"/>
+      <div v-else :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 gap-8 sm:p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
@@ -432,6 +433,7 @@ import dayjs from 'dayjs'
 import DashboardHistoriaClinica from './Dashboard-Historia-Clinica.vue';
 import HeaderTablero from './Header-tablero.vue';
 import NotificacionDashboard from './Notificacion-Dashboard.vue';
+import perfil from './profile/perfil.vue';
 import LogModal from './Log-Modal.vue';
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'

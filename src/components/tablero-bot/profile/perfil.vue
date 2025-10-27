@@ -1,12 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8">
     <div class="max-w-5xl mx-auto space-y-6">
-      <!-- Header -->
-      <div class="bg-white  rounded-xl shadow-sm p-6 border border-gray-100">
-        <h1 class="text-3xl font-bold text-gray-800 ">Mi Perfil</h1>
-        <p class="text-gray-600  mt-2">Administra tu información personal y profesional</p>
-      </div>
-
       <!-- Alerta informativa -->
       <div v-if="showUpdateAlert" class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md">
         <div class="flex">
