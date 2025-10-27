@@ -39,7 +39,7 @@
               <div class="w-40 h-40 rounded-full overflow-hidden bg-gradient-to-br from-orange-400 to-rose-400 p-1 shadow-2xl">
                 <div class="w-full h-full rounded-full overflow-hidden bg-white">
                   <img 
-                    :src="previewImage || userData.fotoPerfil" 
+                    :src="previewImage || user.foto_perfil" 
                     alt="Foto de perfil" 
                     class="w-full h-full object-cover"
                   />
@@ -66,8 +66,8 @@
             
             <div class="flex-1 space-y-4 text-center lg:text-left">
               <div>
-                <h4 class="text-xl font-semibold text-gray-800 ">{{ userData.nombre }}</h4>
-                <p class="text-gray-600  mt-1">{{ userData.rol }}</p>
+                <h4 class="text-xl font-semibold text-gray-800 ">{{ user.nombre }}</h4>
+                <p class="text-gray-600  mt-1">{{ capitalizarPrimeraLetra(user.rol) }}</p>
               </div>
               
               <!-- Boton de cambiar foto
@@ -113,7 +113,7 @@
               <div class="relative">
                 <input
                   type="text"
-                  :value="userData.nombre"
+                  :value="user.nombre"
                   disabled
                   class="block w-full px-4 py-3 border border-gray-200  rounded-lg bg-gray-50  text-gray-600  cursor-not-allowed"
                 />
@@ -136,7 +136,7 @@
               <div class="relative">
                 <input
                   type="email"
-                  :value="userData.email"
+                  :value="user.email"
                   disabled
                   class="block w-full px-4 py-3 border border-gray-200  rounded-lg bg-gray-50  text-gray-600  cursor-not-allowed"
                 />
@@ -160,7 +160,7 @@
               <div class="relative">
                 <input
                   type="text"
-                  :value="userData.rol"
+                  :value="user.rol"
                   disabled
                   class="block w-full px-4 py-3 border border-gray-200  rounded-lg bg-gray-50  text-gray-600  cursor-not-allowed"
                 />
@@ -270,6 +270,13 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
+import { storeToRefs } from 'pinia'
+import { useAuthStore } from '@/stores/Autentificate/auth';
+import { capitalizarPrimeraLetra } from '@/utils/CapitalizarPalabras';
+
+const authStore = useAuthStore();
+const { user } = storeToRefs(authStore)
+
 
 // Referencias
 const fileInput = ref(null);
@@ -277,30 +284,18 @@ const previewImage = ref(null);
 const showUpdateAlert = ref(true);
 
 // Datos del usuario
-const userData = reactive({
-  id: 'USR-2024-001',
-  nombre: 'Juan Carlos Pérez',
-  email: 'juan.perez@empresa.com',
-  password: '••••••••••••',
-  rol: 'Administrador',
-  cargo: 'Gerente de Tecnología',
-  empresa: 'TechCorp Solutions',
-  departamento: 'Tecnología e Innovación',
-  fotoPerfil: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop'
-});
-
 // Datos editables
 const editableData = reactive({
-  cargo: userData.cargo,
-  empresa: userData.empresa,
-  departamento: userData.departamento
+  cargo: user.value.cargo || '',
+  empresa: user.value.empresa || '',
+  departamento: user.value.departamento || ''
 });
 
 // Copia de los datos originales
 const originalEditableData = {
-  cargo: userData.cargo,
-  empresa: userData.empresa,
-  departamento: userData.departamento
+  cargo: user.value.cargo || '',
+  empresa: user.value.empresa || '',
+  departamento: user.value.departamento || ''
 };
 
 // Errores de validación
@@ -391,22 +386,22 @@ const validateForm = () => {
 const handleSubmit = () => {
   if (validateForm()) {
     // Actualizar los datos del usuario con los datos editables
-    userData.cargo = editableData.cargo;
-    userData.empresa = editableData.empresa;
-    userData.departamento = editableData.departamento;
+    user.value.cargo = editableData.cargo;
+    user.value.empresa = editableData.empresa;
+    user.value.departamento = editableData.departamento;
     
     // Si hay una nueva imagen, actualizarla
     if (previewImage.value) {
-      userData.fotoPerfil = previewImage.value;
+      user.value.foto_perfil = previewImage.value;
       previewImage.value = null;
     }
     
     // Aquí iría la lógica para enviar los datos al servidor
     console.log('Datos a enviar:', {
-      cargo: userData.cargo,
-      empresa: userData.empresa,
-      departamento: userData.departamento,
-      fotoPerfil: userData.fotoPerfil
+      cargo: user.value.cargo,
+      empresa: user.value.empresa,
+      departamento: user.value.departamento,
+      foto_perfil: user.value.foto_perfil
     });
     
     // Simulación de éxito
