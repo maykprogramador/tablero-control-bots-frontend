@@ -359,7 +359,7 @@ const closeAllDropdowns = () => {
 }
 
 const handleMenuClick = (action) => {
-  console.log(`Acción ejecutada: ${action}`)
+  //console.log(`Acción ejecutada: ${action}`)
   closeAllDropdowns()
   
   switch (action) {
