@@ -195,6 +195,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted, shallowRef, computed, defineProps, defineEmits} from 'vue'
+
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/Autentificate/auth'
@@ -363,7 +364,8 @@ const handleMenuClick = (action) => {
   
   switch (action) {
     case 'profile':
-      alert('Navegando a Mi Perfil')
+      // redirigir con vue router a la ruta de perfil
+      router.push('/perfil')
       break
     case 'settings':
       alert('Navegando a Configuración')
