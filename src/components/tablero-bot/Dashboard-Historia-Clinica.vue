@@ -28,7 +28,7 @@
 
         <!-- Summary Stats -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-          <div class="bg-white/10 rounded-lg p-3 text-center">
+          <div @click="filtros.estado = ''" class="bg-white/10 rounded-lg p-3 text-center cursor-pointer">
             <div class="text-lg sm:text-2xl font-bold">{{ registrosTrazabilidad.length }}</div>
             <div class="text-xs sm:text-sm text-white">Total Registros</div>
           </div>
@@ -140,6 +140,9 @@
                     Fecha Historia
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                    Fecha Envio
+                  </th>
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Estado
                   </th>
                   <th v-if="filtros.estado === 'error'" class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
@@ -173,6 +176,9 @@
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
                     {{ formatearFechaHora(registro.fecha_historia) }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    {{ formatearFechaHora(registro.fecha_envio) }}
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap">
                     <span 
