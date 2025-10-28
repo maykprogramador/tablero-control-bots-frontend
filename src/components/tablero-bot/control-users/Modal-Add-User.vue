@@ -12,7 +12,7 @@
         @click.stop
       >
         <!-- Header -->
-        <div class="relative bg-gradient-to-br from-[#80006A] to-[#A65C99] px-8 py-6 rounded-t-2xl">
+        <div class="relative bg-[#80006A] px-8 py-6 rounded-t-2xl">
           <button 
             @click="closeModal" 
             class="absolute top-4 right-4 text-white/80 hover:text-white hover:bg-white/20 rounded-full p-2 transition-all duration-200"
