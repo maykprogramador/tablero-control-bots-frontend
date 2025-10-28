@@ -29,7 +29,7 @@
         <!-- Summary Stats -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
           <div @click="filtros.estado = ''" class="bg-white/10 rounded-lg p-3 text-center cursor-pointer">
-            <div class="text-lg sm:text-2xl font-bold">{{ registrosTrazabilidad.length }}</div>
+            <div class="text-lg sm:text-2xl font-bold">{{ registrosFiltrados.length }}</div>
             <div class="text-xs sm:text-sm text-white">Total Registros</div>
           </div>
           <div @click="filtros.estado = 'exito'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center">
