@@ -639,19 +639,19 @@ const limpiarRangoFechas = () => {
 // Computed properties
 // Empresas únicas
 const empresasUnicas = computed(() => {
-  const empresas = [...new Set(registrosFiltrados.value.map(r => r.empresa))]
+  const empresas = [...new Set(registrosTrazabilidad.value.map(r => r.empresa))]
   return empresas.sort()
 })
 
 // Sedes únicas
 const sedesUnicas = computed(() => {
-  const sedes = [...new Set(registrosFiltrados.value.map(r => r.sede).filter(Boolean))]
+  const sedes = [...new Set(registrosTrazabilidad.value.map(r => r.sede).filter(Boolean))]
   return sedes.sort()
 })
 
 // Motivos únicos (solo si hay errores)
 const motivosFallosUnicos = computed(() => {
-  const errores = registrosFiltrados.value.filter(r => r.estado_envio === 'error' && r.motivo_fallo)
+  const errores = registrosTrazabilidad.value.filter(r => r.estado_envio === 'error' && r.motivo_fallo)
   return [...new Set(errores.map(e => e.motivo_fallo))]
 })
 
