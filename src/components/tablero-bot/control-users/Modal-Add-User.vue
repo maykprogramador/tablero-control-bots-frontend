@@ -2,6 +2,7 @@
   <!-- Modal Overlay -->
   <transition name="fade">
     <div 
+      @click="closeModal"
       @keydown.esc="closeModal" 
       tabindex="0" 
       class="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4"
