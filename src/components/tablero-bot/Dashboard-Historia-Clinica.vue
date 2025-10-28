@@ -50,6 +50,7 @@
       <!-- Cuerpo del dashboard -->
       <div class="sm:p-6 md:max-h-[65vh] md:overflow-y-auto">
         <!-- Barra de búsqueda y filtros (versión compacta) -->
+        <!-- Barra de búsqueda y filtros (versión compacta) -->
         <div class="flex flex-wrap gap-3 items-end bg-white/70 backdrop-blur-sm px-3 py-4 rounded-xl shadow border border-gray-100 sm:mx-4">
           <!-- Campo de búsqueda -->
           <div class="flex-1 min-w-[200px]">
@@ -62,6 +63,57 @@
               </svg>
               <input v-model="filtros.busqueda" type="text" placeholder="Buscar..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500 focus:border-blue-400 transition" />
             </div>
+          </div>
+
+          <!-- Agregado filtro de rango de fechas con popover -->
+          <!-- Rango de fechas -->
+          <div class="relative" ref="datePickerRef">
+            <label class="block text-xs font-bold text-gray-600 mb-1">
+              Rango de fechas
+            </label>
+            <div class="relative">
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <input type="text" readonly :value="rangoFechasTexto" @click="togglePopover" placeholder="Seleccionar rango" class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-pointer hover:bg-gray-100 focus:ring-1 focus:ring-[#80006A] focus:border-[#80006A] transition-all duration-200"/>
+            </div>
+
+            <!-- Popover de selección de fechas -->
+            <Teleport to="body">
+              <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95" >
+                <div v-if="showDatePopover" ref="popoverEl" class="absolute top-full left-0 z-75 w-80 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-4"
+                  :style="{ top: `${popoverPos.top}px`, left: `${popoverPos.left}px` }"
+                >
+                  <div class="space-y-3">
+                    <!-- Fecha inicial -->
+                    <div>
+                      <label class="block text-xs font-semibold text-gray-700 mb-1">
+                        Fecha inicial
+                      </label>
+                      <input  v-model="fechaInicioTemp" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
+                    </div>
+
+                    <!-- Fecha final -->
+                    <div>
+                      <label class="block text-xs font-semibold text-gray-700 mb-1">
+                        Fecha final
+                      </label>
+                      <input v-model="fechaFinTemp" type="date" :min="fechaInicioTemp" class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
+                    </div>
+                    <!-- Botones -->
+                    <div class="flex gap-2 pt-2">
+                      <button @click="aplicarRangoFechas" :disabled="!fechaInicioTemp" class="flex-1 px-4 py-2 bg-[#80006A] text-white rounded-lg font-medium hover:bg-[#660055] disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow" >
+                        Aplicar
+                      </button>
+                      <button @click="limpiarRangoFechas" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all duration-200" >
+                        Limpiar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Transition>
+            </Teleport>
+
           </div>
 
           <!-- Estado -->
@@ -331,7 +383,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, defineProps, watch } from 'vue'
+import { ref, computed, onMounted, onUnmounted, defineProps, watch, nextTick, onBeforeUnmount } from 'vue'
 import ModalDetailsHistoriaClinica from './Modal-details-historia-clinica.vue'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import { useAuthStore } from '@/stores/Autentificate/auth';
@@ -340,15 +392,23 @@ import { formatDate, formatearFechaHora } from '@/utils/FormatDate';
 import * as XLSX from 'xlsx';
 import { capitalizarPrimeraLetra } from '@/utils/CapitalizarPalabras';
 import { capitalizarNombre } from '@/utils/CapitalizarNombre';
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween';
+dayjs.extend(isBetween);
 
+
+// STORES Y ROUTER ----------------------------------------------------------------------
 const authStore = useAuthStore()
 const router = useRouter()
-// Props
+const tableroFunctions = useTableroFunctions()
+// Props -----------------------------------------------------------------------------
 const props = defineProps(['onclose','bot'])
 
-const tableroFunctions = useTableroFunctions()
 
 onMounted(async() => {
+   window.addEventListener('resize', updatePopoverPosition)
+   window.addEventListener('scroll', updatePopoverPosition)
+   window.addEventListener('click', handleClickOutside)
    isLoading.value = true;
   //await new Promise(resolve => setTimeout(resolve, 5000)); // simula la carga de datos por un tiempo de 5 segundos
   try {
@@ -362,6 +422,7 @@ onMounted(async() => {
   document.addEventListener('keydown', handleEscape)
 })
 
+// COMPUTED ------------------------------------------------------------------------
 const registrosTrazabilidad = computed(() => 
   tableroFunctions.historias_clinicas.map(t => ({
     empresa: t.HistoriaClinica.empresa,
@@ -379,6 +440,11 @@ const registrosTrazabilidad = computed(() =>
   }))
 );
 
+// VARIABLES REACTIVAS---------------------------------------------------------
+const showDatePopover = ref(false)
+const fechaInicioTemp = ref('')
+const fechaFinTemp = ref('')
+const datePickerRef = ref(null)
 // Estado reactivo
 const mostrarModal = ref(false)
 const registroSeleccionado = ref(null)
@@ -387,7 +453,9 @@ const filtros = ref({
   estado: '',
   empresa: '',
   sede: '',
-  motivo_fallo: ''
+  motivo_fallo: '',
+  fechaInicio: '',
+  fechaFin: ''
 })
 const isLoading = ref(false)
 const currentPage = ref(1)
@@ -470,7 +538,7 @@ const registrosTrazabilidad2 = ref([
 ])
 */
 
-//paginacion ----------------------------------------
+//paginacion -----------------------------------------------------------------------------------------
 const totalPages = computed(() => Math.ceil(registrosFiltrados.value.length / recordsPerPage))
 
 const paginatedRecords = computed(() => {
@@ -489,6 +557,76 @@ const visiblePages = computed(() => {
   }
   return pages
 })
+
+// DESPLIGUE DE LAS FECHAS ---------------------------------------------------------
+const popoverPos = ref({ top: 0, left: 0 })
+const popoverEl = ref(null)
+
+function updatePopoverPosition() {
+  const input = datePickerRef.value?.querySelector('input')
+  if (!input) return
+  const rect = input.getBoundingClientRect()
+  popoverPos.value = {
+    top: rect.bottom + window.scrollY + 8, // un pequeño margen
+    left: rect.left + window.scrollX,
+  }
+}
+
+// abrir / cerrar el popover
+function togglePopover() {
+  showDatePopover.value = !showDatePopover.value
+  if (showDatePopover.value) {
+    nextTick(updatePopoverPosition)
+  }
+}
+
+// cerrar si se hace clic fuera
+function handleClickOutside(event) {
+  if (
+    showDatePopover.value &&
+    !datePickerRef.value?.contains(event.target) &&
+    !popoverEl.value?.contains(event.target)
+  ) {
+    showDatePopover.value = false
+  }
+}
+
+// Computed para mostrar el rango seleccionado
+const rangoFechasTexto = computed(() => {
+  const inicio = filtros.value.fechaInicio
+  const fin = filtros.value.fechaFin
+
+  if (!inicio) {
+    return 'Seleccionar rango'
+  }
+  if (!fin) {
+    return inicio
+  }
+
+  return `${inicio} - ${fin}`
+})
+
+
+// Función para aplicar el rango de fechas
+const aplicarRangoFechas = () => {
+  if (fechaInicioTemp.value) {
+    filtros.value.fechaInicio = fechaInicioTemp.value
+    filtros.value.fechaFin = fechaFinTemp.value || ''
+    showDatePopover.value = false
+  }
+}
+
+// Función para limpiar el rango de fechas
+const limpiarRangoFechas = () => {
+  fechaInicioTemp.value = ''
+  fechaFinTemp.value = ''
+  filtros.value.fechaInicio = ''
+  filtros.value.fechaFin = ''
+  showDatePopover.value = false
+}
+
+// Cerrar popover al hacer clic fuera
+
 
 // Computed properties
 // Empresas únicas
@@ -516,9 +654,9 @@ const registrosFiltrados = computed(() => {
   // Filtro por búsqueda
   if (filtros.value.busqueda) {
     const busqueda = filtros.value.busqueda.toLowerCase()
-    registros = registros.filter(r => 
+    registros = registros.filter(r =>
       r.nombre.toLowerCase().includes(busqueda) ||
-      r.numero_identificacion.includes(busqueda)||
+      r.numero_identificacion.includes(busqueda) ||
       r.ingreso.toLowerCase().includes(busqueda)
     )
   }
@@ -537,11 +675,31 @@ const registrosFiltrados = computed(() => {
   if (filtros.value.sede) {
     registros = registros.filter(r => r.sede === filtros.value.sede)
   }
+
   // Filtro por motivo de fallo
   if (filtros.value.motivo_fallo) {
     registros = registros.filter(r => r.motivo_fallo === filtros.value.motivo_fallo)
   }
 
+  //  Filtro por rango de fechas
+  if (filtros.value.fechaInicio) {
+    const startDate = dayjs(filtros.value.fechaInicio)
+    const endDate = filtros.value.fechaFin
+      ? dayjs(filtros.value.fechaFin)
+      : null // si no hay fecha final, lo manejamos abajo
+
+    registros = registros.filter(record => {
+      const recordDate = dayjs(record.fecha_envio) // ajusta al nombre real de tu campo
+
+      if (endDate) {
+        // Si hay fecha final → filtra por rango
+        return recordDate.isBetween(startDate, endDate, 'day', '[]')
+      } else {
+        // Si solo hay fechaInicio → filtra solo ese día
+        return recordDate.isSame(startDate, 'day')
+      }
+    })
+  }
   return registros
 })
 
@@ -586,7 +744,7 @@ const getStatusDotClass = (estado) => {
 }
 
 const getStatusCount = (estado) => {
-  return registrosTrazabilidad.value.filter(record => record.estado_envio === estado).length
+  return registrosFiltrados.value.filter(record => record.estado_envio === estado).length
 }
 
 const getStatusText = (estado) => {
@@ -650,6 +808,9 @@ const handleEscape = (e) => {
 
 onUnmounted(() => {
   document.removeEventListener('keydown', handleEscape)
+  window.addEventListener('resize', updatePopoverPosition)
+  window.addEventListener('scroll', updatePopoverPosition)
+  window.addEventListener('click', handleClickOutside)
 })
 </script>
 
