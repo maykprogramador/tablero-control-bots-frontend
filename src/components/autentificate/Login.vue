@@ -267,7 +267,9 @@ onMounted(() => {
 
   if (error === "dominio") {
     errorMessage.value = "El usuario no pertenece a cuentas del dominio"
-  } else if (error === "server") {
+  } else if (error === "no_registrado") {
+    errorMessage.value = "Error la cuenta no esta registrada en el sistema."
+  }else if (error === "server") {
     errorMessage.value = "Error al autenticar con Microsoft. Intenta de nuevo."
   }
 })
