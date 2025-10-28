@@ -43,10 +43,12 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
     reproducirSonido(tipo) {
       if (tipo === 'error' || tipo === 'advertencia') {
         const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/alert.mp3");
+        audio.volume = 0.02;
         audio.play().catch(err => console.log("No se pudo reproducir sonido:", err));
         setTimeout(() => { audio.pause(); audio.currentTime = 0; }, 8000);
       } else {
         const audio = new Audio("https://cdn.jsdelivr.net/gh/maykprogramador/tablero-control-bots@main/dist/sounds/notificacion.mp3");
+        audio.volume = 1;
         audio.play().catch(err => console.log("No se pudo reproducir sonido:", err));
       }
     },
