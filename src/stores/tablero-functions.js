@@ -371,7 +371,25 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         console.error(`Error al actualizar métricas para bot ${botId}:`, error);
       } 
     },
-    
+    async reprocesarHistoriaClinica(id) {
+      try {
+        const response = await axiosInstance.put(`reprocesar/historia-clinica/${id}`);
+        // Puedes actualizar el estado local sin recargar:
+        const registro = this.historias_clinicas.find(r => r.id === id);
+        if (registro) {
+          registro.estado_envio = 'pendiente';
+          registro.motivo_fallo = null;
+          registro.fecha_envio = null;
+          console.log('trazabilidad actualizada correctamente');
+        }
+        else {
+          console.log('⚠️ Ocurrió un error al reprocesar la trazabilidad.');    
+        }
+      } catch (error) {
+        console.error('Error al reprocesar trazabilidad:', error);
+        alert('❌ No se pudo reprocesar la trazabilidad.');
+      }
+    },
     
     iniciarSocket() { 
       socket.on('nuevo_registro', (registro, bot, solicitud) => {

@@ -200,7 +200,7 @@
                   <th v-if="filtros.estado === 'error'" class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Motivo Fallo
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
                     Acciones
                   </th>
                 </tr>
@@ -247,17 +247,24 @@
                     </span>
                     
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm">
-                    <button
-                      @click="abrirModal(registro)"
-                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-[#80006A] bg-[#F5E6F1] hover:bg-[#E6CCE4] hover:text-[#A65C99] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A65C99] transition-all duration-200 group-hover:scale-105"
-                      >
-                      <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                      </svg>
-                      Ver detalles
-                    </button>
+                  <td class="px-4 py-4 whitespace-nowrap text-sm">
+                    <div class="flex justify-center gap-2">
+                      <button @click="abrirModal(registro)" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-[#80006A] bg-[#F5E6F1] hover:bg-[#E6CCE4] hover:text-[#A65C99] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A65C99] transition-all duration-200 group-hover:scale-105" >
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        Ver detalles
+                      </button>
+                      <!--  Botón Reprocesar -->
+                      <button v-if="['No se encontro la HC en Indigo', 'No se encontro el pdf'].includes(registro.motivo_fallo)" @click="reprocesarTrazabilidad(registro.id)" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-blue-700 bg-blue-100 hover:bg-blue-200 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all duration-200 group-hover:scale-105" title="Reprocesar trazabilidad" >
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 4v6h6M20 20v-6h-6M4 10a9 9 0 0116-4.5M20 14a9 9 0 01-16 4.5" />
+                        </svg>
+                        Reprocesar
+                      </button>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -425,6 +432,7 @@ onMounted(async() => {
 // COMPUTED ------------------------------------------------------------------------
 const registrosTrazabilidad = computed(() => 
   tableroFunctions.historias_clinicas.map(t => ({
+    id: t.id,
     empresa: t.HistoriaClinica.empresa,
     sede: t.HistoriaClinica.sede,
     numero_identificacion: t.HistoriaClinica.Paciente.numero_identificacion,
@@ -709,6 +717,11 @@ watch(() => filtros.value.estado, (nuevoValor) => {
   }
 })
 // Métodos
+const reprocesarTrazabilidad = async (id) => {
+  if (!confirm('¿Estás seguro de que deseas marcar esta trazabilidad como pendiente para reprocesar?')) return;
+  await tableroFunctions.reprocesarHistoriaClinica(id)
+};
+
 const cerrarModalDashboard = () => {
   props.onclose()
 }
