@@ -24,7 +24,7 @@
       >
         <div 
           @click.stop
-          class="bg-white sm:rounded-xl shadow-2xl w-full h-full sm:max-w-7xl sm:max-h-[95vh] overflow-auto sm:overflow-hidden relative"
+          class="bg-white sm:rounded-xl shadow-2xl w-full h-full sm:max-w-7xl sm:h-auto sm:max-h-[95vh] overflow-auto sm:overflow-hidden relative"
         >
           <!-- Close Button -->
           <button 
