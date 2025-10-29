@@ -24,7 +24,7 @@
       >
         <div 
           @click.stop
-          class="bg-white rounded-xl sm:rounded-xl shadow-2xl w-full h-full sm:max-w-6xl sm:max-h-[95vh] sm:h-auto overflow-auto sm:overflow-hidden relative"
+          class="bg-white sm:rounded-xl shadow-2xl w-full h-full sm:max-w-7xl sm:max-h-[95vh] overflow-auto sm:overflow-hidden relative"
         >
           <!-- Close Button -->
           <button 
@@ -73,7 +73,7 @@
           </div>
 
           <!-- Modal Body -->
-          <div class="p-3 sm:p-6 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto">
+          <div class="p-3 sm:p-6 max-h-[65vh] overflow-y-auto">
             <!-- Filters and Search -->
             <!-- Made filters stack vertically on mobile and improved spacing -->
             <div class="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 mb-4 sm:mb-6">
