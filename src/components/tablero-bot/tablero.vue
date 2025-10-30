@@ -178,7 +178,7 @@
               <select 
                 v-model="control.selectedBot" 
                 @change="resetControlSelected()"
-                class="w-full px-3 py-2.5 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
+                class="w-full px-3 py-2.5 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 duration-300 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
               >
                 <option value="">Seleccionar...</option>
                 <option v-for="bot in bots" :key="bot.id" :value="bot.id">{{ bot.nombre }}</option>
@@ -242,7 +242,7 @@
 
             <!-- funcionalidad para el soporte de patologias-->
             <div v-if="selectedBotName === BOT_TYPES.SOPORTE_PATOLOGIA" class="max-w-md mx-auto p-6 bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  rounded-xl shadow-lg">
-              <h2 class="text-xl font-bold mb-4 text-gray-800">
+              <h2 class="text-xl font-bold mb-4 text-gray-800 text-slate-200">
                 Selecciona una fecha
               </h2>
 
@@ -318,15 +318,8 @@
             <div class="space-y-4">
               <div>
                 <label class="block text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Rol actual</label>
-                <input 
-                  type="text"
-                  :value="formatearRol(user.rol)"
-                  readonly
-                  class="w-full px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-lg bg-gray-100 text-gray-500 cursor-default"
-                />
+                <input type="text" :value="formatearRol(user.rol)" readonly class="w-full px-3 py-2 border-2 border-gray-200 dark:border-slate-700 dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-lg bg-gray-100 cursor-default" />
               </div>
-
-              
               <!-- Botón para abrir modal de gestión -->
               <button
                 v-if="user.rol === 'admin'"

@@ -1,20 +1,20 @@
 <template>
-  <div class="bg-white w-full rounded-xl shadow-md p-6  border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">        
+  <div class="bg-white border-gray-100 dark:bg-[#21292eae] dark:border-slate-700 w-full rounded-xl shadow-md p-6 border  transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">        
     <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
       <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
         <Monitor/>
       </div>
-      <h2 class="text-xl font-semibold text-slate-800">Panel de Solicitudes</h2>
+      <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-200">Panel de Solicitudes</h2>
     </div>
     
     <!-- Filtros -->
     <div>
       <div class="flex flex-wrap items-center gap-4 mb-2">
         <div class="flex flex-col gap-1">
-          <label class="text-sm text-gray-600 font-medium">Filtrar por</label>
+          <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Filtrar por</label>
           <select
             v-model="registros.dateType"
-            class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="createdAt">Fecha de creación</option>
             <option value="fecha_inactivacion">Fecha de inactivación</option>
@@ -22,26 +22,26 @@
         </div>
 
         <div class="flex flex-col gap-1">
-          <label class="text-sm text-gray-600 font-medium">Fecha desde</label>
+          <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Fecha desde</label>
           <input 
             v-model="registros.dateFrom" 
             type="date" 
-            class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-sm text-gray-600 font-medium">Fecha hasta</label>
+          <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Fecha hasta</label>
           <input 
             v-model="registros.dateTo" 
             type="date" 
-            class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
         </div>
         <div class="flex flex-col gap-1 w-full xl:w-auto">
-          <label class="text-sm text-gray-600 font-medium">Estado</label>
+          <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Estado</label>
           <select 
             v-model="registros.statusFilter" 
-            class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <option value="">Todos</option>
             <option value="exito">Éxito</option>
@@ -58,7 +58,7 @@
           v-model="registros.searchQuery" 
           type="text" 
           placeholder="Buscar por nombre o ID o Sucursal..." 
-          class="w-full pl-10 pr-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          class="w-full pl-10 pr-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         >
       </div>
     </div>
@@ -67,31 +67,31 @@
     <!-- Tabla usando la MISMA estructura que funciona en tu formulario -->
     <div class="overflow-x-auto">
       
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
+      <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+        <thead class="bg-gray-50 dark:bg-slate-800">
           <tr>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">ID</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Solicitante</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Usuario</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Bot</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Creacion</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Inactivacion</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Estado</th>
-            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Acciones</ th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">ID</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Solicitante</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Usuario</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Bot</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Fecha de Creacion</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Fecha de Inactivacion</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Estado</th>
+            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Acciones</ th>
           </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="(record, index) in paginatedRecords" :key="index" class="hover:bg-gray-50 transition-colors duration-150">
-            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ index + 1 }}</td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ capitalizarNombre(record.User.nombre) }}</td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">{{ capitalizarNombre(record.nombre) }}</td>
-            <td class="px-4 py-4 text-sm text-gray-700">
+        <tbody class="bg-white dark:bg-dark transition-colors duration-300 divide-y divide-gray-200 dark:divide-slate-800">
+          <tr v-for="(record, index) in paginatedRecords" :key="index" class="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-800 transition-colors duration-200">
+            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">#{{ index + 1 }}</td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ capitalizarNombre(record.User.nombre) }}</td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-100">{{ capitalizarNombre(record.nombre) }}</td>
+            <td class="px-4 py-4 text-sm text-gray-700 dark:text-gray-100">
               <div class="truncate max-w-[108px]" :title="record.Bot.nombre">
                 {{ record.Bot.nombre }}
               </div>
             </td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">{{ formatDate(record.createdAt) }}</td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">{{ formatDate(record.fecha_inactivacion) }}</td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-100">{{ formatDate(record.createdAt) }}</td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-100">{{ formatDate(record.fecha_inactivacion) }}</td>
             <td class="px-4 py-4 whitespace-nowrap" :title="record.estado">
               <span 
                 :class="getStatusBadgeClass(record.estado)"
@@ -125,14 +125,14 @@
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        <span class="text-gray-600">Cargando registros...</span>
+        <span class="text-gray-600 dark:text-gray-300">Cargando registros...</span>
       </div>
     </div>
     <!-- Empty State -->
     <div v-if="filteredRegistros.length === 0 && solicitudes.length > 0" class="text-center py-12">
       <div class="text-gray-400 text-6xl mb-4">🔍</div>
-      <h3 class="text-lg font-medium text-gray-900 mb-2">No se encontraron Solicitudes</h3>
-      <p class="text-gray-500">Intenta ajustar los filtros de búsqueda</p>
+      <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No se encontraron Solicitudes</h3>
+      <p class="text-gray-500 dark:text-gray-100">Intenta ajustar los filtros de búsqueda</p>
     </div>
     <!-- Pagination -->
     <!-- Pagination -->
@@ -143,26 +143,26 @@
         <button 
           @click="currentPage--"
           :disabled="currentPage === 1"
-          class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
         >
           ‹
         </button>
         
-        <div class="text-sm text-gray-700 px-2">
+        <div class="text-sm text-gray-700 dark:text-gray-100 px-2">
           {{ currentPage }} / {{ totalPages }}
         </div>
         
         <button 
           @click="currentPage++"
           :disabled="currentPage === totalPages"
-          class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
         >
           ›
         </button>
       </div>
       <div class="flex items-center justify-between mt-4">
         <!-- Información de registros - Oculta en móviles muy pequeños -->
-        <div class="hidden sm:flex justify-start text-sm text-gray-700 mb-4">
+        <div class="hidden sm:flex justify-start text-sm text-gray-700 dark:text-gray-100 mb-4 ml-2">
           Mostrando {{ (currentPage - 1) * recordsPerPage + 1 }} a {{ Math.min(currentPage * recordsPerPage, filteredRegistros.length) }} de {{ filteredRegistros.length }} registros
         </div>
 
@@ -172,7 +172,7 @@
           <button 
             @click="currentPage--"
             :disabled="currentPage === 1"
-            class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
           >
             Anterior
           </button>
@@ -185,8 +185,8 @@
               :class="[
                 'px-3 py-1.5 text-sm rounded-lg transition-colors duration-200',
                 page === currentPage 
-                  ? 'bg-[#80006A] text-white' 
-                  : 'border border-gray-300 hover:bg-gray-50'
+                  ? 'bg-[#80006A] text-white ' 
+                  : 'border border-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100'
               ]"
             >
               {{ page }}
@@ -196,7 +196,7 @@
           <button 
             @click="currentPage++"
             :disabled="currentPage === totalPages"
-            class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
           >
             Siguiente
           </button>
@@ -205,7 +205,7 @@
       
     </div>
     <!-- Modal Footer -->
-    <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
+    <div class="bg-gray-50 dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex justify-end gap-3">
       <button 
         @click="exportData"
         class="px-4 py-2 bg-[#00B094] text-white rounded-lg font-medium hover:bg-[#0e8571] transition-colors duration-200 flex items-center gap-2"
@@ -373,7 +373,7 @@ const getStatusBadgeClass = (estado) => {
     error: 'bg-red-100 text-red-700',
     pendiente: 'bg-yellow-100 text-yellow-700'
   }
-  return classes[estado] || 'bg-gray-100 text-gray-700'
+  return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-100'
 }
 
 const validarEmpresa = (botId) => {
@@ -388,7 +388,7 @@ const getStatusDotClass = (estado) => {
     error: 'bg-red-500',
     pendiente: 'bg-yellow-500'
   }
-  return classes[estado] || 'bg-gray-500'
+  return classes[estado] || 'bg-gray-50 dark:bg-slate-8000'
 }
 
 const getStatusText = (estado) => {
