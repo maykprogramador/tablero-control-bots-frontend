@@ -24,7 +24,7 @@
       >
         <div 
           @click.stop
-          class="bg-white sm:rounded-xl shadow-2xl w-full h-full sm:max-w-7xl sm:h-auto sm:max-h-[95vh] overflow-auto sm:overflow-hidden relative"
+          class="bg-white dark:bg-black sm:rounded-xl shadow-2xl w-full h-full sm:max-w-7xl sm:h-auto sm:max-h-[95vh] overflow-auto sm:overflow-hidden relative"
         >
           <!-- Close Button -->
           <button 
@@ -78,10 +78,10 @@
             <!-- Made filters stack vertically on mobile and improved spacing -->
             <div class="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-4 mb-4 sm:mb-6">
               <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <label class="text-xs sm:text-sm font-medium text-gray-700">Filtrar por rol:</label>
+                <label class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-400">Filtrar por rol:</label>
                 <select 
                   v-model="roleFilter" 
-                  class="w-full sm:w-auto px-3 py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full sm:w-auto px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
                   <option value="">Todos los roles</option>
                   <option value="admin">Administrador</option>
@@ -90,19 +90,19 @@
                 </select>
               </div>
               <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
-                <label class="text-xs sm:text-sm font-medium text-gray-700">Buscar:</label>
+                <label class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-400">Buscar:</label>
                 <input 
                   v-model="searchQuery"
                   type="text" 
                   placeholder="Buscar por email..."
-                  class="w-full sm:w-auto px-3 py-1.5 border border-gray-300 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="w-full sm:w-auto px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
               </div>
               <!-- boton de nuevo usuario-->
               <div class="sm:ml-auto">
                 <button 
                   @click="openAddUserModal()"
-                  class="px-3 sm:px-4 py-1.5 cursor-pointer bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 text-sm flex items-center gap-2"
+                  class="px-3 sm:px-4 py-1.5 text-white cursor-pointer bg-gradient-to-r from-[#A65C99] to-[#80006A] rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 text-sm flex items-center gap-2"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
@@ -125,23 +125,23 @@
 
             <!-- Users Table -->
             <!-- Improved table responsiveness with better mobile handling -->
-            <div v-else-if="filteredUsers.length > 0" class="overflow-x-auto rounded-lg border border-gray-200">
-              <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <div v-else-if="filteredUsers.length > 0" class="overflow-x-auto rounded-lg border border-gray-200 dark:border-slate-700">
+              <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+                <thead class="bg-gray-50 dark:bg-slate-800">
                   <tr>
-                    <th class="px-2 sm:px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
-                    <th class="px-2 sm:px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Usuario</th>
-                    <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
-                    <th class="px-2 sm:px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Rol</th>
+                    <th class="px-2 sm:px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">#</th>
+                    <th class="px-2 sm:px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Usuario</th>
+                    <th class="hidden sm:table-cell px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                    <th class="px-2 sm:px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Rol</th>
                     <!-- Nueva columna para bots asignados -->
-                    <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Bots</th>
-                    <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Cambiar Rol</th>
-                    <th class="px-2 sm:px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Acciones</th>
+                    <th class="hidden md:table-cell px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Bots</th>
+                    <th class="hidden lg:table-cell px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Cambiar Rol</th>
+                    <th class="px-2 sm:px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
                   </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                  <tr v-for="(user, index) in paginatedUsers" :key="user.id"class="hover:bg-gray-50 transition-colors duration-150">
-                    <td class="px-2 sm:px-4 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
+                <tbody class="bg-white divide-y divide-gray-200 dark:divide-slate-800">
+                  <tr v-for="(user, index) in paginatedUsers" :key="user.id"class="hover:bg-gray-50 dark:hover:bg-[#21292e] dark:bg-[#14181a] transition-colors duration-200">
+                    <td class="px-2 sm:px-4 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100">
                       {{ (currentPage - 1) * usersPerPage + index + 1 }}
                     </td>
                     <td class="px-2 sm:px-4 py-4 whitespace-nowrap">
@@ -158,13 +158,13 @@
                           </div>
                         </div>
                         <div class="ml-2 sm:ml-3">
-                          <div class="text-xs sm:text-sm font-medium text-gray-900">{{ capitalizarNombre(user.nombre)}}</div>
+                          <div class="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100">{{ capitalizarNombre(user.nombre)}}</div>
                           <!-- Show email on mobile in user cell when email column is hidden -->
-                          <div class="sm:hidden text-xs text-gray-500 truncate max-w-[120px]">{{ user.email }}</div>
+                          <div class="sm:hidden text-xs text-gray-700 dark:text-gray-300 truncate max-w-[120px]">{{ user.email }}</div>
                         </div>
                       </div>
                     </td>
-                    <td class="hidden sm:table-cell px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                    <td class="hidden sm:table-cell px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                       {{ user.email }}
                     </td>
                     <td class="px-2 sm:px-4 py-4 whitespace-nowrap">
@@ -186,7 +186,7 @@
                         </span>
                         <button
                           @click="openBotManagement(user)"
-                          class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-md transition-colors duration-200"
+                          class="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-600 hover:text-blue-800 dark:hover:text-blue-200 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-600  rounded-md transition-colors duration-200"
                           title="Gestionar bots asignados"
                         >
                           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,7 +201,7 @@
                       <select 
                         v-model="user.rol"
                         @change="ChangeRol(user)"
-                        class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                       >
                         <option value="admin">Administrador</option>
                         <option value="usuario">Usuario</option>
@@ -241,7 +241,7 @@
                         <select 
                           v-model="user.rol"
                           @change="ChangeRol(user)"
-                          class="lg:hidden px-2 py-1 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                          class="lg:hidden px-2 py-1 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded text-xs focus:outline-none focus:ring-1 focus:ring-[#80006A] focus:border-[#80006A]"
                           title="Cambiar rol"
                         >
                           <option value="admin">Admin</option>
@@ -259,21 +259,21 @@
             <!-- Empty State -->
             <div v-else-if="!isLoading" class="text-center py-12">
               <div class="text-gray-400 text-6xl mb-4">👥</div>
-              <h3 class="text-lg font-medium text-gray-900 mb-2">No hay usuarios disponibles</h3>
-              <p class="text-gray-500">No se encontraron usuarios que coincidan con los filtros aplicados</p>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No hay usuarios disponibles</h3>
+              <p class="text-gray-500 dark:text-gray-200">No se encontraron usuarios que coincidan con los filtros aplicados</p>
             </div>
 
             <!-- Pagination -->
             <!-- Made pagination more mobile-friendly -->
-            <div v-if="totalPages > 1" class="flex flex-col sm:flex-row items-center justify-between mt-4 sm:mt-6 pt-4 border-t border-gray-200 gap-3 sm:gap-0">
-              <div class="text-xs sm:text-sm text-gray-700 text-center sm:text-left">
+            <div v-if="totalPages > 1" class="flex flex-col sm:flex-row items-center justify-between mt-4 sm:mt-6 pt-4 border-t border-gray-200 dark:border-slate-600 gap-3 sm:gap-0">
+              <div class="text-xs sm:text-sm text-gray-700  dark:text-gray-400 text-center sm:text-left">
                 Mostrando {{ (currentPage - 1) * usersPerPage + 1 }} a {{ Math.min(currentPage * usersPerPage, filteredUsers.length) }} de {{ filteredUsers.length }} usuarios
               </div>
               <div class="flex items-center gap-1 sm:gap-2">
                 <button 
                   @click="currentPage--"
                   :disabled="currentPage === 1"
-                  class="px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                  class="px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   <span class="hidden sm:inline">Anterior</span>
                   <span class="sm:hidden">‹</span>
@@ -287,7 +287,7 @@
                       'px-2 sm:px-3 py-1.5 text-xs sm:text-sm rounded-lg transition-colors duration-200',
                       page === currentPage 
                         ? 'bg-[#80006A] text-white' 
-                        : 'border border-gray-300 hover:bg-gray-50'
+                        : 'border border-gray-300 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 hover:bg-gray-50'
                     ]"
                   >
                     {{ page }}
@@ -296,7 +296,7 @@
                 <button 
                   @click="currentPage++"
                   :disabled="currentPage === totalPages"
-                  class="px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                  class="px-2 sm:px-3 py-1.5 text-xs sm:text-sm border border-gray-300 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   <span class="hidden sm:inline">Siguiente</span>
                   <span class="sm:hidden">›</span>
@@ -307,8 +307,8 @@
 
           <!-- Modal Footer -->
           <!-- Made footer responsive with better mobile layout -->
-          <div class="bg-gray-50 px-3 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
-            <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
+          <div class="bg-gray-50 dark:bg-[#21292eae] border-t border-gray-200 dark:border-slate-700 px-3 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
+            <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>

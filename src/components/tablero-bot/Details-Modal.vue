@@ -80,7 +80,7 @@
                 <input 
                   v-model="dateFilterInitial" 
                   type="date" 
-                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
               </div>
               <div class="flex items-center gap-2">
@@ -88,14 +88,14 @@
                 <input 
                   v-model="dateFilterFinal" 
                   type="date" 
-                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
               </div>
               <div class="flex items-center gap-2">
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-400">Filtrar por estado:</label>
                 <select 
                   v-model="statusFilter" 
-                  class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
                   <option value="">Todos</option>
                   <option value="exito">Éxito</option>
@@ -109,7 +109,7 @@
                   v-model="searchQuery"
                   type="text" 
                   placeholder="Buscar en mensajes..."
-                  class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
               </div>
             </div>
