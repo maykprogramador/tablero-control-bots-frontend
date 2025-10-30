@@ -188,7 +188,7 @@
             <div v-if="filteredRecords.length === 0" class="text-center py-12">
               <div class="text-gray-400 text-6xl mb-4">🔍</div>
               <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No se encontraron registros</h3>
-              <p class="text-gray-500">Intenta ajustar los filtros de búsqueda</p>
+              <p class="text-gray-500 dark:text-gray-100">Intenta ajustar los filtros de búsqueda</p>
             </div>
 
             <!-- Pagination -->

@@ -26,14 +26,14 @@
         >
           <div 
             @click.stop
-            class="fixed inset-0 bg-white sm:relative sm:rounded-xl shadow-2xl sm:max-w-6xl sm:w-full sm:max-h-[95vh] sm:h-auto overflow-auto sm:overflow-hidden"
+            class="fixed inset-0   dark:bg-black sm:relative sm:rounded-xl shadow-2xl sm:max-w-6xl sm:w-full sm:max-h-[95vh] sm:h-auto overflow-auto sm:overflow-hidden"
           >
             <!-- Close Button -->
             <button 
               @click="closeModal"
               class="absolute top-4 right-4 z-10 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200 group"
             >
-              <svg class="w-4 h-4 text-gray-600 group-hover:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
@@ -41,7 +41,7 @@
             <!-- Modal Header -->
             <div class="bg-gradient-to-r from-slate-800 to-[#80006A] text-white p-6 pr-16">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                <div class="w-10 h-10  /20 rounded-lg flex items-center justify-center">
                   <span class="text-xl">📋</span>
                 </div>
                 <div>
@@ -52,7 +52,7 @@
               
               <!-- Summary Stats -->
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-                <div class="bg-white/10 rounded-lg p-3 text-center">
+                <div class=" bg-white/10 rounded-lg p-3 text-center">
                   <div class="text-lg sm:text-2xl font-bold">{{ logsDelBot.length }}</div>
                   <div class="text-sm text-white">Total Logs</div>
                 </div>
@@ -76,26 +76,26 @@
               <!-- Filters -->
               <div class="flex flex-wrap gap-4 mb-6">
                 <div class="flex items-center gap-2">
-                  <label class="text-sm text-gray-600 font-medium">Fecha Inicial</label>
+                  <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Fecha Inicial</label>
                   <input 
                     v-model="dateFilterInitial" 
                     type="date" 
-                    class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                 </div>
                 <div class="flex items-center gap-2">
-                  <label class="text-sm text-gray-600 font-medium">Fecha Final</label>
+                  <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Fecha Final</label>
                   <input 
                     v-model="dateFilterFinal" 
                     type="date" 
-                    class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                 </div>
                 <div class="flex items-center gap-2">
-                  <label class="text-sm font-medium text-gray-700">Filtrar por estado:</label>
+                  <label class="text-sm font-medium text-gray-700 dark:text-gray-400">Filtrar por estado:</label>
                   <select 
                     v-model="statusFilter" 
-                    class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option value="">Todos</option>
                     <option value="exito">Éxito</option>
@@ -104,44 +104,44 @@
                   </select>
                 </div>
                 <div class="flex items-center gap-2">
-                  <label class="text-sm font-medium text-gray-700">Buscar:</label>
+                  <label class="text-sm font-medium text-gray-700 dark:text-gray-400">Buscar:</label>
                   <input 
                     v-model="searchQuery"
                     type="text" 
                     placeholder="Buscar en mensajes..."
-                    class="px-3 py-1.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                 </div>
               </div>
 
               <!-- Table -->
-              <div class="overflow-x-auto rounded-lg border border-gray-200">
-                <table class="min-w-full divide-y divide-gray-200">
-                  <thead class="bg-gray-50">
+              <div class="overflow-x-auto rounded-lg border border-gray-200 dark:border-slate-700">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
+                  <thead class="bg-gray-50 dark:bg-slate-800">
                     <tr>
-                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">#</th>
-                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Fecha de Log</th>
-                      <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">Mensaje</th>
-                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Duración</th>
-                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Estado</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">#</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Fecha de Log</th>
+                      <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Mensaje</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Duración</th>
+                      <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Estado</th>
                     </tr>
                   </thead>
-                  <tbody class="bg-white divide-y divide-gray-200">
+                  <tbody class="bg-white  divide-y divide-gray-200 dark:divide-slate-800">
                     <tr 
                       v-for="(log, index) in paginatedLogs" 
                       :key="log.id"
-                      class="hover:bg-gray-50 transition-colors duration-150"
+                      class="hover:bg-gray-50 dark:hover:bg-[#21292e] dark:bg-[#14181a] transition-colors duration-200"
                     >
-                      <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                         {{ (currentPage - 1) * logsPerPage + index + 1 }}
                       </td>
-                      <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         <div class="flex flex-col">
-                          <span class="font-medium">{{ formatDate(log.fecha_log) }}</span>
-                          <span class="text-xs text-gray-500">{{ formatTime(log.fecha_log) }}</span>
+                          <span class="font-medium text-gray-900 dark:text-gray-100">{{ formatDate(log.fecha_log) }}</span>
+                          <span class="text-xs text-gray-500 dark:text-gray-300">{{ formatTime(log.fecha_log) }}</span>
                         </div>
                       </td>
-                      <td class="px-4 py-4 text-sm text-gray-700 max-w-xs">
+                      <td class="px-4 py-4 text-sm text-gray-700 dark:text-gray-300 max-w-xs">
                         <div class="flex items-center justify-between gap-2">
                           <!-- Mensaje truncado -->
                           <div class="truncate" :title="log.mensaje">
@@ -161,7 +161,7 @@
                           </button>
                         </div>
                       </td>
-                      <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700">
+                      <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         <div class="flex items-center gap-1">
                           <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -186,20 +186,20 @@
               <!-- Empty State -->
               <div v-if="filteredLogs.length === 0" class="text-center py-12">
                 <div class="text-gray-400 text-6xl mb-4">🔍</div>
-                <h3 class="text-lg font-medium text-gray-900 mb-2">No se encontraron logs</h3>
-                <p class="text-gray-500">Intenta ajustar los filtros de búsqueda</p>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">No se encontraron logs</h3>
+                <p class="text-gray-500 dark:text-gray-100">Intenta ajustar los filtros de búsqueda</p>
               </div>
 
               <!-- Pagination -->
-              <div v-if="totalPages > 1" class="flex items-center justify-between mt-6 pt-4 border-t border-gray-200">
-                <div class="text-sm text-gray-700">
+              <div v-if="totalPages > 1" class="flex items-center justify-between mt-6 pt-4 border-t border-gray-200 dark:border-slate-600">
+                <div class="text-sm text-gray-700 dark:text-gray-400">
                   Mostrando {{ (currentPage - 1) * logsPerPage + 1 }} a {{ Math.min(currentPage * logsPerPage, filteredLogs.length) }} de {{ filteredLogs.length }} logs
                 </div>
                 <div class="flex items-center gap-2">
                   <button 
                     @click="currentPage--"
                     :disabled="currentPage === 1"
-                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                   >
                     Anterior
                   </button>
@@ -212,7 +212,7 @@
                         'px-3 py-1.5 text-sm rounded-lg transition-colors duration-200',
                         page === currentPage 
                           ? 'bg-[#80006A] text-white' 
-                          : 'border border-gray-300 hover:bg-gray-50'
+                          : 'border border-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100'
                       ]"
                     >
                       {{ page }}
@@ -221,7 +221,7 @@
                   <button 
                     @click="currentPage++"
                     :disabled="currentPage === totalPages"
-                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                    class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                   >
                     Siguiente
                   </button>
@@ -230,7 +230,7 @@
             </div>
 
             <!-- Modal Footer -->
-            <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
+            <div class="bg-gray-50 dark:bg-[#21292eae] border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex justify-end gap-3">
               <button 
                 @click="exportData"
                 class="px-4 py-2 bg-[#00B094] text-white rounded-lg font-medium hover:bg-[#0e8571] transition-colors duration-200 flex items-center gap-2"
@@ -368,7 +368,7 @@ const getStatusBadgeClass = (estado) => {
     error: 'bg-red-100 text-red-700',
     proceso: 'bg-yellow-100 text-yellow-700'
   }
-  return classes[estado] || 'bg-gray-100 text-gray-700'
+  return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-400'
 }
 
 const getStatusDotClass = (estado) => {
