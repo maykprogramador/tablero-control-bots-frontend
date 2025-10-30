@@ -99,13 +99,13 @@
             </button>
 
             <!-- Dropdown del Usuario -->
-            <div v-if="showUserMenu" class="absolute right-0 mt-2 w-56 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 py-2 transition-all duration-200 ease-in-out">
-              <div class="px-4 py-2 border-b border-gray-100">
+            <div v-if="showUserMenu" class="absolute right-0 mt-2 w-56 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-slate-800 py-2 transition-all duration-200 ease-in-out">
+              <div class="px-4 py-2 border-b border-gray-100 dark:border-slate-600">
                 <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ user.nombre  }}</p>
-                <p class="text-sm text-gray-500">{{ user.email }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-300">{{ user.email }}</p>
               </div>
               <div class="py-1">
-                <a @click="handleMenuClick(item.action)" v-for="item in userMenuItems" :key="item.name" href="#"class="flex items-center cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150">
+                <a @click="handleMenuClick(item.action)" v-for="item in userMenuItems" :key="item.name" href="#"class="flex items-center cursor-pointer px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-[#21292e] transition-colors duration-150">
                   <component :is="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
                   {{ item.name }}
                 </a>

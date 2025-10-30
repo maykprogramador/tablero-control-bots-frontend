@@ -199,7 +199,7 @@
               <!-- Botón para descargar formato -->
               <!-- Funcionalidad de cargar archivo que arrastre y solte en el cuadro -->
               <div
-                class="border-2 border-dashed border-[#80006A] rounded-lg p-5 text-center bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700  transition-all duration-300 hover:bg-blue-50 hover:border-blue-600"
+                class="border-2 border-dashed border-[#80006A] rounded-lg p-5 text-center bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700  transition-all duration-300 hover:bg-blue-50 dark:hover:bg-slate-800 hover:border-[#80006A]"
                 @dragover.prevent="handleDragOver"
                 @dragleave="handleDragLeave"
                 @drop.prevent="handleDrop"
@@ -222,7 +222,7 @@
                 <button
                   type="button"
                   @click="triggerFileSelect"
-                  class="px-4 py-2 bg-gray-200 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                  class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600"
                 >
                   Seleccionar archivo
                 </button>

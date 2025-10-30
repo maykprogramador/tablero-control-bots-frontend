@@ -269,6 +269,7 @@
                     class="hidden"
                     ref="fileInputRef"
                     @change="handleFileChange"
+                    accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                   >
 
                   <!-- Nombre del archivo -->
@@ -400,7 +401,6 @@
                   @click="closeDeactivationModal"
                   class="px-6 py-3 bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-semibold rounded-lg transition-colors duration-200 flex items-center gap-2"
                 >
-                  <span class="text-lg">↩️</span>
                   Cancelar
                 </button>
                 <button 
@@ -408,7 +408,6 @@
                   :disabled="personasInactivacion.length === 0"
                   class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-blue-600 disabled:hover:to-blue-700"
                 >
-                  <span class="text-lg">✅</span>
                   Guardar registros
                 </button>
               </div>
