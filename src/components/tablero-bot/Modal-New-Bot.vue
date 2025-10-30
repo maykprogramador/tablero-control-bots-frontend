@@ -1,20 +1,20 @@
 <template>
   <!-- Modal -->
   <transition name="fade">
-    <div @keydown.esc="closeModal" tabindex="0" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50" >
-      <div class="bg-white rounded-xl shadow-lg w-11/12 sm:w-96 p-6 relative">
+    <div @keydown.esc="closeModal" tabindex="0" class="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" >
+      <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg w-11/12 sm:w-96 p-6 relative">
         <!-- Botón Cerrar -->
-        <button @click="closeModal" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600" > 
+        <button @click="closeModal" class="absolute top-3 right-3 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300" > 
           ✕
         </button>
-        <h2 class="text-lg font-semibold text-gray-800 mb-4">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">
           {{ bot ? 'Editar Bot' : 'Agregar Bot' }}
         </h2>
         <!-- Formulario -->
         <form @submit.prevent="agregaroEditarBot">
           <!-- Nombre -->
           <div class="mb-3">
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Nombre completo
             </label>
             <input 
@@ -23,13 +23,13 @@
               pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$" 
               minlength="7" 
               required 
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+              class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]" 
             />
           </div>
 
           <!-- Descripción -->
           <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Descripción
             </label>
             <textarea
@@ -37,7 +37,7 @@
               minlength="10"
               maxlength="200"
               placeholder="Describe brevemente el propósito del bot..."
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-auto max-h-[9rem]"
+              class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-500 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] resize-none overflow-auto max-h-[9rem]"
               style="field-sizing: content;"
               rows="2"
             ></textarea>
@@ -48,7 +48,7 @@
             <button 
               type="button" 
               @click="closeModal" 
-              class="px-3 py-1.5 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 text-sm" 
+              class="px-3 py-1.5 text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 text-sm" 
             >
               Cancelar
             </button>

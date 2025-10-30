@@ -72,7 +72,7 @@
             </div>
 
             <!-- Modal Body -->
-            <div class="p-6 md:max-h-[60vh] sm:overflow-y-auto">
+            <div class="p-2 sm:p-6 md:max-h-[60vh] sm:overflow-y-auto">
               <!-- Filters -->
               <div class="flex flex-wrap gap-4 mb-6">
                 <div class="flex items-center gap-2">
