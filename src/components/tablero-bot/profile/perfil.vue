@@ -254,18 +254,28 @@
             @click="resetForm"
             class="px-6 py-3 border border-gray-300  rounded-lg shadow-sm text-sm font-medium text-gray-700  bg-white hover:bg-gray-50  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500  transition-all"
           >
-            ↩️ Cancelar cambios
+            Cancelar cambios
           </button>
           <button
             type="submit"
-            class="px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500  transition-all transform hover:-translate-y-0.5"
+            class="px-6 py-3 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-[#80006A] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500  transition-all transform hover:-translate-y-0.5"
           >
-            💾 Guardar cambios
+            Guardar cambios
           </button>
         </div>
       </form>
     </div>
   </div>
+  <!-- Success Toast -->
+  <!-- Made toast responsive tarjeta de alerta-->
+  <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 translate-x-full" enter-to-class="opacity-100 translate-x-0" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-x-0" leave-to-class="opacity-0 translate-x-full" >
+    <div v-if="showSuccessToast" class="fixed top-4 right-2 sm:right-4 bg-green-500 text-white px-4 sm:px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 max-w-xs sm:max-w-none">
+      <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      <span class="text-sm sm:text-base">{{ successMessage }}</span>
+    </div>
+  </Transition>
 </template>
 
 <script setup>
@@ -273,30 +283,29 @@ import { ref, reactive, onMounted } from 'vue';
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { capitalizarPrimeraLetra } from '@/utils/CapitalizarPalabras';
+import { useTableroFunctions } from '@/stores/tablero-functions';
+import { useUserFunctions } from '@/stores/user-functions';
+
 
 const authStore = useAuthStore();
 const { user } = storeToRefs(authStore)
-
+const tableroFunctions = useTableroFunctions()
+const userFunctions = useUserFunctions()
 
 // Referencias
 const fileInput = ref(null);
 const previewImage = ref(null);
 const showUpdateAlert = ref(true);
+// referencias de la tarjeta de alerta
+const showSuccessToast = ref(false)
+const successMessage = ref('')
 
-// Datos del usuario
-// Datos editables
+// Datos del  editables
 const editableData = reactive({
   cargo: user.value.cargo || '',
   empresa: user.value.empresa || '',
   departamento: user.value.departamento || ''
 });
-
-// Copia de los datos originales
-const originalEditableData = {
-  cargo: user.value.cargo || '',
-  empresa: user.value.empresa || '',
-  departamento: user.value.departamento || ''
-};
 
 // Errores de validación
 const errors = reactive({
@@ -310,6 +319,14 @@ const triggerFileInput = () => {
   fileInput.value.click();
 };
 
+const showToast = (message) => {
+  successMessage.value = message
+  showSuccessToast.value = true
+  
+  setTimeout(() => {
+    showSuccessToast.value = false
+  }, 3000)
+}
 // Función para manejar la subida de imagen
 const handleImageUpload = (event) => {
   const file = event.target.files[0];
@@ -336,6 +353,8 @@ const handleImageUpload = (event) => {
     reader.readAsDataURL(file);
   }
 };
+
+
 
 // Función para cancelar la subida de imagen
 const cancelImageUpload = () => {
@@ -383,34 +402,22 @@ const validateForm = () => {
 };
 
 // Función para manejar el envío del formulario
-const handleSubmit = () => {
+const handleSubmit = async () => {
   if (validateForm()) {
     // Actualizar los datos del usuario con los datos editables
     user.value.cargo = editableData.cargo;
     user.value.empresa = editableData.empresa;
     user.value.departamento = editableData.departamento;
-    
+    /*
     // Si hay una nueva imagen, actualizarla
     if (previewImage.value) {
       user.value.foto_perfil = previewImage.value;
       previewImage.value = null;
-    }
-    
-    // Aquí iría la lógica para enviar los datos al servidor
-    console.log('Datos a enviar:', {
-      cargo: user.value.cargo,
-      empresa: user.value.empresa,
-      departamento: user.value.departamento,
-      foto_perfil: user.value.foto_perfil
-    });
-    
-    // Simulación de éxito
-    alert('✅ ¡Información actualizada correctamente!');
-    
-    // Actualizar datos originales
-    originalEditableData.cargo = editableData.cargo;
-    originalEditableData.empresa = editableData.empresa;
-    originalEditableData.departamento = editableData.departamento;
+    }*/
+    // Aquí ira la lógica para enviar los datos a tableroFunctions que se encargara de enviarlo al servidor
+    await userFunctions.ActualizarPerfil(user.value)
+    showToast('¡Información actualizada correctamente!')
+
   } else {
     alert('⚠️ Por favor corrige los errores en el formulario');
   }
@@ -419,9 +426,9 @@ const handleSubmit = () => {
 // Función para resetear el formulario
 const resetForm = () => {
   // Restaurar datos originales
-  editableData.cargo = originalEditableData.cargo;
-  editableData.empresa = originalEditableData.empresa;
-  editableData.departamento = originalEditableData.departamento;
+  editableData.cargo = user.cargo;
+  editableData.empresa = user.empresa;
+  editableData.departamento = user.departamento;
   
   // Resetear errores
   Object.keys(errors).forEach(key => {

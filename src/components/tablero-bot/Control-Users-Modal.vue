@@ -339,15 +339,8 @@
     </div>
   </Transition>
   <!-- Success Toast -->
-  <!-- Made toast responsive -->
-  <Transition
-    enter-active-class="transition-all duration-300 ease-out"
-    enter-from-class="opacity-0 translate-x-full"
-    enter-to-class="opacity-100 translate-x-0"
-    leave-active-class="transition-all duration-200 ease-in"
-    leave-from-class="opacity-100 translate-x-0"
-    leave-to-class="opacity-0 translate-x-full"
-  >
+  <!-- Made toast responsive tarjeta de alerta-->
+  <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 translate-x-full" enter-to-class="opacity-100 translate-x-0" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-x-0" leave-to-class="opacity-0 translate-x-full" >
     <div v-if="showSuccessToast" class="fixed top-4 right-2 sm:right-4 bg-green-500 text-white px-4 sm:px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 max-w-xs sm:max-w-none">
       <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
