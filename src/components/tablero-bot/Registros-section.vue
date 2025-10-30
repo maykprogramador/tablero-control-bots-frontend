@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white border-gray-100 dark:bg-[#21292eae] dark:border-slate-700 w-full rounded-xl shadow-md p-6 border  transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">        
-    <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
+    <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100 dark:border-slate-600">
       <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
         <Monitor/>
       </div>
@@ -81,7 +81,7 @@
           </tr>
         </thead>
         <tbody class="bg-white dark:bg-dark transition-colors duration-300 divide-y divide-gray-200 dark:divide-slate-800">
-          <tr v-for="(record, index) in paginatedRecords" :key="index" class="hover:bg-gray-50 dark:hover:bg-slate-700 dark:bg-slate-800 transition-colors duration-200">
+          <tr v-for="(record, index) in paginatedRecords" :key="index" class="hover:bg-gray-50 dark:hover:bg-[#21292e] dark:bg-[#14181a] transition-colors duration-200">
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">#{{ index + 1 }}</td>
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ capitalizarNombre(record.User.nombre) }}</td>
             <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-100">{{ capitalizarNombre(record.nombre) }}</td>
@@ -136,7 +136,7 @@
     </div>
     <!-- Pagination -->
     <!-- Pagination -->
-    <div v-if="totalPages > 1" class="mt-6 pt-4 mb-4 border-t border-gray-200">
+    <div v-if="totalPages > 1" class="mt-6 pt-4 mb-4 border-t border-gray-200 dark:border-slate-600">
       
       <!-- Versión móvil simplificada (< 500px) -->
       <div class="flex sm:hidden items-center justify-between">

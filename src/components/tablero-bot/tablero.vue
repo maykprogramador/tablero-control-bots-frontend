@@ -12,7 +12,7 @@
           <NavVar v-model:selectedTab="selectedTab"/><!-- aqui se esta enviando el selectedTab a el hijo y con v-model recibe el evento de update que emite el hijo -->
           <!-- Panel de Monitoreo -->
           <div v-if="selectedTab === 'bots'" class="bg-white dark:bg-[#21292eae] dark:border-slate-700 rounded-xl shadow-md p-2 sm:p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-            <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
+            <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100 dark:border-slate-600">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                 <Monitor/>
               </div>
@@ -165,7 +165,7 @@
         <div v-if="selectedTab !== 'notificaciones'" class="space-y-8">
           <!-- Torre de Control -->
           <div class="bg-white dark:bg-[#21292eae] dark:border-slate-700 rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-            <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
+            <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100 dark:border-slate-600">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                 <Cog/> 
               </div>
@@ -308,7 +308,7 @@
 
           <!-- Control de Usuarios -->
           <div v-if="user.rol === 'admin'" class="bg-white dark:bg-[#21292eae] dark:border-slate-700  rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-            <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
+            <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100 dark:border-slate-600">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                 <UserCog /> 
               </div>
