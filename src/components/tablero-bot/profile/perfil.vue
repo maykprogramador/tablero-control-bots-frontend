@@ -426,9 +426,9 @@ const handleSubmit = async () => {
 // Función para resetear el formulario
 const resetForm = () => {
   // Restaurar datos originales
-  editableData.cargo = user.cargo;
-  editableData.empresa = user.empresa;
-  editableData.departamento = user.departamento;
+  editableData.cargo = user.value.cargo;
+  editableData.empresa = user.value.empresa;
+  editableData.departamento = user.value.departamento;
   
   // Resetear errores
   Object.keys(errors).forEach(key => {
