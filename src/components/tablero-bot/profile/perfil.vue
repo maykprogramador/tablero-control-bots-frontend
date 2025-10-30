@@ -420,6 +420,7 @@ const handleSubmit = async () => {
       showToast('¡Información actualizada correctamente!')
     } catch (error) {
       console.error('Error al actualizar el perfil:', error.message);
+      alert('Error al actualizar el perfil. Por favor, inténtalo de nuevo.')
     }
   
   } else {
