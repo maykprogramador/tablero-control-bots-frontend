@@ -1,6 +1,6 @@
 <template>
   <div @keydown.esc="cerrarModalDashboard" tabindex="0" @click="cerrarModalDashboard" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div @click.stop class="fixed inset-0 bg-white rounded-none shadow-2xl 
+    <div @click.stop class="fixed inset-0 bg-white dark:bg-black rounded-none shadow-2xl 
          w-screen h-screen sm:relative sm:rounded-xl 
          sm:max-w-8xl sm:max-h-[95vh] sm:w-full sm:h-auto 
          overflow-auto sm:overflow-hidden">
@@ -9,7 +9,7 @@
         @click="cerrarModalDashboard"
         class="absolute top-4 right-4 z-20 w-8 h-8 bg-gray-100 hover:bg-gray-200 rounded-full flex items-center justify-center transition-colors duration-200 group"
       >
-        <svg class="w-4 h-4 text-gray-600 group-hover:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-gray-600 dark:text-gray-300 group-hover:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
         </svg>
       </button>
@@ -51,46 +51,46 @@
       <div class="sm:p-6 md:max-h-[65vh] md:overflow-y-auto">
         <!-- Barra de búsqueda y filtros (versión compacta) -->
         <!-- Barra de búsqueda y filtros (versión compacta) -->
-        <div class="flex flex-wrap gap-3 items-end bg-white/70 backdrop-blur-sm px-3 py-4 rounded-xl shadow border border-gray-100 sm:mx-4">
+        <div class="flex flex-wrap gap-3 items-end bg-white/70 dark:bg-[#14181a] backdrop-blur-sm px-3 py-4 rounded-xl shadow border border-gray-100 dark:border-slate-600 sm:mx-4">
           <!-- Campo de búsqueda -->
           <div class="flex-1 min-w-[200px]">
-            <label class="block text-xs font-bold text-gray-600 mb-1">
+            <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">
               Buscar por nombre o identificación
             </label>
             <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-200 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <input v-model="filtros.busqueda" type="text" placeholder="Buscar..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500 focus:border-blue-400 transition" />
+              <input v-model="filtros.busqueda" type="text" placeholder="Buscar..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
             </div>
           </div>
 
           <!-- Agregado filtro de rango de fechas con popover -->
           <!-- Rango de fechas -->
           <div class="relative" ref="datePickerRef">
-            <label class="block text-xs font-bold text-gray-600 mb-1">
+            <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">
               Fechas
             </label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <input type="text" readonly :value="rangoFechasTexto" @click="togglePopover" placeholder="Seleccionar rango" class="w-44 pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-pointer hover:bg-gray-100 focus:ring-1 focus:ring-[#80006A] focus:border-[#80006A] transition-all duration-200"/>
+              <input type="text" readonly :value="rangoFechasTexto" @click="togglePopover" placeholder="Seleccionar rango" class="w-44 pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-700 focus:ring-1 focus:ring-[#80006A] focus:border-[#80006A] transition-all duration-200"/>
             </div>
 
             <!-- Popover de selección de fechas -->
             <Teleport to="body">
               <Transition enter-active-class="transition ease-out duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95" >
-                <div v-if="showDatePopover" ref="popoverEl" class="absolute top-full left-0 z-75 w-80 bg-white/95 backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 p-4"
+                <div v-if="showDatePopover" ref="popoverEl" class="absolute top-full left-0 z-75 w-80 bg-white/95 dark:bg-black backdrop-blur-sm rounded-lg shadow-lg border border-gray-200 dark:border-slate-600 p-4"
                   :style="{ top: `${popoverPos.top}px`, left: `${popoverPos.left}px` }"
                 >
                   <div class="space-y-3">
                     <!-- Tipo filtro fecha_envio o fecha_historia -->
                     <div>
-                      <label class="block text-xs font-semibold text-gray-700 mb-1">Filtrar por</label>
+                      <label class="block text-xs font-semibold text-gray-700 dark:text-gray-400 mb-1">Filtrar por</label>
                       <select
                         v-model="filtros.tipoDato"
-                        class="w-full px-3 py-2 border border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
+                        class="w-full px-3 py-2 border border-gray-200 rounded-md text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition-colors"
                       >
                         <option value="fecha_envio">Fecha de Envio</option>
                         <option value="fecha_historia">Fecha de Historia</option>
@@ -98,25 +98,25 @@
                     </div>
                     <!-- Fecha inicial -->
                     <div>
-                      <label class="block text-xs font-semibold text-gray-700 mb-1">
+                      <label class="block text-xs font-semibold text-gray-700 dark:text-gray-400 mb-1">
                         Fecha inicial
                       </label>
-                      <input  v-model="fechaInicioTemp" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
+                      <input  v-model="fechaInicioTemp" type="date" class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]" />
                     </div>
 
                     <!-- Fecha final -->
                     <div>
-                      <label class="block text-xs font-semibold text-gray-700 mb-1">
+                      <label class="block text-xs font-semibold text-gray-700 dark:text-gray-400 mb-1">
                         Fecha final
                       </label>
-                      <input v-model="fechaFinTemp" type="date" :min="fechaInicioTemp" class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
+                      <input v-model="fechaFinTemp" type="date" :min="fechaInicioTemp" class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]" />
                     </div>
                     <!-- Botones -->
                     <div class="flex gap-2 pt-2">
                       <button @click="aplicarRangoFechas" :disabled="!fechaInicioTemp" class="flex-1 px-4 py-2 bg-[#80006A] text-white rounded-lg font-medium hover:bg-[#660055] disabled:bg-gray-300 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow" >
                         Aplicar
                       </button>
-                      <button @click="limpiarRangoFechas" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all duration-200" >
+                      <button @click="limpiarRangoFechas" class="px-4 py-2 bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-100 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-slate-600 transition-all duration-200" >
                         Limpiar
                       </button>
                     </div>
@@ -129,9 +129,9 @@
 
           <!-- Estado -->
           <div>
-            <label class="block text-xs font-bold text-gray-600 mb-1">Estado</label>
+            <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">Estado</label>
             <select v-model="filtros.estado"
-              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500">
+              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]">
               <option value="">Todos</option>
               <option value="exito">Éxito</option>
               <option value="error">Error</option>
@@ -141,10 +141,10 @@
 
           <!-- Filtro dinámico de Motivo de fallo -->
           <div v-if="filtros.estado === 'error'">
-            <label class="block text-xs font-bold text-gray-600 mb-1">Motivo de fallo</label>
+            <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">Motivo de fallo</label>
             <select
               v-model="filtros.motivo_fallo"
-              class="w-48 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500"
+              class="w-48 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
             >
               <option value="">Todos</option>
               <option
@@ -159,9 +159,9 @@
 
           <!-- Empresa -->
           <div>
-            <label class="block text-xs font-bold text-gray-600 mb-1">Empresa</label>
+            <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">Empresa</label>
             <select v-model="filtros.empresa"
-              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500">
+              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]">
               <option value="">Todas</option>
               <option v-for="empresa in empresasUnicas" :key="empresa" :value="empresa">{{ empresa }}</option>
             </select>
@@ -169,78 +169,78 @@
 
           <!-- Sede -->
           <div>
-            <label class="block text-xs font-bold text-gray-600 mb-1">Sede</label>
+            <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">Sede</label>
             <select v-model="filtros.sede"
-              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 focus:ring-1 focus:ring-blue-500">
+              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]">
               <option value="">Todas</option>
               <option v-for="sede in sedesUnicas" :key="sede" :value="sede">{{ sede }}</option>
             </select>
           </div>
         </div>
 
-        <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 overflow-hidden backdrop-blur-sm bg-white/90">
+        <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 dark:border-slate-600 overflow-hidden backdrop-blur-sm bg-white/90 dark:bg-black">
           <!-- Tabla principal -->
           <div class="overflow-x-auto">
             <table class="w-full">
-              <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+              <thead class="bg-gray-100 dark:bg-slate-800">
                 <tr>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Empresa / IPS
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Identificación
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Nombre del Paciente
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Ingreso
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Folio
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Fecha Historia
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Fecha Envio
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Estado
                   </th>
-                  <th v-if="filtros.estado === 'error'" class="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th v-if="filtros.estado === 'error'" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Motivo Fallo
                   </th>
-                  <th class="px-6 py-4 text-center text-xs font-bold text-gray-600 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Acciones
                   </th>
                 </tr>
               </thead>
-              <tbody v-if="paginatedRecords" class="bg-white divide-y divide-gray-100">
+              <tbody v-if="paginatedRecords" class="bg-white divide-y divide-gray-100 dark:divide-slate-800">
                 <tr
                   v-for="registro in paginatedRecords"
                   :key="`${registro.numero_identificacion}-${registro.ingreso}`"
-                  class="hover:bg-blue-50/50 transition-all duration-200 group"
+                  class="hover:bg-blue-50/50 dark:hover:bg-[#21292e] dark:bg-[#14181a] transition-colors duration-200 group"
                 >
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">
                     {{ registro.empresa }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-blue-600 font-semibold">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-blue-600 dark:text-blue-200 font-semibold">
                     {{ registro.numero_identificacion }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 font-medium">
                     {{ registro.nombre }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700 dark:text-gray-300">
                     {{ registro.ingreso }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700 dark:text-gray-300">
                     {{ registro.folio }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                     {{ formatearFechaHora(registro.fecha_historia) }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                     {{ formatearFechaHora(registro.fecha_envio) }}
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap">
@@ -288,45 +288,45 @@
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span class="text-gray-600">Cargando Historias...</span>
+              <span class="text-gray-600 dark:text-gray-300">Cargando Historias...</span>
             </div>
           </div>
           <!-- Mensaje cuando no hay resultados -->
-          <div v-if="registrosFiltrados.length === 0 && isLoading === false" class="text-center py-16 bg-gradient-to-b from-gray-50 to-white">
-            <div class="text-gray-500">
-              <div class="text-gray-400 text-6xl mb-4">🔍</div>
-              <p class="text-xl font-semibold text-gray-700 mb-2">No se encontraron registros</p>
-              <p class="text-sm text-gray-500">Intenta ajustar los filtros de búsqueda</p>
+          <div v-if="registrosFiltrados.length === 0 && isLoading === false" class="text-center py-16 bg-gray-50 dark:bg-black">
+            <div class="text-gray-500 dark:text-gray-100">
+              <div class="text-gray-400 dark:text-gray-200 text-6xl mb-4">🔍</div>
+              <p class="text-xl font-semibold text-gray-700 dark:text-gray-100 mb-2">No se encontraron registros</p>
+              <p class="text-sm text-gray-500 dark:text-gray-300">Intenta ajustar los filtros de búsqueda</p>
             </div>
           </div>
           <!-- Pagination -->
-          <div v-if="totalPages > 1" class="mt-6 pt-4 mb-4 border-t border-gray-200">
+          <div v-if="totalPages > 1" class="mt-6 pt-4 mb-4 border-t border-gray-200 dark:border-slate-600">
             
             <!-- Versión móvil simplificada (< 500px) -->
             <div class="flex sm:hidden items-center justify-between">
               <button 
                 @click="currentPage--"
                 :disabled="currentPage === 1"
-                class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                class="px-2 py-1.5 text-sm border border-gray-300 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
                 ‹
               </button>
               
-              <div class="text-sm text-gray-700 px-2">
+              <div class="text-sm text-gray-700 dark:text-gray-300 px-2">
                 {{ currentPage }} / {{ totalPages }}
               </div>
               
               <button 
                 @click="currentPage++"
                 :disabled="currentPage === totalPages"
-                class="px-2 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                class="px-2 py-1.5 text-sm border border-gray-300 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
               >
                 ›
               </button>
             </div>
             <div class="flex items-center justify-between mt-4 ml-4">
               <!-- Información de registros - Oculta en móviles muy pequeños -->
-              <div class="hidden sm:flex justify-start text-sm text-gray-700 mb-4">
+              <div class="hidden sm:flex justify-start text-sm text-gray-700 dark:text-gray-300 mb-4">
                 Mostrando {{ (currentPage - 1) * recordsPerPage + 1 }} a {{ Math.min(currentPage * recordsPerPage, registrosTrazabilidad.length) }} de {{ registrosTrazabilidad.length }} registros
               </div>
 
@@ -336,7 +336,7 @@
                 <button 
                   @click="currentPage--"
                   :disabled="currentPage === 1"
-                  class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                  class="px-3 py-1.5 text-sm border border-gray-300 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   Anterior
                 </button>
@@ -350,7 +350,7 @@
                       'px-3 py-1.5 text-sm rounded-lg transition-colors duration-200',
                       page === currentPage 
                         ? 'bg-[#80006A] text-white' 
-                        : 'border border-gray-300 hover:bg-gray-50'
+                        : 'border border-gray-300 hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100'
                     ]"
                   >
                     {{ page }}
@@ -360,7 +360,7 @@
                 <button 
                   @click="currentPage++"
                   :disabled="currentPage === totalPages"
-                  class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+                  class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-800 dark:bg-slate-800 dark:text-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
                 >
                   Siguiente
                 </button>
@@ -371,7 +371,7 @@
         </div>
       </div>
       <!-- Modal Footer -->
-      <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
+      <div class="bg-gray-50 dark:bg-[#21292eae] border-t border-gray-200 dark:border-slate-700 px-6 py-4 flex justify-end gap-3">
         <button 
           @click="exportData"
           class="px-4 py-2 bg-[#00B094] text-white rounded-lg font-medium hover:bg-[#0e8571] transition-colors duration-200 flex items-center gap-2"
@@ -762,7 +762,7 @@ const getStatusBadgeClass = (estado) => {
     error: 'bg-red-100 text-red-700',
     pendiente: 'bg-yellow-100 text-yellow-700'
   }
-  return classes[estado] || 'bg-gray-100 text-gray-700'
+  return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-300'
 }
 
 const getStatusDotClass = (estado) => {
