@@ -27,7 +27,7 @@
                 <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Estado</label>
                 <select 
                   v-model="filters.estado" 
-                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
+                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 duration-300 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
                   <option value="">Todos</option>
                   <option value="activo">En línea</option>
@@ -44,7 +44,7 @@
                   v-model="filters.nombre" 
                   type="text" 
                   placeholder="Buscar bot..." 
-                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] w-full"
+                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 duration-300 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] w-full"
                 >
               </div>
 
