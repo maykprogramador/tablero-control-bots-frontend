@@ -6,15 +6,15 @@
   >
     <!-- Panel lateral offcanvas -->
     <div 
-      class="fixed inset-y-0 right-0 w-full bg-white transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl" 
+      class="fixed inset-y-0 right-0 w-full bg-white dark:bg-black transform transition-transform duration-300 ease-in-out flex flex-col shadow-2xl" 
       @click.stop
     >
       <!-- Header -->
-      <div class="px-4 sm:px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 flex-shrink-0">
+      <div class="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-[#14181a] text-slate-800 dark:text-slate-200 flex-shrink-0">
         <div class="flex items-center justify-between">
           <div class="flex-1 min-w-0">
-            <h3 class="text-base sm:text-lg font-semibold text-gray-900 truncate">{{ selectedUser?.nombre }}</h3>
-            <p class="text-xs sm:text-sm text-gray-600">Asignar bots a este usuario</p>
+            <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 truncate">{{ selectedUser?.nombre }}</h3>
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-300 ">Asignar bots a este usuario</p>
           </div>
           <button
             @click="closeBotManagement"
@@ -34,11 +34,11 @@
             v-for="bot in botsDisponibles"
             @click="toggleBotAssignment(bot.id)"
             :key="bot.id"
-            class="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer"
+            class="flex items-center justify-between p-3 sm:p-4 border border-gray-200 rounded-lg hover:bg-gray-50 dark:border-slate-700 dark:hover:bg-[#21292e] dark:bg-[#14181a] transition-colors duration-200 cursor-pointer"
           >
             <div class="flex-1 min-w-0 pr-3">
-              <h4 class="text-sm font-medium text-gray-900 truncate">{{ bot.nombre }}</h4>
-              <p class="text-xs text-gray-600 mt-1 line-clamp-2">{{ bot.descripcion }}</p>
+              <h4 class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{{ bot.nombre }}</h4>
+              <p class="text-xs text-gray-600 dark:text-gray-300 mt-1 line-clamp-2">{{ bot.descripcion }}</p>
             </div>
             <div class="flex-shrink-0">
               <!-- Toggle switch moderno estilo iOS -->
@@ -48,7 +48,7 @@
                   :checked="tempBotAssignments[bot.id]"
                   class="sr-only peer"
                 >
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                <div class="w-11 h-6 bg-gray-200 dark:bg-slate-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
               </label>
             </div>
           </div>
@@ -56,17 +56,17 @@
       </div>
 
       <!-- Actions - Footer fijo -->
-      <div class="px-4 sm:px-6 py-4 border-t border-gray-200 bg-gray-50 flex-shrink-0">
+      <div class="bg-gray-50 px-4 sm:px-6 py-4 dark:bg-[#21292eae] border-t dark:border-slate-700 border-gray-200 flex-shrink-0">
         <div class="flex gap-2 sm:gap-3">
           <button
             @click="saveBotAssignments"
-            class="flex-1 px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 font-medium text-sm sm:text-base"
+            class="flex-1 px-3 sm:px-4 py-2 bg-[#00B094] text-white rounded-lg hover:bg-[#0d947d] transition-colors duration-200 font-medium text-sm sm:text-base"
           >
             Guardar cambios
           </button>
           <button
             @click="closeBotManagement"
-            class="px-3 sm:px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 font-medium text-sm sm:text-base"
+            class="px-3 sm:px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 font-medium text-sm sm:text-base"
           >
             Cancelar
           </button>
