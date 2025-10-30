@@ -1,16 +1,17 @@
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+  <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-black dark:via-slate-950 dark:to-[#21292eae] transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-6">
-      <!-- Barra de búsqueda y filtros -->
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 lg:p-6 mb-6">
+
+      <!-- 🔍 Barra de búsqueda y filtros -->
+      <div class="bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm border border-gray-200 dark:border-slate-700 p-4 lg:p-6 mb-6 transition-colors duration-300">
         <!-- Búsqueda -->
         <div class="relative mb-4">
-          <Search class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
           <input
             v-model="busqueda"
             type="text"
             placeholder="Buscar notificaciones..."
-            class="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            class="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-xl text-gray-900 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-transparent transition-all"
           />
         </div>
 
@@ -24,8 +25,8 @@
               :class="[
                 'px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 transform hover:scale-105',
                 filtroActivo === filtro.valor
-                  ? 'bg-gradient-to-r from-[#80006A] to-[#FF5F3F] text-white shadow-lg shadow-blue-500/30'
-                  : 'bg-gray-50 text-gray-700 hover:bg-gray-100 border border-gray-200'
+                  ? 'bg-gradient-to-r from-[#80006A] to-[#FF5F3F] text-white shadow-lg shadow-pink-500/20'
+                  : 'bg-gray-50 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 border border-gray-200 dark:border-slate-700'
               ]"
             >
               <span class="flex items-center gap-2">
@@ -36,7 +37,7 @@
                     'px-2 py-0.5 rounded-full text-xs font-bold',
                     filtroActivo === filtro.valor
                       ? 'bg-white/30 text-white'
-                      : 'bg-gray-200 text-gray-700'
+                      : 'bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-300'
                   ]"
                 >
                   {{ filtro.count }}
@@ -51,15 +52,16 @@
               v-if="notificacionesNoLeidas.length > 0"
               @click="marcarTodasLeidas"
               :disabled="notificacionesNoLeidas.length === 0"
-              class="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 text-emerald-700 rounded-xl hover:bg-emerald-100 transition-all duration-200 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed border border-emerald-200"
+              class="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-xl hover:bg-emerald-100 dark:hover:bg-emerald-800/50 transition-all duration-200 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed border border-emerald-200 dark:border-emerald-800"
             >
               <Check class="w-4 h-4" />
               <span class="hidden sm:inline">Marcar leídas</span>
             </button>
+
             <button
               @click="eliminarTodas"
               :disabled="notificaciones.length === 0"
-              class="flex items-center gap-2 px-4 py-2.5 bg-rose-50 text-rose-700 rounded-xl hover:bg-rose-100 transition-all duration-200 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed border border-rose-200"
+              class="flex items-center gap-2 px-4 py-2.5 bg-rose-50 dark:bg-rose-900/30 text-rose-700 dark:text-rose-300 rounded-xl hover:bg-rose-100 dark:hover:bg-rose-800/50 transition-all duration-200 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed border border-rose-200 dark:border-rose-800"
             >
               <Trash2 class="w-4 h-4" />
               <span class="hidden sm:inline">Eliminar todas</span>
@@ -68,21 +70,20 @@
         </div>
       </div>
 
-      <!-- Lista de Notificaciones -->
+      <!-- 🔔 Lista de Notificaciones -->
       <div class="space-y-4">
         <TransitionGroup name="notification">
           <div
             v-for="notificacion in notificacionesFiltradas"
             :key="notificacion.id"
             :class="[
-              'bg-white rounded-2xl shadow-sm border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden',
-              notificacion.leido ? 'border-gray-200' : getIconConfig(notificacion.tipo).borderColor
+              'relative bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden',
+              notificacion.leido ? 'border-gray-200 dark:border-slate-700' : getIconConfig(notificacion.tipo).borderColor
             ]"
           >
-            <!-- Barra lateral de color -->
             <div
               v-if="!notificacion.leido"
-              :class="['h-full w-1.5 absolute left-0 top-0 bottom-0', getIconConfig(notificacion.tipo).color.replace('text-', 'bg-')]"
+              :class="['absolute left-0 top-0 bottom-0 w-1.5', getIconConfig(notificacion.tipo).color.replace('text-', 'bg-')]"
             ></div>
 
             <div class="p-5 lg:p-6">
@@ -91,9 +92,8 @@
                 <div class="flex-shrink-0">
                   <div
                     :class="[
-                      'p-3 rounded-xl transition-all duration-300',
+                      'p-3 rounded-xl border transition-all duration-300',
                       getIconConfig(notificacion.tipo).bgColor,
-                      'border',
                       getIconConfig(notificacion.tipo).borderColor
                     ]"
                   >
@@ -113,7 +113,7 @@
                           v-if="!notificacion.leido"
                           class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"
                         ></div>
-                        <h3 class="text-lg lg:text-xl font-bold text-gray-900">
+                        <h3 class="text-lg lg:text-xl font-bold text-gray-900 dark:text-gray-100">
                           {{ notificacion.titulo }}
                         </h3>
                       </div>
@@ -133,10 +133,8 @@
                         v-if="!notificacion.leido"
                         @click="handleNotificacionClick(notificacion)"
                         :class="[
-                          'p-2 cursor-pointer rounded-lg transition-all duration-200 hover:scale-110',
-                          notificacion.leido
-                            ? 'text-gray-400 hover:bg-gray-100'
-                            : 'text-blue-500 hover:bg-blue-50'
+                          'p-2 rounded-lg transition-all duration-200 hover:scale-110',
+                          'text-blue-500 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/30'
                         ]"
                         :title="notificacion.leido ? 'Marcar como no leída' : 'Marcar como leída'"
                       >
@@ -144,7 +142,7 @@
                       </button>
                       <button
                         @click="eliminarNotificacion(notificacion.id)"
-                        class="p-2 rounded-lg text-rose-500 hover:bg-rose-50 transition-all duration-200 hover:scale-110"
+                        class="p-2 rounded-lg text-rose-500 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/30 transition-all duration-200 hover:scale-110"
                         title="Eliminar"
                       >
                         <Trash2 class="w-5 h-5" />
@@ -154,11 +152,11 @@
 
                   <p
                     @click="handleNotificacionClick(notificacion)"
-                    class="text-gray-700 leading-relaxed mb-4 text-sm lg:text-base cursor-pointer"
+                    class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4 text-sm lg:text-base cursor-pointer"
                     v-html="notificacion.mensaje"
                   ></p>
 
-                  <div class="flex flex-wrap items-center gap-4 text-xs lg:text-sm text-gray-500">
+                  <div class="flex flex-wrap items-center gap-4 text-xs lg:text-sm text-gray-500 dark:text-gray-400">
                     <span class="flex items-center gap-1.5">
                       <Clock class="w-4 h-4" />
                       {{ timeAgo(notificacion.createdAt) }}
@@ -170,46 +168,47 @@
           </div>
         </TransitionGroup>
 
-        <!-- Estado Vacío -->
+        <!-- 💤 Estado vacío -->
         <div
           v-if="notificacionesFiltradas.length === 0"
-          class="bg-white rounded-2xl shadow-sm border border-gray-200 p-12 lg:p-16 text-center"
+          class="bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm border border-gray-200 dark:border-slate-700 p-12 lg:p-16 text-center transition-colors duration-300"
         >
-          <div class="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Bell class="w-10 h-10 lg:w-12 lg:h-12 text-gray-400" />
+          <div class="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-slate-800 dark:to-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Bell class="w-10 h-10 lg:w-12 lg:h-12 text-gray-400 dark:text-gray-500" />
           </div>
-          <h3 class="text-xl lg:text-2xl font-bold text-gray-900 mb-2">
+          <h3 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             No hay notificaciones
           </h3>
-          <p class="text-gray-500 text-sm lg:text-base">
+          <p class="text-gray-500 dark:text-gray-400 text-sm lg:text-base">
             {{ mensajeVacio }}
           </p>
         </div>
       </div>
 
-      <!-- Estadísticas -->
+      <!-- 📊 Estadísticas -->
       <div
         v-if="notificaciones.length > 0"
-        class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6"
+        class="mt-8 bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm border border-gray-200 dark:border-slate-700 p-6 transition-colors duration-300"
       >
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div class="text-center">
-            <p class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <p class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-indigo-400">
               {{ notificaciones.length }}
             </p>
-            <p class="text-sm text-gray-600 mt-1">Total</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Total</p>
           </div>
           <div class="text-center">
-            <p class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <p class="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent dark:from-emerald-400 dark:to-teal-400">
               {{ notificacionesNoLeidas.length }}
             </p>
-            <p class="text-sm text-gray-600 mt-1">No leídas</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">No leídas</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, defineProps, defineEmits } from 'vue'
