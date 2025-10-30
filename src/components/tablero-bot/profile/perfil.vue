@@ -415,9 +415,13 @@ const handleSubmit = async () => {
       previewImage.value = null;
     }*/
     // Aquí ira la lógica para enviar los datos a tableroFunctions que se encargara de enviarlo al servidor
-    await userFunctions.ActualizarPerfil(user.value)
-    showToast('¡Información actualizada correctamente!')
-
+    try {
+      await userFunctions.ActualizarPerfil(user.value)
+      showToast('¡Información actualizada correctamente!')
+    } catch (error) {
+      console.error('Error al actualizar el perfil:', error.message);
+    }
+  
   } else {
     alert('⚠️ Por favor corrige los errores en el formulario');
   }
