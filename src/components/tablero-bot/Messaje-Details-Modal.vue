@@ -9,7 +9,7 @@
         <!-- Modal Content -->
         <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 scale-100 translate-y-0" leave-to-class="opacity-0 scale-95 translate-y-4" >
           <div     
-            class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden relative"
+            class="bg-white dark:bg-black rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden relative"
             @click.stop
           >
             <!-- Close Button -->
@@ -51,7 +51,7 @@
               <div class="space-y-4">
                 <!-- Message Type Detection -->
                 <div class="flex items-center gap-2 mb-4">
-                  <span class="text-sm font-medium text-gray-700">Tipo de contenido:</span>
+                  <span class="text-sm font-medium text-gray-700 dark:text-gray-400">Tipo de contenido:</span>
                   <span 
                     :class="getMessageTypeClass(selectedRecord?.mensaje)"
                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
@@ -61,14 +61,14 @@
                 </div>
 
                 <!-- Message Container -->
-                <div class="bg-gray-50 rounded-lg border border-gray-200 shadow-inner">
-                  <div class="bg-gray-100 px-4 py-2 rounded-t-lg border-b border-gray-200">
+                <div class="bg-gray-50 dark:bg-[#14181a] rounded-lg border border-gray-200 dark:border-slate-700 shadow-inner">
+                  <div class="bg-gray-100 dark:bg-slate-800 px-4 py-2 rounded-t-lg border-b border-gray-200 dark:border-slate-700">
                     <div class="flex items-center justify-between">
-                      <span class="text-sm font-medium text-gray-700">Contenido del mensaje</span>
+                      <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Contenido del mensaje</span>
                       <div class="flex items-center gap-2">
                         <button
                           @click="copyToClipboard"
-                          class="text-xs text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center gap-1"
+                          class="text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200 flex items-center gap-1"
                           title="Copiar al portapapeles"
                         >
                           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,7 +78,7 @@
                         </button>
                         <button
                           @click="toggleWordWrap"
-                          class="text-xs text-gray-600 hover:text-blue-600 transition-colors duration-200 flex items-center gap-1"
+                          class="text-xs text-gray-600 dark:text-gray-300 hover:text-blue-600 transition-colors duration-200 flex items-center gap-1"
                           :title="wordWrap ? 'Desactivar ajuste de línea' : 'Activar ajuste de línea'"
                         >
                           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +94,7 @@
                   <div class="p-4">
                     <pre 
                       :class="[
-                        'text-sm text-gray-800 font-mono leading-relaxed',
+                        'text-sm text-gray-800 dark:text-gray-300 font-mono leading-relaxed',
                         wordWrap ? 'whitespace-pre-wrap' : 'whitespace-pre overflow-x-auto',
                         isJsonMessage(selectedRecord?.mensaje) ? 'text-xs' : ''
                       ]"
@@ -137,8 +137,8 @@
             </div>
 
             <!-- Modal Footer -->
-            <div class="bg-gray-50 px-6 py-4 flex justify-between items-center border-t border-gray-200">
-              <div class="flex items-center gap-2 text-sm text-gray-600">
+            <div class="bg-gray-50 px-6 py-4 flex justify-between items-center dark:bg-[#21292eae] border-t border-gray-200 dark:border-slate-700">
+              <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
@@ -147,7 +147,7 @@
               <div class="flex gap-3">
                 <button 
                   @click="downloadMessage"
-                  class="px-4 py-2 bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg font-medium hover:from-[#A65C99] hover:to-[#A65C99] transition-colors duration-200 flex items-center gap-2"
+                  class="px-4 py-2 bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white rounded-lg font-medium hover:from-[#80006A] hover:to-[#80006A] transition-colors duration-200 flex items-center gap-2"
                 >
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -212,7 +212,7 @@ const getStatusBadgeClass = (status) => {
     error: 'bg-red-100 text-red-700',
     proceso: 'bg-yellow-100 text-yellow-700'
   }
-  return classes[status] || 'bg-gray-100 text-gray-700'
+  return classes[status] || 'bg-gray-100 text-gray-700 dark:text-gray-400'
 }
 
 const getStatusText = (status) => {
@@ -266,7 +266,7 @@ const getMessageTypeClass = (message) => {
     'Proceso': 'bg-blue-100 text-blue-700',
     'Texto': 'bg-gray-100 text-gray-700'
   }
-  return classes[type] || 'bg-gray-100 text-gray-700'
+  return classes[type] || 'bg-gray-100 text-gray-700 dark:text-gray-400'
 }
 
 const toggleWordWrap = () => {

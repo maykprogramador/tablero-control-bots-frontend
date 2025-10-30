@@ -26,7 +26,7 @@
         >
           <div 
             @click.stop
-            class="fixed inset-0   dark:bg-black sm:relative sm:rounded-xl shadow-2xl sm:max-w-6xl sm:w-full sm:max-h-[95vh] sm:h-auto overflow-auto sm:overflow-hidden"
+            class="fixed inset-0 bg-white dark:bg-black sm:relative sm:rounded-xl shadow-2xl sm:max-w-6xl sm:w-full sm:max-h-[95vh] sm:h-auto overflow-auto sm:overflow-hidden"
           >
             <!-- Close Button -->
             <button 
