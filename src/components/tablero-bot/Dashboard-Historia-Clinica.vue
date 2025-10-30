@@ -69,13 +69,13 @@
           <!-- Rango de fechas -->
           <div class="relative" ref="datePickerRef">
             <label class="block text-xs font-bold text-gray-600 mb-1">
-              Rango de fechas
+              Fechas
             </label>
             <div class="relative">
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <input type="text" readonly :value="rangoFechasTexto" @click="togglePopover" placeholder="Seleccionar rango" class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-pointer hover:bg-gray-100 focus:ring-1 focus:ring-[#80006A] focus:border-[#80006A] transition-all duration-200"/>
+              <input type="text" readonly :value="rangoFechasTexto" @click="togglePopover" placeholder="Seleccionar rango" class="w-44 pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 cursor-pointer hover:bg-gray-100 focus:ring-1 focus:ring-[#80006A] focus:border-[#80006A] transition-all duration-200"/>
             </div>
 
             <!-- Popover de selección de fechas -->
@@ -85,6 +85,17 @@
                   :style="{ top: `${popoverPos.top}px`, left: `${popoverPos.left}px` }"
                 >
                   <div class="space-y-3">
+                    <!-- Tipo filtro fecha_envio o fecha_historia -->
+                    <div>
+                      <label class="block text-xs font-semibold text-gray-700 mb-1">Filtrar por</label>
+                      <select
+                        v-model="filtros.tipoDato"
+                        class="w-full px-3 py-2 border border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
+                      >
+                        <option value="fecha_envio">Fecha de Envio</option>
+                        <option value="fecha_historia">Fecha de Historia</option>
+                      </select>
+                    </div>
                     <!-- Fecha inicial -->
                     <div>
                       <label class="block text-xs font-semibold text-gray-700 mb-1">
@@ -463,7 +474,8 @@ const filtros = ref({
   sede: '',
   motivo_fallo: '',
   fechaInicio: '',
-  fechaFin: ''
+  fechaFin: '',
+  tipoDato: 'fecha_envio'
 })
 const isLoading = ref(false)
 const currentPage = ref(1)
@@ -630,6 +642,7 @@ const limpiarRangoFechas = () => {
   fechaFinTemp.value = ''
   filtros.value.fechaInicio = ''
   filtros.value.fechaFin = ''
+  filtros.value.tipoDato = 'fecha_envio'
   showDatePopover.value = false
 }
 
@@ -689,7 +702,7 @@ const registrosFiltrados = computed(() => {
     registros = registros.filter(r => r.motivo_fallo === filtros.value.motivo_fallo)
   }
 
-  //  Filtro por rango de fechas
+  // Filtro por rango de fechas (dinámico con tipoDato)
   if (filtros.value.fechaInicio) {
     const startDate = dayjs(filtros.value.fechaInicio)
     const endDate = filtros.value.fechaFin
@@ -697,7 +710,11 @@ const registrosFiltrados = computed(() => {
       : null // si no hay fecha final, lo manejamos abajo
 
     registros = registros.filter(record => {
-      const recordDate = dayjs(record.fecha_envio) // ajusta al nombre real de tu campo
+      // Usamos el tipoDato para decidir si es fecha_envio o fecha_historia
+      const campoFecha = filtros.value.tipoDato || 'fecha_envio'
+      const recordDate = record[campoFecha] ? dayjs(record[campoFecha]) : null
+
+      if (!recordDate) return false // si el campo está vacío, se excluye
 
       if (endDate) {
         // Si hay fecha final → filtra por rango
@@ -707,6 +724,7 @@ const registrosFiltrados = computed(() => {
         return recordDate.isSame(startDate, 'day')
       }
     })
+
   }
   return registros
 })
