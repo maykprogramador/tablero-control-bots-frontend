@@ -1,31 +1,16 @@
 <template>
-  <div @click.stop class="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-violet-600 p-5 overflow-auto">
     <!-- Modal de Detalle del Mensaje -->
-    <Transition
-      enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0"
-      enter-to-class="opacity-100"
-      leave-active-class="transition-all duration-200 ease-in"
-      leave-from-class="opacity-100"
-      leave-to-class="opacity-0"
-    >
+    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0" >
       <div 
-      
         class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
         @click="closeMessageModal"
         @keydown.esc="closeMessageModal" tabindex="0"
       >
         <!-- Modal Content -->
-        <Transition
-          enter-active-class="transition-all duration-300 ease-out"
-          enter-from-class="opacity-0 scale-95 translate-y-4"
-          enter-to-class="opacity-100 scale-100 translate-y-0"
-          leave-active-class="transition-all duration-200 ease-in"
-          leave-from-class="opacity-100 scale-100 translate-y-0"
-          leave-to-class="opacity-0 scale-95 translate-y-4"
-        >
-          <div 
+        <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 scale-95 translate-y-4" enter-to-class="opacity-100 scale-100 translate-y-0" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 scale-100 translate-y-0" leave-to-class="opacity-0 scale-95 translate-y-4" >
+          <div     
             class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden relative"
+            @click.stop
           >
             <!-- Close Button -->
             <button 
@@ -183,14 +168,7 @@
     </Transition>
 
     <!-- Success Toast -->
-    <Transition
-      enter-active-class="transition-all duration-300 ease-out"
-      enter-from-class="opacity-0 translate-x-full"
-      enter-to-class="opacity-100 translate-x-0"
-      leave-active-class="transition-all duration-200 ease-in"
-      leave-from-class="opacity-100 translate-x-0"
-      leave-to-class="opacity-0 translate-x-full"
-    >
+    <Transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 translate-x-full" enter-to-class="opacity-100 translate-x-0" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 translate-x-0" leave-to-class="opacity-0 translate-x-full" >
       <div v-if="showToast" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -198,7 +176,7 @@
         <span>{{ toastMessage }}</span>
       </div>
     </Transition>
-  </div>
+ 
 </template>
 
 <script setup>
@@ -207,7 +185,7 @@ import dayjs from 'dayjs'
 
 // UI State
 const isMessageModalOpen = ref(false)
-const wordWrap = ref(true)
+const wordWrap = ref(false)
 const showToast = ref(false)
 const toastMessage = ref('')
 const { selectedRecord, onClose } = defineProps(['selectedRecord', 'onClose'])
