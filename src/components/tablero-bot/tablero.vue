@@ -242,7 +242,7 @@
 
             <!-- funcionalidad para el soporte de patologias-->
             <div v-if="selectedBotName === BOT_TYPES.SOPORTE_PATOLOGIA" class="max-w-md mx-auto p-6 bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  rounded-xl shadow-lg">
-              <h2 class="text-xl font-bold mb-4 text-gray-800 text-slate-200">
+              <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-slate-200">
                 Selecciona una fecha
               </h2>
 
