@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-6">
 
       <!-- 🔍 Barra de búsqueda y filtros -->
-      <div class="bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm border border-gray-200 dark:border-slate-700 p-4 lg:p-6 mb-6 transition-colors duration-300">
+      <div class="bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800 p-4 lg:p-6 mb-6 transition-colors duration-300">
         <!-- Búsqueda -->
         <div class="relative mb-4">
           <Search class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
@@ -77,7 +77,7 @@
             v-for="notificacion in notificacionesFiltradas"
             :key="notificacion.id"
             :class="[
-              'relative bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden',
+              'relative bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 overflow-hidden',
               notificacion.leido ? 'border-gray-200 dark:border-slate-700' : getIconConfig(notificacion.tipo).borderColor
             ]"
           >

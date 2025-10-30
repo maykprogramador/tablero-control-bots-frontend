@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white border-gray-100 dark:bg-[#21292eae] dark:border-slate-700 w-full rounded-xl shadow-md p-6 border  transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">        
+  <div class="bg-white border-gray-100 dark:bg-[#21292eae] dark:border-slate-800 w-full rounded-xl shadow-md p-6 border  transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">        
     <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100 dark:border-slate-600">
       <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
         <Monitor/>

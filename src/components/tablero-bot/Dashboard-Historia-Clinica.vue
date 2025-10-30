@@ -51,7 +51,7 @@
       <div class="sm:p-6 md:max-h-[65vh] md:overflow-y-auto">
         <!-- Barra de búsqueda y filtros (versión compacta) -->
         <!-- Barra de búsqueda y filtros (versión compacta) -->
-        <div class="flex flex-wrap gap-3 items-end bg-white/70 dark:bg-[#14181a] backdrop-blur-sm px-3 py-4 rounded-xl shadow border border-gray-100 dark:border-slate-600 sm:mx-4">
+        <div class="flex flex-wrap gap-3 items-end bg-white/70 dark:bg-[#14181a] backdrop-blur-sm px-3 py-4 rounded-xl shadow border border-gray-100 dark:border-slate-800 sm:mx-4">
           <!-- Campo de búsqueda -->
           <div class="flex-1 min-w-[200px]">
             <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">
@@ -178,7 +178,7 @@
           </div>
         </div>
 
-        <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 dark:border-slate-600 overflow-hidden backdrop-blur-sm bg-white/90 dark:bg-black">
+        <div class="rounded-2xl md:m-4 shadow-lg border border-gray-100 dark:border-slate-800 overflow-hidden backdrop-blur-sm bg-white/90 dark:bg-black">
           <!-- Tabla principal -->
           <div class="overflow-x-auto">
             <table class="w-full">
