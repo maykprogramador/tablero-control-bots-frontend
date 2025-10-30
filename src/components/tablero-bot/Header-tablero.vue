@@ -11,6 +11,16 @@
 
         <!-- Sección  Desktop -->
         <div class="hidden md:flex items-center space-x-4">
+          <!-- Botón Modo Oscuro / Claro -->
+          <button @click="toggleDarkMode" class="relative p-2 rounded-lg text-white hover:text-blue-200 hover:bg-white/10 transition-all duration-300 ease-in-out flex items-center justify-center" :class="{ 'rotate-360': isDark }" title="Cambiar tema" >
+            <transition name="fade" mode="out-in">
+              <svg v-if="!isDark" key="sun" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" >
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.485-8.485l-.707.707M4.222 19.778l-.707-.707M21 12h-1M4 12H3m16.263 6.263l-.707-.707M6.343 6.343l-.707-.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+              <Moon v-else class="w-5 h-5"/>
+            </transition>
+          </button>
+
           <!-- Notificaciones -->
           <div class="relative">
             <!-- Botón de notificaciones -->
@@ -200,6 +210,8 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/Autentificate/auth'
 import { useNotificacionesStore } from '@/stores/notificacion-functions'
+import { useTableroFunctions } from '@/stores/tablero-functions'
+import { Moon } from 'lucide-vue-next';
 
 //props
 const props = defineProps(['openModalOption', 'selectedTab'])
@@ -207,10 +219,12 @@ const emit = defineEmits(['update:selectedTab'])
 
 // stores
 const authStore = useAuthStore()
+const tableroFunctions = useTableroFunctions()
 const router = useRouter()
 const notificacionStore = useNotificacionesStore()
 const { user } = storeToRefs(authStore)
 const { notificaciones } = storeToRefs(notificacionStore)
+const { isDark } = storeToRefs(tableroFunctions)
 
 //iconos de vue
 import { Settings, LogOut, User, Bell, CircleCheck, CircleX, TriangleAlert, Info, Trash, CheckCheck } from 'lucide-vue-next'
@@ -394,6 +408,21 @@ const handleKeydown = (event) => {
   }
 }
 
+const toggleDarkMode = () => {
+  isDark.value = !isDark.value
+  localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+  applyTheme()
+}
+
+const applyTheme = () => {
+  const html = document.documentElement
+  if (isDark.value) {
+    html.classList.add('dark')
+  } else {
+    html.classList.remove('dark')
+  }
+}
+
 onMounted(async() => {
   try {
     await notificacionStore.fetchNotificaciones()
@@ -403,6 +432,14 @@ onMounted(async() => {
     alert(error.response.data.message);
   }
   document.addEventListener('keydown', handleKeydown)
+  // Detectar el modo del sistema o el que haya guardado el usuario
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme) {
+    isDark.value = savedTheme === 'dark'
+  } else {
+    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
+  applyTheme()
 })
 
 onUnmounted(() => {

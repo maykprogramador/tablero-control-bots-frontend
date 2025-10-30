@@ -1,22 +1,22 @@
 <template>
-  <div v-if="user" class="min-h-screen bg-white">
+  <div v-if="user" class="min-h-screen bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300 ">
     <div class="mx-auto rounded-2xl shadow-xl">
       <!-- Header -->
       <HeaderTablero :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
       <!-- Main Content -->
       <perfil v-if="selectedTab === 'perfil'"/>
-      <div v-else :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 gap-8 sm:p-4 lg:p-10">
+      <div v-else :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 dark:bg-black transition-colors duration-300 gap-8 sm:p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
           <NavVar v-model:selectedTab="selectedTab"/><!-- aqui se esta enviando el selectedTab a el hijo y con v-model recibe el evento de update que emite el hijo -->
           <!-- Panel de Monitoreo -->
-          <div v-if="selectedTab === 'bots'" class="bg-white rounded-xl shadow-md p-2 sm:p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div v-if="selectedTab === 'bots'" class="bg-white dark:bg-[#21292eae] dark:border-slate-700 rounded-xl shadow-md p-2 sm:p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                 <Monitor/>
               </div>
-              <h2 class="text-xl font-semibold text-slate-800">Panel de Monitoreo</h2>
+              <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-200">Panel de Monitoreo</h2>
             </div>
             
             
@@ -24,10 +24,10 @@
             <div class="flex flex-wrap items-end gap-4 mb-5">
               <!-- Filtro Estado -->
               <div class="flex flex-col gap-1 w-full sm:w-auto">
-                <label class="text-sm text-gray-600 font-medium">Estado</label>
+                <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Estado</label>
                 <select 
                   v-model="filters.estado" 
-                  class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
                   <option value="">Todos</option>
                   <option value="activo">En línea</option>
@@ -39,12 +39,12 @@
 
               <!-- Filtro Nombre -->
               <div class="flex flex-col gap-1 w-full sm:w-56">
-                <label class="text-sm text-gray-600 font-medium">Nombre</label>
+                <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Nombre</label>
                 <input 
                   v-model="filters.nombre" 
                   type="text" 
                   placeholder="Buscar bot..." 
-                  class="px-3 py-2 border-2 border-gray-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"
+                  class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] w-full"
                 >
               </div>
 
@@ -59,16 +59,12 @@
 
             <!-- Bot List -->
             <div class="space-y-4">
-              <div 
-                v-for="bot in filteredBots" 
-                :key="bot.id"
-                class="bg-gray-50 rounded-xl p-2 sm:p-5 border-2 border-transparent transition-all duration-300 cursor-pointer hover:border-blue-500 hover:bg-blue-50 hover:translate-x-1"
-              >
+              <div v-for="bot in filteredBots" :key="bot.id" class="bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700  rounded-xl p-2 sm:p-5 border-2 border-transparent  transition-all duration-300 cursor-pointer hover:border-[#80006A] hover:bg-blue-50 dark:hover:bg-slate-800  hover:shadow-lg hover:-translate-y-1" >
                 <div class="flex justify-between items-center mb-4">
                   <!-- Nombre editable -->
                   <!-- Modo visualización -->
                   <div class="flex items-center gap-2 group">
-                    <h3 class="font-semibold text-lg text-slate-800 group-hover:text-[#80006A] transition-colors duration-200">
+                    <h3 class="font-semibold text-lg text-slate-800 dark:text-slate-200 group-hover:text-[#80006A] transition-colors duration-200">
                       {{ bot.nombre }}
                     </h3>
                     <div v-if="user.rol === 'admin'" class="space-x-2">
@@ -104,14 +100,14 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div class="flex flex-col gap-1">
-                    <span class="text-xs text-gray-600 font-medium">Última ejecución</span>
-                    <span class="font-semibold text-slate-800">{{ formatDate(bot.updatedAt) }}</span>
+                    <span class="text-xs text-gray-600 dark:text-gray-400 font-medium">Última ejecución</span>
+                    <span class="font-semibold text-slate-800 dark:text-slate-200">{{ formatDate(bot.updatedAt) }}</span>
                   </div>
                   <div class="flex flex-col gap-1 ml-auto">
                     <div class="flex items-center gap-2 flex-wrap">
                       <!-- Total registros -->
                       <div class="px-3 py-0.5 rounded-full bg-gray-100 border-gray-200">
-                        <span class="text-xs font-medium text-gray-600">Total: </span>
+                        <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Total: </span>
                         <span class="text-xs font-semibold text-gray-800">{{ getMetricas(bot.id).total_registros }}</span>
                       </div>
                       
@@ -144,7 +140,7 @@
                   </button>
                   <button
                     @click="openModal(bot.id, 'logs')"
-                    class="px-4 py-2 cursor-pointer bg-gray-200 text-slate-800 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                    class="px-4 py-2 cursor-pointer bg-gray-200 dark:bg-slate-700 text-slate-800 dark:text-slate-100 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg dark:hover:bg-slate-700"
                   >
                     Logs
                   </button>
@@ -168,21 +164,21 @@
         <!-- Right Panel -->
         <div v-if="selectedTab !== 'notificaciones'" class="space-y-8">
           <!-- Torre de Control -->
-          <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="bg-white dark:bg-[#21292eae] dark:border-slate-700 rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                 <Cog/> 
               </div>
-              <h2 class="text-xl font-semibold text-slate-800">Torre de Control</h2>
+              <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-200">Torre de Control</h2>
             </div>
             
             <!-- Seleccionar Bot -->
             <div class="mb-6">
-              <h3 class="text-lg text-slate-800 mb-3">Seleccionar Bot</h3>
+              <h3 class="text-lg text-slate-800 dark:text-slate-200 mb-3">Seleccionar Bot</h3>
               <select 
                 v-model="control.selectedBot" 
                 @change="resetControlSelected()"
-                class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                class="w-full px-3 py-2.5 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
               >
                 <option value="">Seleccionar...</option>
                 <option v-for="bot in bots" :key="bot.id" :value="bot.id">{{ bot.nombre }}</option>
@@ -199,11 +195,11 @@
                   📥 Descargar formato de archivo
                 </button>
               </div>
-              <h3 class="text-lg text-slate-800 mb-3">Cargar Archivo</h3>
+              <h3 class="text-lg text-slate-800 dark:text-slate-200 mb-3">Cargar Archivo</h3>
               <!-- Botón para descargar formato -->
               <!-- Funcionalidad de cargar archivo que arrastre y solte en el cuadro -->
               <div
-                class="border-2 border-dashed border-blue-500 rounded-lg p-5 text-center bg-gray-50 transition-all duration-300 hover:bg-blue-50 hover:border-blue-600"
+                class="border-2 border-dashed border-[#80006A] rounded-lg p-5 text-center bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700  transition-all duration-300 hover:bg-blue-50 hover:border-blue-600"
                 @dragover.prevent="handleDragOver"
                 @dragleave="handleDragLeave"
                 @drop.prevent="handleDrop"
@@ -211,7 +207,7 @@
               >
                 <div class="text-2xl mb-2">📁</div>
 
-                <div class="text-gray-700 mb-3">
+                <div class="text-gray-700 dark:text-gray-400 mb-3">
                   {{ control.fileName || 'Arrastrar archivo aquí o usar el botón' }}
                 </div>
 
@@ -226,7 +222,7 @@
                 <button
                   type="button"
                   @click="triggerFileSelect"
-                  class="px-4 py-2 bg-gray-200 text-slate-800 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
+                  class="px-4 py-2 bg-gray-200 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg"
                 >
                   Seleccionar archivo
                 </button>
@@ -245,7 +241,7 @@
             </div>
 
             <!-- funcionalidad para el soporte de patologias-->
-            <div v-if="selectedBotName === BOT_TYPES.SOPORTE_PATOLOGIA" class="max-w-md mx-auto p-6 bg-white rounded-xl shadow-lg">
+            <div v-if="selectedBotName === BOT_TYPES.SOPORTE_PATOLOGIA" class="max-w-md mx-auto p-6 bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  rounded-xl shadow-lg">
               <h2 class="text-xl font-bold mb-4 text-gray-800">
                 Selecciona una fecha
               </h2>
@@ -260,7 +256,7 @@
                 @update:model-value="handleDateSelect"
               />
 
-              <p v-if="selectedDate" class="mt-4 text-gray-700 text-center">
+              <p v-if="selectedDate" class="mt-4 text-gray-700 dark:text-gray-400 text-center">
                 Fecha seleccionada:
                 <strong>{{ selectedDate.toLocaleDateString() }}</strong>
               </p>
@@ -281,10 +277,10 @@
             </button>
 
             <!-- Status Summary -->
-            <div class="bg-gray-50 rounded-lg p-4 mt-4">
-              <h4 class="font-semibold text-slate-800 mb-2">Estado de Ejecución</h4>
+            <div class="bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300 rounded-lg p-4 mt-4">
+              <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-2">Estado de Ejecución</h4>
 
-              <p class="text-sm text-gray-700 mb-1">
+              <p class="text-sm text-gray-700 dark:text-gray-400 mb-1">
                 <!-- Si hay bot seleccionado -->
                 <template v-if="control.selectedBot">
                   <span class="flex flex-col">
@@ -297,7 +293,7 @@
                     <span v-if="botEstado === 'ejecutable_p'">✅ Bot Listo para ejecución</span>
                   </span>
                   <!-- Archivo -->
-                  <p v-if="botEstado === 'archivo'" class="text-sm text-gray-700 mb-1">
+                  <p v-if="botEstado === 'archivo'" class="text-sm text-gray-700 dark:text-gray-400 mb-1">
                     📄 Archivo: {{ control.fileName || 'No seleccionado' }}
                   </p>
                 </template>
@@ -311,22 +307,22 @@
           </div>
 
           <!-- Control de Usuarios -->
-          <div v-if="user.rol === 'admin'" class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div v-if="user.rol === 'admin'" class="bg-white dark:bg-[#21292eae] dark:border-slate-700  rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                 <UserCog /> 
               </div>
-              <h2 class="text-xl font-semibold text-slate-800">Control de Usuarios</h2>
+              <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-200">Control de Usuarios</h2>
             </div>
             
             <div class="space-y-4">
               <div>
-                <label class="block text-sm text-gray-600 font-medium mb-1">Rol actual</label>
+                <label class="block text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Rol actual</label>
                 <input 
                   type="text"
                   :value="formatearRol(user.rol)"
                   readonly
-                  class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg bg-gray-100 text-gray-500 cursor-default"
+                  class="w-full px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200  transition-colors duration-300 rounded-lg bg-gray-100 text-gray-500 cursor-default"
                 />
               </div>
 
@@ -345,60 +341,60 @@
             </div>
           </div>
           <!-- Configuración 
-          <div class="bg-white rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+          <div class="bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100">
               <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
                <Bolt />
               </div>
-              <h2 class="text-xl font-semibold text-slate-800">Configuración</h2>
+              <h2 class="text-xl font-semibold text-slate-800 dark:text-slate-200">Configuración</h2>
             </div>
             
             <!-- Parámetros por Bot 
-            <div class="bg-gray-50 rounded-lg p-4 mb-4">
-              <h4 class="font-semibold text-slate-800 mb-3">Parámetros por Bot</h4>
+            <div class="bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300 rounded-lg p-4 mb-4">
+              <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-3">Parámetros por Bot</h4>
               <div class="space-y-3">
                 <div>
-                  <label class="block text-sm text-gray-600 font-medium mb-1">Timeout (segundos)</label>
+                  <label class="block text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Timeout (segundos)</label>
                   <input 
                     v-model="config.timeout" 
                     type="number" 
-                    class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                   >
                 </div>
                 <div>
-                  <label class="block text-sm text-gray-600 font-medium mb-1">Reintentos</label>
+                  <label class="block text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Reintentos</label>
                   <input 
                     v-model="config.retries" 
                     type="number" 
-                    class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                   >
                 </div>
               </div>
             </div>
 
             <!-- Reglas de Ejecución 
-            <div class="bg-gray-50 rounded-lg p-4 mb-4">
-              <h4 class="font-semibold text-slate-800 mb-3">Reglas de Ejecución</h4>
+            <div class="bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300 rounded-lg p-4 mb-4">
+              <h4 class="font-semibold text-slate-800 dark:text-slate-200 mb-3">Reglas de Ejecución</h4>
               <div class="space-y-3">
                 <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-700">Ejecutar cada lunes</span>
+                  <span class="text-sm text-gray-700 dark:text-gray-400">Ejecutar cada lunes</span>
                   <label class="relative inline-flex items-center cursor-pointer">
                     <input v-model="config.weeklyExecution" type="checkbox" class="sr-only peer">
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-700">Notificaciones por email</span>
+                  <span class="text-sm text-gray-700 dark:text-gray-400">Notificaciones por email</span>
                   <label class="relative inline-flex items-center cursor-pointer">
                     <input v-model="config.emailNotifications" type="checkbox" class="sr-only peer">
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-sm text-gray-700">Auto-reiniciar en errores</span>
+                  <span class="text-sm text-gray-700 dark:text-gray-400">Auto-reiniciar en errores</span>
                   <label class="relative inline-flex items-center cursor-pointer">
                     <input v-model="config.autoRestart" type="checkbox" class="sr-only peer">
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                   </label>
                 </div>
               </div>
@@ -883,7 +879,7 @@ const getStatusBadgeClass = (estado) => {
     error: 'bg-red-100 text-red-700',
     ejecucion: 'bg-yellow-100 text-yellow-700'
   }
-  return classes[estado] || 'bg-gray-100 text-gray-700'
+  return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-400'
 }
 
 const getStatusDotClass = (estado) => {
@@ -892,7 +888,7 @@ const getStatusDotClass = (estado) => {
     error: 'bg-red-500',
     ejecucion: 'bg-yellow-500'
   }
-  return classes[estado] || 'bg-gray-500'
+  return classes[estado] || 'bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-3000'
 }
 </script>
 <!-- CSS adicional para asegurar que funcione -->

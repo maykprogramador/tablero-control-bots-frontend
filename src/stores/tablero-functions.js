@@ -34,6 +34,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     historias_clinicas: [],
     formSolicitudes: [],
     executeBot: false,
+    isDark: false,
   }),
 
   actions: {
