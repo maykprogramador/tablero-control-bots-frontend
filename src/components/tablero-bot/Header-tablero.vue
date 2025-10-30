@@ -38,20 +38,20 @@
             </button>
 
             <!-- Dropdown de Notificaciones -->
-            <div v-if="showNotifications && !showMobileMenu" class="absolute left-1/2 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 transition-all duration-200 ease-in-out transform -translate-x-1/2 z-50" >
+            <div v-if="showNotifications && !showMobileMenu" class="absolute left-1/2 mt-2 w-80 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-slate-700 py-2 transition-all duration-200 ease-in-out transform -translate-x-1/2 z-50" >
               <!-- Header con título y menú -->
-              <div class="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
-                <h3 class="text-sm font-semibold text-gray-900">Notificaciones</h3>
+              <div class="px-4 py-2 border-b border-gray-100 bg-white dark:bg-[#14181a] dark:border-slate-600 flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Notificaciones</h3>
 
                 <!-- Botón de opciones (...) -->
                 <div class="relative">
-                  <button @click="toggleMenuAcciones" class="p-1 rounded-full text-black font-bold cursor-pointer hover:bg-gray-300 transition" > 
+                  <button @click="toggleMenuAcciones" class="p-1 rounded-full font-bold cursor-pointer text-black hover:bg-gray-300 dark:hover:bg-slate-700 dark:text-white transition" > 
                     ⋮ 
                   </button>
 
                   <!-- Menú desplegable -->
-                  <div v-if="showMenuAcciones" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50" >
-                    <button @click="marcarTodasLeidas" class="flex items-center cursor-pointer text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150" >
+                  <div v-if="showMenuAcciones" class="absolute right-0 mt-2 w-40 bg-white dark:bg-black border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-50" >
+                    <button @click="marcarTodasLeidas" class="flex items-center cursor-pointer text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 transition-colors duration-150" >
                       <CheckCheck class="w-4 h-4 inline-block mr-2 text-green-600" />
                       Marcar como leídas
                     </button>
@@ -63,7 +63,7 @@
                 </div>
               </div>
               <div class="max-h-64 overflow-y-auto">
-                <div v-for="notificacion in notificaciones.slice(0, 30)" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
+                <div v-for="notificacion in notificaciones.slice(0, 30)" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#21292e7a]  transition-colors duration-200 cursor-pointer" >
                   <div @click="handleNotificacionClick(notificacion)" class="flex items-start space-x-3">
                     <!-- Puntos o icono segun tipo -->
                     <div v-if="!notificacion.leido" class="flex-shrink-0">
@@ -71,15 +71,15 @@
                     </div>
                     <!-- Contenido -->
                     <div class="flex-1 min-w-0">
-                      <p class="text-sm font-medium text-gray-900">{{ notificacion.titulo }}</p>
-                      <p class="text-sm text-gray-600 mt-1" v-html="notificacion.mensaje"></p>
+                      <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ notificacion.titulo }}</p>
+                      <p class="text-sm text-gray-600 dark:text-gray-300 mt-1" v-html="notificacion.mensaje"></p>
                       <p class="text-xs text-gray-400 mt-1">{{ timeAgo( notificacion.createdAt ) }}</p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="px-4 py-2 border-t border-gray-100">
-                <button @click="$emit('update:selectedTab', 'notificaciones'),toggleNotifications()" class="text-sm cursor-pointer text-blue-600 hover:text-blue-800 font-medium">
+              <div class="px-4 py-2 border-t border-gray-100 dark:border-slate-600">
+                <button @click="$emit('update:selectedTab', 'notificaciones'),toggleNotifications()" class="text-sm cursor-pointer text-blue-600 hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-300 font-medium">
                   Ver todas las notificaciones
                 </button>
               </div>
@@ -99,9 +99,9 @@
             </button>
 
             <!-- Dropdown del Usuario -->
-            <div v-if="showUserMenu" class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 transition-all duration-200 ease-in-out">
+            <div v-if="showUserMenu" class="absolute right-0 mt-2 w-56 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 py-2 transition-all duration-200 ease-in-out">
               <div class="px-4 py-2 border-b border-gray-100">
-                <p class="text-sm font-medium text-gray-900">{{ user.nombre  }}</p>
+                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ user.nombre  }}</p>
                 <p class="text-sm text-gray-500">{{ user.email }}</p>
               </div>
               <div class="py-1">
@@ -163,7 +163,7 @@
           <div v-if="showNotifications && showMobileMenu" class="mt-2 w-full bg-white rounded-lg shadow-md border border-gray-200 py-2 transition-all duration-200 ease-in-out" >
             <!-- Header con título y menú -->
             <div class="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
-              <h3 class="text-sm font-semibold text-gray-900">Notificaciones</h3>
+              <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Notificaciones</h3>
 
               <!-- Botón de opciones (...) -->
               <div class="relative">
@@ -191,8 +191,8 @@
                     <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                   </div>
                   <div class="flex-1 min-w-0">
-                    <p class="text-sm font-medium text-gray-900">{{ notificacion.titulo }}</p>
-                    <p class="text-sm text-gray-600 mt-1" v-html="notificacion.mensaje"></p>
+                    <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ notificacion.titulo }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mt-1" v-html="notificacion.mensaje"></p>
                     <p class="text-xs text-gray-400 mt-1">{{ timeAgo(notificacion.createdAt) }}</p>
                   </div>
                 </div>
