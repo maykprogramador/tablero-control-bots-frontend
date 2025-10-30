@@ -106,27 +106,27 @@
                   <div class="flex flex-col gap-1 ml-auto">
                     <div class="flex items-center gap-2 flex-wrap">
                       <!-- Total registros -->
-                      <div class="px-3 py-0.5 rounded-full bg-gray-100 border-gray-200">
-                        <span class="text-xs font-medium text-gray-600 dark:text-gray-400">Total: </span>
-                        <span class="text-xs font-semibold text-gray-800">{{ getMetricas(bot.id).total_registros }}</span>
+                      <div class="px-3 py-0.5 rounded-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600">
+                        <span class="text-xs font-medium text-gray-600 dark:text-gray-300">Total: </span>
+                        <span class="text-xs font-semibold text-gray-800 dark:text-gray-100">{{ getMetricas(bot.id).total_registros }}</span>
                       </div>
                       
                       <!-- Exitosos -->
-                      <div class="px-3 py-0.5 rounded-full bg-green-100  border-green-200">
-                        <span class="text-xs font-medium text-green-600">Exitosos: </span>
-                        <span class="text-xs font-semibold text-green-800">{{ getMetricas(bot.id).exito }}</span>
+                      <div class="px-3 py-0.5 rounded-full bg-green-100 dark:bg-green-900/40 border-green-200 dark:border-green-700">
+                        <span class="text-xs font-medium text-green-600 dark:text-green-400">Exitosos: </span>
+                        <span class="text-xs font-semibold text-green-800 dark:text-green-300">{{ getMetricas(bot.id).exito }}</span>
                       </div>
                       
                       <!-- Pendientes -->
-                      <div class="px-3 py-0.5 rounded-full bg-amber-100  border-amber-200">
-                        <span class="text-xs font-medium text-amber-600">Pendientes: </span>
-                        <span class="text-xs font-semibold text-amber-800">{{ getMetricas(bot.id).pendiente ||  getMetricas(bot.id).proceso}}</span>
+                      <div class="px-3 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 border-amber-200 dark:border-amber-700">
+                        <span class="text-xs font-medium text-amber-600 dark:text-amber-400">Pendientes: </span>
+                        <span class="text-xs font-semibold text-amber-800 dark:text-amber-300">{{ getMetricas(bot.id).pendiente ||  getMetricas(bot.id).proceso}}</span>
                       </div>
                       
                       <!-- Error -->
-                      <div class="px-3 py-0.5 rounded-full bg-red-100  border-red-200">
-                        <span class="text-xs font-medium text-red-600">Error: </span>
-                        <span class="text-xs font-semibold text-red-800">{{ getMetricas(bot.id).error }}</span>
+                      <div class="px-3 py-0.5 rounded-full bg-red-100 dark:bg-red-900/40 border-red-200 dark:border-red-700">
+                        <span class="text-xs font-medium text-red-600 dark:text-red-400">Error: </span>
+                        <span class="text-xs font-semibold text-red-800 dark:text-red-300">{{ getMetricas(bot.id).error }}</span>
                       </div>
                     </div>
                   </div>
