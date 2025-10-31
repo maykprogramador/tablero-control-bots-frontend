@@ -105,7 +105,7 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm">
               <button
                 @click="viewRegistroDetails(record)"
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-[#80006A] bg-[#F5E6F1] hover:bg-[#E6CCE4] hover:text-[#A65C99] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A65C99] transition-all duration-200 group-hover:scale-105"
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-[#80006A] dark:text-purple-100 bg-[#F5E6F1] dark:bg-[#80006A] hover:bg-[#E6CCE4] dark:hover:bg-[#80006A] hover:text-[#A65C99] dark:hover:text-purple-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-800 focus:ring-[#A65C99] dark:focus:ring-purple-600 transition-all duration-200 group-hover:scale-105"
               >
                 <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -367,28 +367,28 @@ const getRegistroStatusClass = (estado) => {
   return classes[estado] || 'bg-gray-100 text-gray-800'
 }
 
-const getStatusBadgeClass = (estado) => {
-  const classes = {
-    exito: 'bg-green-100 text-green-700',
-    error: 'bg-red-100 text-red-700',
-    pendiente: 'bg-yellow-100 text-yellow-700'
-  }
-  return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-100'
-}
-
 const validarEmpresa = (botId) => {
   if (botId === 1 || botId === 4) return 'Avidanti'
   if (botId === 3 || botId === 5) return 'Oncologos'
   return 'Desconocida'
 }
 
+const getStatusBadgeClass = (estado) => {
+  const classes = {
+    exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
+  }
+  return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-300'
+}
+
 const getStatusDotClass = (estado) => {
   const classes = {
-    exito: 'bg-green-500',
-    error: 'bg-red-500',
-    pendiente: 'bg-yellow-500'
+    exito: 'bg-green-500 dark:bg-green-40',
+    error: 'bg-red-500 dark:bg-red-400',
+    pendiente: 'bg-yellow-500 dark:bg-yellow-400'
   }
-  return classes[estado] || 'bg-gray-50 dark:bg-slate-8000'
+  return classes[estado] || 'bg-gray-500'
 }
 
 const getStatusText = (estado) => {

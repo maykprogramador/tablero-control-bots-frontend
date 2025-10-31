@@ -294,20 +294,20 @@ const formatDateTime = (date) => {
 
 const getEstadoBadgeClass = (estado) => {
   const classes = {
-    'exito': 'bg-green-100 text-green-800',
-    'error': 'bg-red-100 text-red-800',
-    'proceso': 'bg-yellow-100 text-yellow-800',
-    'pendiente': 'bg-yellow-100 text-yellow-800'
+    'exito': 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    'error': 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    'proceso': 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+    'pendiente': 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
   }
   return classes[estado] || classes.pendiente
 }
 
 const getEstadoDotClass = (estado) => {
   const classes = {
-    'exito': 'bg-green-500',
-    'error': 'bg-red-500',
-    'proceso': 'bg-yellow-500',
-    'pendiente': 'bg-yellow-500'
+    'exito': 'bg-green-500 dark:bg-green-400',
+    'error': 'bg-red-500 dark:bg-red-400',
+    'proceso': 'bg-yellow-500 dark:bg-yellow-400',
+    'pendiente': 'bg-yellow-500 dark:bg-yellow-400'
   }
   return classes[estado] || classes.pendiente
 }

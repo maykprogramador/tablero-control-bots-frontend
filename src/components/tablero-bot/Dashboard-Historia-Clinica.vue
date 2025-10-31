@@ -260,7 +260,7 @@
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap text-sm">
                     <div class="flex justify-center gap-2">
-                      <button @click="abrirModal(registro)" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-[#80006A] bg-[#F5E6F1] hover:bg-[#E6CCE4] hover:text-[#A65C99] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A65C99] transition-all duration-200 group-hover:scale-105" >
+                      <button @click="abrirModal(registro)" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-[#80006A] dark:text-purple-100 bg-[#F5E6F1] dark:bg-[#80006A] hover:bg-[#E6CCE4] dark:hover:bg-[#80006A] hover:text-[#A65C99] dark:hover:text-purple-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-800 focus:ring-[#A65C99] dark:focus:ring-purple-600 transition-all duration-200 group-hover:scale-105" >
                         <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -268,7 +268,7 @@
                         Ver detalles
                       </button>
                       <!--  Botón Reprocesar -->
-                      <button v-if="['No se encontro la HC en Indigo', 'No se encontro el pdf'].includes(registro.motivo_fallo)" @click="reprocesarTrazabilidad(registro.id)" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-blue-700 bg-blue-100 hover:bg-blue-200 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-all duration-200 group-hover:scale-105" title="Reprocesar trazabilidad" >
+                      <button v-if="['No se encontro la HC en Indigo', 'No se encontro el pdf'].includes(registro.motivo_fallo)" @click="reprocesarTrazabilidad(registro.id)" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-200 dark:hover:bg-blue-900/60 hover:text-blue-800 dark:hover:text-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-800 focus:ring-blue-400 dark:focus:ring-blue-600 transition-all duration-200 group-hover:scale-105" title="Reprocesar trazabilidad" >
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 4v6h6M20 20v-6h-6M4 10a9 9 0 0116-4.5M20 14a9 9 0 01-16 4.5" />
@@ -758,20 +758,20 @@ const cerrarModal = () => {
 
 const getStatusBadgeClass = (estado) => {
   const classes = {
-    exito: 'bg-green-100 text-green-700',
-    error: 'bg-red-100 text-red-700',
-    pendiente: 'bg-yellow-100 text-yellow-700'
+    exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
   }
   return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-300'
 }
 
 const getStatusDotClass = (estado) => {
   const classes = {
-    exito: 'bg-green-500',
-    error: 'bg-red-500',
-    pendiente: 'bg-yellow-500'
+    exito: 'bg-green-500 dark:bg-green-400',
+    error: 'bg-red-500 dark:bg-red-400',
+    pendiente: 'bg-yellow-500 dark:bg-yellow-400'
   }
-  return classes[estado] || 'bg-gray-500'
+  return classes[estado] || 'bg-gray-500 dark:bg-gray-400'
 }
 
 const getStatusCount = (estado) => {

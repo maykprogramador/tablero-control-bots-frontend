@@ -364,20 +364,20 @@ const getStatusCount = (estado) => {
 
 const getStatusBadgeClass = (estado) => {
   const classes = {
-    exito: 'bg-green-100 text-green-700',
-    error: 'bg-red-100 text-red-700',
-    proceso: 'bg-yellow-100 text-yellow-700'
+    exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    proceso: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
   }
-  return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-400'
+  return classes[estado] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
 }
 
 const getStatusDotClass = (estado) => {
   const classes = {
-    exito: 'bg-green-500',
-    error: 'bg-red-500',
-    proceso: 'bg-yellow-500'
+    exito: 'bg-green-500 dark:bg-green-400',
+    error: 'bg-red-500 dark:bg-red-400',
+    proceso: 'bg-yellow-500 dark:bg-yellow-400'
   }
-  return classes[estado] || 'bg-gray-500'
+  return classes[estado] || 'bg-gray-500 dark:bg-gray-400'
 }
 
 const getStatusText = (estado) => {

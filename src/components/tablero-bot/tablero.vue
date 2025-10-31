@@ -64,29 +64,29 @@
                   <!-- Nombre editable -->
                   <!-- Modo visualización -->
                   <div class="flex items-center gap-2 group">
-                    <h3 class="font-semibold text-lg text-slate-800 dark:text-slate-200 group-hover:text-[#80006A] transition-colors duration-200">
+                    <h3 class="font-semibold text-lg text-slate-800 dark:text-slate-200 group-hover:text-[#80006A] dark:group-hover:text-purple-400 transition-colors duration-200">
                       {{ bot.nombre }}
                     </h3>
                     <div v-if="user.rol === 'admin'" class="space-x-2">
-                      <button v-if="user.rol === 'admin'" @click="EditarBot(bot)" class="text-[#80006A] hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95" title="Editar Bot" >
+                      <button v-if="user.rol === 'admin'" @click="EditarBot(bot)" class="text-[#80006A] dark:text-purple-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95" title="Editar Bot" >
                         <SquarePen class="w-4 h-4" />
                       </button>
-                      <button v-if="user.rol === 'admin'" @click="EliminarBot(bot)" class="text-red-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95" title="Eliminar Bot" >
+                      <button v-if="user.rol === 'admin'" @click="EliminarBot(bot)" class="text-red-700 dark:text-red-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-lg transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95" title="Eliminar Bot" >
                         <Trash class="w-4 h-4" />
                       </button>
                     </div>
                   </div>
-          
+                  
                   <div class="flex flex-wrap sm:flex-nowrap items-center sm:justify-between gap-2 sm:gap-3">
                     <!-- Procesados / Total -->
                     <div class="flex items-center gap-2">
-                      <div class="px-3 py-0.5 rounded-full bg-blue-100 border-blue-200">
-                        <span class="text-xs sm:text-sm font-semibold text-blue-800">
+                      <div class="px-3 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 border-blue-200 dark:border-blue-700">
+                        <span class="text-xs sm:text-sm font-semibold text-blue-800 dark:text-blue-300">
                           {{ bot.procesados }} / {{ bot.total_registros }}
                         </span>
                       </div>
                       <!-- Porcentaje -->
-                      <p class="px-3 py-1 rounded-full text-xs sm:text-sm font-semibold bg-gray-200 text-gray-800">
+                      <p class="px-3 py-1 rounded-full text-xs sm:text-sm font-semibold bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                         {{ obtener_porcentaje(bot.procesados, bot.total_registros) }}%
                       </p>
                     </div>
@@ -868,20 +868,20 @@ const getStatusText = (status) => {
 
 const getStatusBadgeClass = (estado) => {
   const classes = {
-    activo: 'bg-green-100 text-green-700',
-    error: 'bg-red-100 text-red-700',
-    ejecucion: 'bg-yellow-100 text-yellow-700'
+    activo: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    ejecucion: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
   }
-  return classes[estado] || 'bg-gray-100 text-gray-700 dark:text-gray-400'
+  return classes[estado] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
 }
 
 const getStatusDotClass = (estado) => {
   const classes = {
-    activo: 'bg-green-500',
-    error: 'bg-red-500',
-    ejecucion: 'bg-yellow-500'
+    activo: 'bg-green-500 dark:bg-green-400',
+    error: 'bg-red-500 dark:bg-red-400',
+    ejecucion: 'bg-yellow-500 dark:bg-yellow-400'
   }
-  return classes[estado] || 'bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-3000'
+  return classes[estado] || 'bg-gray-500 dark:bg-gray-400'
 }
 </script>
 <!-- CSS adicional para asegurar que funcione -->

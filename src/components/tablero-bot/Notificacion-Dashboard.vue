@@ -356,24 +356,45 @@ const eliminarTodas = () => {
     notificacionStore.eliminarNotificaciones()
   }
 }
-
 const getIconConfig = (tipo) => {
   const configs = {
-    'exito': { icono: CheckCircle, color: 'text-emerald-600', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-200' },
-    'error': { icono: XCircle, color: 'text-rose-600', bgColor: 'bg-rose-50', borderColor: 'border-rose-200' },
-    'advertencia': { icono: AlertCircle, color: 'text-amber-600', bgColor: 'bg-amber-50', borderColor: 'border-amber-200' },
-    'info': { icono: Info, color: 'text-blue-600', bgColor: 'bg-blue-50', borderColor: 'border-blue-200' }
+    'exito': {
+      icono: CheckCircle,
+      color: 'text-emerald-600 dark:text-emerald-300',
+      bgColor: 'bg-emerald-50 dark:bg-emerald-900/40',
+      borderColor: 'border-emerald-200 dark:border-emerald-700'
+    },
+    'error': {
+      icono: XCircle,
+      color: 'text-rose-600 dark:text-rose-300',
+      bgColor: 'bg-rose-50 dark:bg-rose-900/40',
+      borderColor: 'border-rose-200 dark:border-rose-700'
+    },
+    'advertencia': {
+      icono: AlertCircle,
+      color: 'text-amber-600 dark:text-amber-300',
+      bgColor: 'bg-amber-50 dark:bg-amber-900/40',
+      borderColor: 'border-amber-200 dark:border-amber-700'
+    },
+    'info': {
+      icono: Info,
+      color: 'text-blue-600 dark:text-blue-300',
+      bgColor: 'bg-blue-50 dark:bg-blue-900/40',
+      borderColor: 'border-blue-200 dark:border-blue-700'
+    }
   }
+
   return configs[tipo] || configs['info']
 }
 
 const getTipoBadgeClass = (tipo) => {
   const classes = {
-    'exito': 'bg-emerald-100 text-emerald-700 border border-emerald-200',
-    'error': 'bg-rose-100 text-rose-700 border border-rose-200',
-    'advertencia': 'bg-amber-100 text-amber-700 border border-amber-200',
-    'info': 'bg-blue-100 text-blue-700 border border-blue-200'
+    'exito': 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700',
+    'error': 'bg-rose-100 dark:bg-rose-900/40 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-700',
+    'advertencia': 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-700',
+    'info': 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700'
   }
+
   return classes[tipo] || classes['info']
 }
 
