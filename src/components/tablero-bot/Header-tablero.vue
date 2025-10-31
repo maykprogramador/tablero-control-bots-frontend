@@ -40,7 +40,7 @@
             <!-- Dropdown de Notificaciones -->
             <div v-if="showNotifications && !showMobileMenu" class="absolute left-1/2 mt-2 w-80 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-slate-700 py-2 transition-all duration-200 ease-in-out transform -translate-x-1/2 z-50" >
               <!-- Header con título y menú -->
-              <div class="px-4 py-2 border-b border-gray-100 bg-white dark:bg-[#14181a] dark:border-slate-600 flex items-center justify-between">
+              <div class="px-4 py-2 border-b border-gray-100 bg-white dark:bg-black dark:border-slate-600 flex items-center justify-between">
                 <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Notificaciones</h3>
 
                 <!-- Botón de opciones (...) -->
@@ -63,7 +63,7 @@
                 </div>
               </div>
               <div class="max-h-64 overflow-y-auto">
-                <div v-for="notificacion in notificaciones.slice(0, 30)" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#21292e7a]  transition-colors duration-200 cursor-pointer" >
+                <div v-for="notificacion in notificaciones.slice(0, 30)" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#21292ea1]  transition-colors duration-200 cursor-pointer" >
                   <div @click="handleNotificacionClick(notificacion)" class="flex items-start space-x-3">
                     <!-- Puntos o icono segun tipo -->
                     <div v-if="!notificacion.leido" class="flex-shrink-0">
