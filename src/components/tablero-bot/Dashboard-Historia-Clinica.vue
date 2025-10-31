@@ -253,7 +253,7 @@
                     </span>
                   </td>
                   <td v-if="filtros.estado === 'error'"  class="px-6 py-4 whitespace-nowrap text-sm">
-                    <span class="px-2.5 py-0.5 rounded-full mr-1.5 bg-red-100 text-red-700 text-xs font-medium">
+                    <span :class="getStatusBadgeClass(filtros.estado), getStatusText(filtros.estado)" class="px-2.5 py-0.5 rounded-full mr-1.5 text-xs font-medium">
                       {{ registro.motivo_fallo || '—' }}
                     </span>
                     
