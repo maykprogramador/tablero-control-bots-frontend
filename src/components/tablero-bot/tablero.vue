@@ -118,7 +118,7 @@
                       </div>
                       
                       <!-- Pendientes -->
-                      <div class="px-3 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 border-amber-200 dark:border-amber-700">
+                      <div v-if="getMetricas(bot.id).pendiente && getMetricas(bot.id).pendiente > 0" class="px-3 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 border-amber-200 dark:border-amber-700">
                         <span class="text-xs font-medium text-amber-600 dark:text-amber-400">Pendientes: </span>
                         <span class="text-xs font-semibold text-amber-800 dark:text-amber-300">{{ getMetricas(bot.id).pendiente ||  getMetricas(bot.id).proceso}}</span>
                       </div>
@@ -490,6 +490,13 @@ const BOTS_RETIRO = [
   BOT_TYPES.RETIRO_USUARIO_AVIDANTI,
   BOT_TYPES.AUTOMATIZACION_FACTURAS,
   BOT_TYPES.RETIRO_USUARIO_ODO,
+];
+
+const BOTS_SIN_PENDIENTES = [
+  BOT_TYPES.RETIRO_USUARIO_AVIDANTI,
+  BOT_TYPES.SOPORTE_PATOLOGIA,
+  BOT_TYPES.RETIRO_USUARIO_ODO,
+  BOT_TYPES.RETIRO_USUARIO_GOMEDYS
 ];
 
 //--------------------------------------------------------------------------------------------------------------------------------
