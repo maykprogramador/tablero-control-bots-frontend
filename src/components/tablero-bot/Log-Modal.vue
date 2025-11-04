@@ -52,19 +52,19 @@
               
               <!-- Summary Stats -->
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-                <div class=" bg-white/10 rounded-lg p-3 text-center">
-                  <div class="text-lg sm:text-2xl font-bold">{{ logsDelBot.length }}</div>
-                  <div class="text-sm text-white">Total Logs</div>
+                <div @click="statusFilter = ''" class="bg-white/10 rounded-lg p-3 text-center cursor-pointer">
+                  <div class="text-lg sm:text-2xl font-bold">{{ logsDelBot.length}}</div>
+                  <div class="text-sm text-blue-100">Total Registros</div>
                 </div>
-                <div class="bg-[#00B094]/70 rounded-lg p-3 text-center">
+                <div @click="statusFilter = 'exito'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center">
                   <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('exito') }}</div>
-                  <div class="text-sm text-green-100">Exitosos</div>
+                  <div class="text-sm text-white">Exitosos</div>
                 </div>
-                <div class="bg-[#FF5F3F]/70 rounded-lg p-3 text-center">
+                <div @click="statusFilter = 'proceso'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center">
                   <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('proceso') }}</div>
-                  <div class="text-sm text-yellow-100">En Proceso</div>
+                  <div class="text-sm text-white">En Proceso</div>
                 </div>
-                <div class="bg-red-500/20 rounded-lg p-3 text-center">
+                <div @click="statusFilter = 'error'" class="bg-red-500/20 rounded-lg p-3 cursor-pointer text-center">
                   <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('error') }}</div>
                   <div class="text-sm text-white">Con Error</div>
                 </div>

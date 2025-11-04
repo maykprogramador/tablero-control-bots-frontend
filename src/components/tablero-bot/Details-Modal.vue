@@ -52,7 +52,7 @@
             
             <!-- Summary Stats -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-              <div class="bg-white/10 rounded-lg p-3 text-center">
+              <div @click="statusFilter = ''" class="bg-white/10 rounded-lg p-3 text-center cursor-pointer">
                 <div class="text-lg sm:text-2xl font-bold">{{ registrosDelBot.length}}</div>
                 <div class="text-sm text-blue-100">Total Registros</div>
               </div>
