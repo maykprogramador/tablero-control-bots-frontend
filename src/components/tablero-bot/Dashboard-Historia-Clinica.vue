@@ -823,6 +823,8 @@ const exportData = () => {
     Folio: record.folio,
     Fecha_Historia: record.fecha_historia,
     fecha_envio: record.fecha_envio || '—',
+    duracion: record.duracion? formatDuration(record.duracion) : '—',
+    Estado: record.estado_envio,
     Estado: capitalizarPrimeraLetra(record.estado_envio), // Capitalizar primer letra a mayuscula
     Motivo_Fallo: capitalizarPrimeraLetra(record.motivo_fallo) || '—',
     Bot: record.bot

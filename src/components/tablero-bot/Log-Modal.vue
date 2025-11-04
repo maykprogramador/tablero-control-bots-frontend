@@ -242,6 +242,7 @@ import MessageDetailsModal from './Messaje-Details-Modal.vue'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 import * as XLSX from 'xlsx'
+import { formatDuration } from '@/utils/FormatSeconds'
 
 // Activar el plugin
 dayjs.extend(isBetween)
@@ -381,11 +382,10 @@ const exportData = () => {
   const data = filteredLogs.value.map(log => ({
     Bot: log.bot_id,
     Nombre_Bot: log.nombreBot || props.bot.nombre,
+    Mensaje: log.mensaje,
     Estado: log.estado,
     Fecha: log.fecha_log,
-    Hora: log.fecha_log,
-    Duración: log.duracion,
-    Mensaje: log.mensaje
+    Duración: log.duracion || '-',
   }))
 
   const worksheet = XLSX.utils.json_to_sheet(data)

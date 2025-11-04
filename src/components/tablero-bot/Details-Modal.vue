@@ -419,7 +419,8 @@ const exportData = () => {
     Estado: record.estado,
     Fecha: record.fecha_ejecucion,
     Mensaje: record.mensaje,
-    ...(botOptions.includes(record.bot_id)  && { Duración: record.duracion }) // 👈 se agrega solo si bot_id ≠ 8
+    Duración: record.duracion? formatDuration(record.duracion) : '-',
+
   }));
 
 
@@ -433,7 +434,7 @@ const exportData = () => {
   // 4️⃣ Generar archivo Excel y descargar
   XLSX.writeFile(
     workbook, 
-    `bot-execution-details-${props.bot.nombre.replace(/\s+/g, '-').toLowerCase()}.xlsx`
+    `bot-detalle-ejecucion-${props.bot.nombre.replace(/\s+/g, '-').toLowerCase()}.xlsx`
   );
 };
 
