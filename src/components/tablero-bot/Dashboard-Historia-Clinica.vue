@@ -206,6 +206,9 @@
                     Fecha Envio
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                    Duracion
+                  </th>
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Estado
                   </th>
                   <th v-if="filtros.estado === 'error'" class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
@@ -242,6 +245,14 @@
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                     {{ formatearFechaHora(registro.fecha_envio) }}
+                  </td>
+                  <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                    <div class="flex items-center justify-center gap-1">
+                      <svg v-if="registro.duracion" class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      {{ formatDuration(registro.duracion) }}
+                    </div>
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap">
                     <span 
@@ -412,6 +423,7 @@ import { capitalizarPrimeraLetra } from '@/utils/CapitalizarPalabras';
 import { capitalizarNombre } from '@/utils/CapitalizarNombre';
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween';
+import { formatDuration } from '@/utils/FormatSeconds';
 dayjs.extend(isBetween);
 
 
@@ -452,6 +464,7 @@ const registrosTrazabilidad = computed(() =>
     ingreso: t.HistoriaClinica.ingreso,
     fecha_historia: t.HistoriaClinica.fecha_historia,
     fecha_envio: t.fecha_envio,
+    duracion: t.duracion,
     folio: t.HistoriaClinica.folio,
     estado_envio: t.estado_envio,
     motivo_fallo: t.motivo_fallo,

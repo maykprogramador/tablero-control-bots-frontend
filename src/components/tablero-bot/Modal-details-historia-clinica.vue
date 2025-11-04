@@ -122,6 +122,14 @@
               </p>
             </div>
 
+            <!-- Duración del envío -->
+            <div v-if="registroSeleccionado.duracion">
+              <label class="block text-sm font-semibold text-gray-600 dark:text-gray-400 mb-1">Duración de Envío</label>
+              <p class="text-gray-800 dark:text-gray-200 font-medium">
+                {{ formatDuration(registroSeleccionado.duracion) }}
+              </p>
+            </div>
+
             <!-- Motivo de fallo -->
             <div v-if="registroSeleccionado.motivo_fallo" class="md:col-span-2">
               <label class="block text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2">Motivo de Fallo</label>
@@ -160,6 +168,7 @@
 
 <script setup>
 import { formatDate, formatearFechaHora, mostrarFecha } from '@/utils/FormatDate'
+import { formatDuration } from '@/utils/FormatSeconds'
 import { ref, computed, defineProps} from 'vue'
 
 // Props
@@ -173,12 +182,12 @@ const cerrarModal = () => {
 
 
 const getBadgeClass = (estado) => {
-  const clases = {
-    exito: 'bg-green-100 text-green-800 border border-green-200',
-    error: 'bg-red-100 text-red-800 border border-red-200',
-    pendiente: 'bg-yellow-100 text-yellow-800 border border-yellow-200'
+  const classes = {
+    exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
   }
-  return clases[estado] || 'bg-gray-100 text-gray-800 border border-gray-200'
+  return classes[estado] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
 }
 
 const getEstadoTexto = (estado) => {
