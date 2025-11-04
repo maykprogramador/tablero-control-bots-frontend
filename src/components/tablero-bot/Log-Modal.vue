@@ -41,9 +41,9 @@
                 <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('exito') }}</div>
                 <div class="text-sm text-white">Exitosos</div>
               </div>
-              <div @click="statusFilter = 'proceso'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center">
-                <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('proceso') }}</div>
-                <div class="text-sm text-white">En Proceso</div>
+              <div @click="statusFilter = 'pendiente'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center">
+                <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('pendiente') }}</div>
+                <div class="text-sm text-white">Pendiente</div>
               </div>
               <div @click="statusFilter = 'error'" class="bg-red-500/20 rounded-lg p-3 cursor-pointer text-center">
                 <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('error') }}</div>
@@ -80,7 +80,7 @@
                 >
                   <option value="">Todos</option>
                   <option value="exito">Éxito</option>
-                  <option value="proceso">En Proceso</option>
+                  <option value="pendiente">Pendiente</option>
                   <option value="error">Error</option>
                 </select>
               </div>
@@ -347,6 +347,7 @@ const getStatusBadgeClass = (estado) => {
   const classes = {
     exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
     error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
     proceso: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300'
   }
   return classes[estado] || 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400'
@@ -356,7 +357,8 @@ const getStatusDotClass = (estado) => {
   const classes = {
     exito: 'bg-green-500 dark:bg-green-400',
     error: 'bg-red-500 dark:bg-red-400',
-    proceso: 'bg-yellow-500 dark:bg-yellow-400'
+    pendiente: 'bg-yellow-500 dark:bg-yellow-400',
+    proceso: 'bg-yellow-500 dark:bg-yellow-400',
   }
   return classes[estado] || 'bg-gray-500 dark:bg-gray-400'
 }
@@ -365,7 +367,8 @@ const getStatusText = (estado) => {
   const texts = {
     exito: 'Éxito',
     error: 'Error',
-    proceso: 'En Proceso'
+    pendiente: 'Pendiente',
+    proceso: 'En Proceso',
   }
   return texts[estado] || 'Desconocido'
 }
