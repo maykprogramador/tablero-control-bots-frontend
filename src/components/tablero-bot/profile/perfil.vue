@@ -39,7 +39,7 @@
               <div class="w-40 h-40 rounded-full overflow-hidden bg-gradient-to-br from-orange-400 to-rose-400 dark:from-orange-500 dark:to-rose-500 p-1 shadow-2xl">
                 <div class="w-full h-full rounded-full overflow-hidden bg-white dark:bg-gray-700">
                   <img 
-                    :src="previewImage || user.foto_perfil" 
+                    :src="user.foto_perfil || previewImage" 
                     alt="Foto de perfil" 
                     class="w-full h-full object-cover"
                   />

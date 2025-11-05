@@ -364,10 +364,10 @@ function extraerNombreApellido(nombreCompleto) {
   const palabras = nombreCompleto.trim().split(' ');
   
   // Si solo tiene un nombre, retornarlo
-  if (palabras.length === 1) return this.capitalizarNombre(palabras[0]);
+  if (palabras.length === 1) return capitalizarNombre(palabras[0]);
   
   // Si tiene dos o más palabras, tomar la primera y la segunda
-  return `${this.capitalizarNombre(palabras[0])} ${this.capitalizarNombre(palabras[1])}`;
+  return `${capitalizarNombre(palabras[0])} ${capitalizarNombre(palabras[1])}`;
 }
 
 // Obtiene las iniciales para el avatar
