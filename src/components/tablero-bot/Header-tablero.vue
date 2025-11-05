@@ -160,9 +160,9 @@
             </span>
           </button>
           <!-- Notificaciones en Mobile -->
-          <div v-if="showNotifications && showMobileMenu" class="mt-2 w-full bg-white rounded-lg shadow-md border border-gray-200 py-2 transition-all duration-200 ease-in-out" >
+          <div v-if="showNotifications && showMobileMenu" class="mt-2 w-full bg-white dark:bg-black rounded-lg shadow-md border border-gray-200 dark:border-slate-700 py-2 transition-all duration-200 ease-in-out" >
             <!-- Header con título y menú -->
-            <div class="px-4 py-2 border-b border-gray-100 flex items-center justify-between">
+            <div class="px-4 py-2 border-b border-gray-100 dark:border-slate-600 flex items-center justify-between">
               <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100">Notificaciones</h3>
 
               <!-- Botón de opciones (...) -->
@@ -198,8 +198,8 @@
                 </div>
               </div>
             </div>
-            <div class="px-4 py-2 border-t border-gray-100">
-              <button @click="$emit('update:selectedTab', 'notificaciones'),toggleNotifications()" class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+            <div class="px-4 py-2 border-t border-gray-100 dark:border-slate-600">
+              <button @click="$emit('update:selectedTab', 'notificaciones'),toggleNotifications()" class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-200 dark:hover:text-blue-300 font-medium">
                 Ver todas las notificaciones
               </button>
             </div>
