@@ -293,7 +293,7 @@ const userFunctions = useUserFunctions()
 
 // Referencias
 const fileInput = ref(null);
-const previewImage = ref(null);
+const previewImage = ref('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png');
 const showUpdateAlert = ref(true);
 // referencias de la tarjeta de alerta
 const showSuccessToast = ref(false)
