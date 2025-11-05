@@ -92,22 +92,50 @@
             <button @click="toggleUserMenu" class="flex items-center space-x-2 text-white hover:text-blue-200 transition-all duration-200 ease-in-out hover:bg-white/10 rounded-lg p-2">
               <img v-if="!user.foto_perfil" class="h-8 w-8 rounded-full border-2 border-white/20" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" alt="Avatar del usuario" />
               <img v-else :src="user.foto_perfil" class="h-8 w-8 rounded-full border-2 border-white/20" alt="Avatar del usuario" />
-              <span class="text-sm font-medium">{{ user.nombre }}</span>
+              <span class="text-sm font-medium">{{ capitalizarNombre(user.nombre) }}</span>
               <svg class="w-4 h-4 transition-transform duration-200" :class="{ 'rotate-180': showUserMenu }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
               </svg>
             </button>
 
             <!-- Dropdown del Usuario -->
-            <div v-if="showUserMenu" class="absolute right-0 mt-2 w-56 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-slate-800 py-2 transition-all duration-200 ease-in-out">
-              <div class="px-4 py-2 border-b border-gray-100 dark:border-slate-600">
-                <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ user.nombre  }}</p>
-                <p class="text-sm text-gray-500 dark:text-gray-300">{{ user.email }}</p>
+            <div v-if="showUserMenu" class="absolute right-0 mt-2 w-64 bg-white dark:bg-black rounded-lg shadow-xl border border-gray-200 dark:border-slate-800 overflow-hidden transition-all duration-200 ease-in-out">
+              <!-- Header con Avatar y Info del Usuario -->
+              <div class="px-4 py-4 bg-gradient-to-br from-gray-50 to-white dark:from-slate-900 dark:to-black border-b border-gray-100 dark:border-slate-800">
+                <div class="flex items-center gap-3 mb-3">
+                  <!-- Avatar con indicador de estado -->
+                  <div class="relative">
+                    <img v-if="user.foto_perfil" :src="user.foto_perfil" class="h-12 w-12 rounded-full border-2 border-white/20" alt="Avatar del usuario" />
+                    <div v-else class="w-12 h-12 rounded-full bg-[#80006A] flex items-center justify-center text-white font-semibold text-lg shadow-md">
+                      {{ obtenerIniciales(user.nombre) }}
+                    </div>
+                    <div class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-black rounded-full"></div>
+                  </div>
+                  
+                  <!-- Información del usuario -->
+                  <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white truncate">
+                      {{ extraerNombreApellido(user.nombre) }}
+                    </p>
+                    <!-- Badge del Rol -->
+                    <span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-purple-100 dark:bg-[#80006A]/30 text-[#80006A] dark:text-[#e7b6df] mt-1">
+                      {{ user.rol }}
+                    </span>
+                  </div>
+                </div>
+                
+                <!-- Email -->
+                <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  {{ user.email }}
+                </p>
               </div>
+              <!-- Opciones del menú -->
               <div class="py-1">
-                <a @click="handleMenuClick(item.action)" v-for="item in userMenuItems" :key="item.name" href="#"class="flex items-center cursor-pointer px-4 py-2 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-[#21292e] transition-colors duration-150">
-                  <component :is="item.icon" class="w-4 h-4 mr-3 text-gray-400" />
-                  {{ item.name }}
+                <a @click="handleMenuClick(item.action)"  v-for="item in userMenuItems"  :key="item.name"  href="#" class="flex items-center cursor-pointer px-4 py-2.5 text-sm text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-900 transition-colors duration-150 group" >
+                  <component  :is="item.icon"  class="w-4 h-4 mr-3 text-gray-400 group-hover:text-[#80006A] dark:group-hover:text-purple-400 transition-colors duration-150"  />
+                  <span class="group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-150">
+                    {{ item.name }}
+                  </span>
                 </a>
               </div>
             </div>
@@ -133,7 +161,7 @@
           <img v-if="user.foto_perfil" :src="user.foto_perfil" class="h-10 w-10 rounded-full border-2 border-white/20" alt="Avatar del usuario" />
           <img v-else class="h-8 w-8 rounded-full border-2 border-white/20" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png" alt="Avatar del usuario" />
           <div>
-            <p class="text-white font-medium">{{ user.nombre }}</p>
+            <p class="text-white font-medium">{{ capitalizarNombre(user.nombre) }}</p>
             <p class="text-blue-200 text-sm">{{ user.email }}</p>
           </div>
         </div>
@@ -241,6 +269,7 @@ const { isDark } = storeToRefs(tableroFunctions)
 //iconos de vue
 import { Settings, LogOut, User, Bell, CircleCheck, CircleX, TriangleAlert, Info, Trash, CheckCheck } from 'lucide-vue-next'
 import { timeAgo } from '@/utils/TimeAgo'
+import { capitalizarNombre } from '@/utils/CapitalizarNombre'
 
 // Estados reactivo
 const showNotifications = ref(false)
@@ -329,6 +358,31 @@ async function handleNotificacionClick(notificacion) {
   toggleNotifications()
   // luego decides qué acción tomar (redirigir, abrir modal, etc.)
 }
+
+function extraerNombreApellido(nombreCompleto) {
+  if (!nombreCompleto) return '';
+  const palabras = nombreCompleto.trim().split(' ');
+  
+  // Si solo tiene un nombre, retornarlo
+  if (palabras.length === 1) return this.capitalizarNombre(palabras[0]);
+  
+  // Si tiene dos o más palabras, tomar la primera y la segunda
+  return `${this.capitalizarNombre(palabras[0])} ${this.capitalizarNombre(palabras[1])}`;
+}
+
+// Obtiene las iniciales para el avatar
+function obtenerIniciales(nombreCompleto) {
+  if (!nombreCompleto) return '?';
+  const palabras = nombreCompleto.trim().split(' ');
+  
+  if (palabras.length === 1) {
+    return palabras[0].charAt(0).toUpperCase();
+  }
+  
+  // Primera letra del primer nombre y primera letra del primer apellido
+  return (palabras[0].charAt(0) + palabras[1].charAt(0)).toUpperCase();
+}
+
 
 function toggleMenuAcciones() {
   showMenuAcciones.value = !showMenuAcciones.value

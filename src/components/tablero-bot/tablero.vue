@@ -730,15 +730,20 @@ const ejecutarBot = async () => {
   //console.log('ejecutar bot: ', formInactivation.value);
 
   if (formInactivation.value !== null && formInactivation.value.length > 0) {
-    console.log('registros a inactivar: ', formInactivation.value);
-    try {
-      await tableroFunctions.createSolicitud(formInactivation.value, authStore.user.user_id, control.selectedBot);
-      tableroFunctions.setSolicitudInactivacion([]);
-      alert('Registro guardado satisfactoriamente');
-      tableroFunctions.setExecuteBot(false);
-    } catch (error) {
-      //console.log(error.message); //  aquí captura el mensaje
-      alert(error.message);       //  y lo muestra en el alert
+    //console.log('registros a inactivar: ', formInactivation.value);
+    if(user.value.cargo){
+      try {
+        await tableroFunctions.createSolicitud(formInactivation.value, authStore.user.user_id, control.selectedBot);
+        tableroFunctions.setSolicitudInactivacion([]);
+        alert('Registro guardado satisfactoriamente');
+        tableroFunctions.setExecuteBot(false);
+      } catch (error) {
+        //console.log(error.message); //  aquí captura el mensaje
+        alert(error.message);       //  y lo muestra en el alert
+      }
+    }else{
+      alert('Por favor ingrese su cargo antes de continuar');
+      selectedTab.value = 'perfil';
     }
   }
 

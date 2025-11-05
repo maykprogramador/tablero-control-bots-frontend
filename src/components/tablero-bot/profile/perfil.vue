@@ -26,7 +26,7 @@
 
       <form @submit.prevent="handleSubmit" class="space-y-6">
         <!-- Sección de foto de perfil -->
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
+       <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 border border-gray-100 dark:border-gray-700">
           <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6 flex items-center gap-2">
             <svg class="w-5 h-5 text-orange-500 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -45,6 +45,7 @@
                   />
                 </div>
               </div>
+              <!-- Boton de subir foto
               <button
                 type="button"
                 @click="triggerFileInput"
@@ -61,13 +62,13 @@
                 class="hidden" 
                 accept="image/*" 
                 @change="handleImageUpload"
-              />
+              />-->
             </div>
             
             <div class="flex-1 space-y-4 text-center lg:text-left">
               <div>
                 <h4 class="text-xl font-semibold text-gray-800 dark:text-gray-100">{{ user.nombre }}</h4>
-                <p class="text-gray-600 dark:text-gray-400 mt-1">{{ capitalizarPrimeraLetra(user.rol) }}</p>
+                <span class="text-xs font-semibold bg-orange-50 dark:bg-orange-900/40 text-[#80006A] dark:text-orange-300 px-2 py-1 rounded-full">{{ capitalizarPrimeraLetra(user.rol)  }}</span>
               </div>
               
               <!-- Boton de cambiar foto
@@ -75,7 +76,7 @@
                 <button 
                   type="button" 
                   @click="triggerFileInput"
-                  class="px-4 py-2 text-sm font-medium border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 dark:focus:ring-orange-600 transition-all"
+                  class="px-4 py-2 text-sm font-medium border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-800 focus:ring-orange-500 dark:focus:ring-orange-600 transition-all"
                 >
                   🖼️ Cambiar foto
                 </button>
@@ -83,7 +84,7 @@
                   v-if="previewImage" 
                   type="button" 
                   @click="cancelImageUpload"
-                  class="px-4 py-2 text-sm font-medium border border-red-300 dark:border-red-600 rounded-lg shadow-sm text-red-700 dark:text-red-300 bg-white hover:bg-red-50 dark:hover:bg-red-900/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-red-600 transition-all"
+                  class="px-4 py-2 text-sm font-medium border border-red-300 dark:border-red-600 rounded-lg shadow-sm text-red-700 dark:text-red-300 bg-white dark:bg-gray-800 hover:bg-red-50 dark:hover:bg-red-900/20 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-800 focus:ring-red-500 dark:focus:ring-red-600 transition-all"
                 >
                   ❌ Cancelar
                 </button>
@@ -212,7 +213,6 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
                 Empresa
-                <span class="text-red-500 dark:text-red-400">*</span>
               </label>
               <input
                 id="empresa"
@@ -232,7 +232,6 @@
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
                 Departamento
-                <span class="text-red-500 dark:text-red-400">*</span>
               </label>
               <input
                 id="departamento"
@@ -381,7 +380,7 @@ const validateForm = () => {
   }
   
   // Validar empresa
-  if (!editableData.empresa.trim()) {
+  /*if (!editableData.empresa.trim()) {
     errors.empresa = 'La empresa es requerida';
     isValid = false;
   } else if (editableData.empresa.trim().length < 3) {
@@ -396,7 +395,7 @@ const validateForm = () => {
   } else if (editableData.departamento.trim().length < 3) {
     errors.departamento = 'El departamento debe tener al menos 3 caracteres';
     isValid = false;
-  }
+  }*/
   
   return isValid;
 };
