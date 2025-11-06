@@ -30,10 +30,9 @@ export const useNotificacionesStore = defineStore('notificacion-functions',{
       const authStore = useAuthStore();
 
       socket.on('nueva_notificacion', (notificacion) => {
-        console.log('Nueva notificación recibida via Socket.IO:', notificacion);
-
         //  Solo agregar si corresponde al usuario logueado
         if (notificacion.user_id === authStore.user.user_id ) {
+          console.log('Nueva notificación recibida via Socket.IO:', notificacion);
           this.notificaciones.unshift(notificacion);
           // Sonidos
           this.reproducirSonido(notificacion.tipo);
