@@ -119,13 +119,13 @@ const saveBotAssignments = async () => {
 // Lifecycle
 onMounted(async () => {
   tempBotAssignments.value = {}
-  console.log('selectedUser: ', selectedUser)
+  //console.log('selectedUser: ', selectedUser)
 
   await tableroFunctions.getAllBots()
-  console.log('botsDisponibles: ', botsDisponibles.value)
+  //console.log('botsDisponibles: ', botsDisponibles.value)
 
   botsDisponibles.value.forEach(bot => { tempBotAssignments.value[bot.id] = selectedUser.Bots?.some(b => b.id === bot.id) || false })
-  console.log('tempBotAssignments: ', tempBotAssignments.value)
+  //console.log('tempBotAssignments: ', tempBotAssignments.value)
 })
 
 

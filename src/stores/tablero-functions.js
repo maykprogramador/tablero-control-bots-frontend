@@ -74,16 +74,16 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       try {
         const yaExisten = this.registros.some(r => r.bot_id === bot_id)
         if (!yaExisten) {
-          console.log('entro');
+          //console.log('entro');
           const nuevosRegistros = await axiosInstance.get('get/registros', { params: { bot_id } });
           if (nuevosRegistros.data.length > 0) {
             this.registros.push(...nuevosRegistros.data)  // sin sobrescribir
-            console.log('Registros cargados de db: ',this.registros);
+            //console.log('Registros cargados de db: ',this.registros);
             
           }
           return;
         }
-        console.log('Registros cargados del estado: ',this.registros);
+        //console.log('Registros cargados del estado: ',this.registros);
         /*const response = await axiosInstance.get('get/registros', { params: { bot_id } });
         this.registros = response.data;*/
       } catch (error) {
@@ -98,11 +98,11 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           const logs = await axiosInstance.get('logs', { params: { bot_id } });
           if (logs.data.length > 0) {
             this.logs.push(...logs.data)  // sin sobrescribir
-            console.log('Logs cargados de db: ',this.logs);
+            //console.log('Logs cargados de db: ',this.logs);
           }
           return;
         }
-        console.log('Logs cargados del estado: ',this.logs);
+        //console.log('Logs cargados del estado: ',this.logs);
       } catch (error) {
         console.error('Error al cargar los logs:', error);
       }
@@ -111,7 +111,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     async getUsers() {
       try {
         const response = await axiosInstance.get('get/users');
-        console.log('usuarios cargados: ',response.data);
+        //console.log('usuarios cargados: ',response.data);
         
         this.users = response.data;
       } catch (error) {
@@ -245,10 +245,10 @@ export const useTableroFunctions = defineStore('tablero-functions',{
                 }
               });
               this.solicitudes = response.data;
-            console.log('solicitudes cargadas de la DB: ',this.solicitudes);
+            //console.log('solicitudes cargadas de la DB: ',this.solicitudes);
           }
           else {
-            console.log('solicitudes cargadas del estado: ',this.solicitudes);
+            //console.log('solicitudes cargadas del estado: ',this.solicitudes);
           }
           
       } catch (error) {
@@ -258,12 +258,12 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     async loadHistoriasClinicas(user) {
       try {
           if (this.historias_clinicas.length === 0) {
-              const response = await axiosInstance.get('get/historiasClinicas', { params: { user_id: user.user_id, } });
-              this.historias_clinicas = response.data;
-            console.log('historias cargadas de la DB: ',this.historias_clinicas);
+            const response = await axiosInstance.get('get/historiasClinicas', { params: { user_id: user.user_id, } });
+            this.historias_clinicas = response.data;
+            //console.log('historias cargadas de la DB: ',this.historias_clinicas);
           }
           else {
-            console.log('historias_clinicas cargadas del estado: ',this.historias_clinicas);
+            //console.log('historias_clinicas cargadas del estado: ',this.historias_clinicas);
           }
           
       } catch (error) {

@@ -352,7 +352,7 @@ const visiblePages = computed(() => {
 })
 
 const closeModal = () => {
-  console.log('isopnemodal: ', tableroFunctions.isModalOpen );
+  //console.log('isopnemodal: ', tableroFunctions.isModalOpen );
   tableroFunctions.closeModal()
   // Reset filters
   statusFilter.value = ''
