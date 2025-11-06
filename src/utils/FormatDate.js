@@ -10,7 +10,7 @@ export function formatDate(date) {
 export function formatearFechaHora(fecha) {
   //console.log('fecha: ', fecha.toLocaleString('es-CO'));
   
-  if (!fecha) return '—'
+  if (!fecha) return '-'
 
   // Si viene como objeto Date, lo convertimos a string
   if (fecha instanceof Date) {

@@ -202,7 +202,7 @@
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Fecha Historia
                   </th>
-                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                  <th class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Fecha Envio
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
@@ -243,7 +243,7 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                     {{ formatearFechaHora(registro.fecha_historia) }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-700 dark:text-gray-300">
                     {{ formatearFechaHora(registro.fecha_envio) }}
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
