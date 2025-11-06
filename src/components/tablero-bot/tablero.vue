@@ -506,7 +506,7 @@ const checkSession = async () => {
   try {
     await authStore.verifyAuthUser()
     if (user.value) {
-      console.log('Sesión verificada:', user.value.user_id, 'provider: ',provider.value)
+      //console.log('Sesión verificada:', user.value.user_id, 'provider: ',provider.value)
       loadBots()
     } else {
       //console.log('No hay usuario autenticado')
@@ -719,7 +719,7 @@ async function handleDateSelect(date) {
 const loadBots = async() => { 
   try {
     await tableroFunctions.loadbots({ user_id: user.value.user_id, rol: user.value.rol })
-    console.log('Bots cargados:', bots.value);
+    //console.log('Bots cargados:', bots.value);
     
   } catch (err) {
     console.error('Error al cargar los bots:', err)

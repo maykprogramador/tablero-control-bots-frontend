@@ -410,12 +410,12 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           const indexBot = this.bots.findIndex(b => b.id === bot.id);
           if (indexBot !== -1) {
             this.bots[indexBot] = bot; // actualizamos datos del bot
-            console.log('Bot actualizado desde socket:', bot);
+            //console.log('Bot actualizado desde socket:', bot);
             this.actualizarMetricasIncremental(bot.id, registro);
           }
           if (yaTieneRegistros) {
             this.registros.unshift(registro)
-            console.log('Registro agregado desde socket:', registro)
+            //console.log('Registro agregado desde socket:', registro)
           }else{
             console.log('Registro ignorado porque no existe historial para este bot:', registro.bot_id)
           }
@@ -427,7 +427,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
               this.solicitudes.splice(indexSolicitud, 1);
               // insertar la solicitud actualizada al inicio
               this.solicitudes.unshift(solicitud);// actualizamos datos de la solicitud
-              console.log('Solicitud actualizado desde socket:', solicitud);
+              //console.log('Solicitud actualizado desde socket:', solicitud);
             }
           }
         }
@@ -471,13 +471,13 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           const indexBot = this.bots.findIndex(b => b.id === bot.id);
           if (indexBot !== -1) {
             this.bots[indexBot] = bot;
-            console.log('🔄 Bot actualizado desde socket:', bot);
+            //console.log('🔄 Bot actualizado desde socket:', bot);
           }
 
           // ✅ Agregar log al inicio de la lista si ya hay logs de ese bot
           if (yaTieneLogs) {
             this.logs.unshift(log);
-            console.log('✅ Log agregado desde socket:', log);
+            //console.log('✅ Log agregado desde socket:', log);
           } else {
             console.log('⚠️ Log ignorado: no hay historial previo para este bot:', log.bot_id);
           }
@@ -488,7 +488,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
 
       // Evento para historias clínicas
       socket.on('nueva_historia', (trazabilidad, botActualizado) => {
-        console.log('Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
+        //console.log('Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
 
         // Verificar si el bot está en el estado
         const perteneceABot = this.bots.some(b => b.id === trazabilidad.bot_id);
@@ -499,7 +499,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           const indexBot = this.bots.findIndex(b => b.id === botActualizado.id);
           if (indexBot !== -1) {
             this.bots.splice(indexBot, 1, botActualizado);
-            console.log('Bot actualizado desde socket:', botActualizado);
+            //console.log('Bot actualizado desde socket:', botActualizado);
           }
           this.actualizarMetricaBot(botActualizado.id);
 
@@ -507,7 +507,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
             // 📄 Agregar o actualizar trazabilidad
             if (!yaExiste) {
               this.historias_clinicas.unshift(trazabilidad);
-              console.log('✅ Trazabilidad agregada al state:', trazabilidad);
+              //console.log('✅ Trazabilidad agregada al state:', trazabilidad);
             } else {
               const index = this.historias_clinicas.findIndex(t => t.id === trazabilidad.id);
               if (index !== -1) {
@@ -516,7 +516,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
               }
               // Insertar la historia actualizada al inicio
               this.historias_clinicas.unshift(trazabilidad);
-              console.log('🔄 Trazabilidad actualizada y movida al inicio del state:', trazabilidad);
+              //console.log('🔄 Trazabilidad actualizada y movida al inicio del state:', trazabilidad);
             }
           }
           

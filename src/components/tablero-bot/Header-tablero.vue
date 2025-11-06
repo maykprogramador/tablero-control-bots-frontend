@@ -492,7 +492,7 @@ const applyTheme = () => {
 onMounted(async() => {
   try {
     await notificacionStore.fetchNotificaciones()
-    console.log('notificaciones', notificaciones.value);
+    //console.log('notificaciones', notificaciones.value);
     
   } catch (error) {
     alert(error.response.data.message);

@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', {
       try {
         const response = await axiosInstance.get('getUser')
        
-        console.log('Verificación de usuario autenticado:', response.data);
+        //console.log('Verificación de usuario autenticado:', response.data);
         this.user = response.data // ejemplo: { UserID: ..., username: ... }
         return response.data.user
 

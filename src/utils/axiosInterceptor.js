@@ -9,12 +9,12 @@ export function setupAxiosInterceptor(axios = axiosInstance) {
   axios.interceptors.response.use(
     // Si la respuesta es exitosa, simplemente la retornamos
     (response) => {
-       console.log('entrio al interceptor');
+       //console.log('entrio al interceptor');
       return response
     },
     // Si hay un error, lo manejamos aquí
     async (error) => {
-      console.log('entrio al interceptor');
+      //console.log('entrio al interceptor');
       
       // Verificamos si es un error 401 (No autorizado)
       if (error.response && error.response.status === 401) {
