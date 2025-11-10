@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white border-gray-100 dark:bg-[#21292eae] dark:border-slate-800 w-full rounded-xl shadow-md p-6 border  transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">        
+  <div class="bg-white border-gray-100 dark:bg-[#21292eae] dark:border-slate-800 w-full rounded-xl shadow-md p-2 sm:p-6 border  transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">        
     <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100 dark:border-slate-600">
       <div class="bg-gradient-to-r from-[#A65C99] to-[#80006A] text-white p-3 rounded-lg mr-4 text-xl">
         <Monitor/>
@@ -65,19 +65,19 @@
     
 
     <!-- Tabla usando la MISMA estructura que funciona en tu formulario -->
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto rounded-2xl">
       
       <table class="min-w-full divide-y divide-gray-200 dark:divide-slate-700">
-        <thead class="bg-gray-50 dark:bg-slate-800">
+        <thead class="bg-gray-100 dark:bg-slate-800">
           <tr>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">ID</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Solicitante</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Usuario</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Bot</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Fecha de Creacion</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Fecha de Inactivacion</th>
-            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Estado</th>
-            <th class="px-4 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Acciones</ th>
+            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">ID</th>
+            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Solicitante</th>
+            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Usuario</th>
+            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Bot</th>
+            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Fecha de Creacion</th>
+            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Fecha de Inactivacion</th>
+            <th class="px-4 py-4 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Estado</th>
+            <th class="px-4 py-4 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Acciones</ th>
           </tr>
         </thead>
         <tbody class="bg-white dark:bg-dark transition-colors duration-300 divide-y divide-gray-200 dark:divide-slate-800">

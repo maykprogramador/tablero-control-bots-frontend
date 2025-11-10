@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-black dark:via-slate-950 dark:to-[#21292eae] transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-6">
+    <div class="max-w-7xl mx-auto p-2 sm:p-6 lg:py-6">
 
       <!-- 🔍 Barra de búsqueda y filtros -->
       <div class="bg-white dark:bg-[#21292eae] rounded-2xl shadow-sm border border-gray-200 dark:border-slate-800 p-4 lg:p-6 mb-6 transition-colors duration-300">
