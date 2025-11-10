@@ -51,11 +51,11 @@
 
                   <!-- Menú desplegable -->
                   <div v-if="showMenuAcciones" class="absolute right-0 mt-2 w-40 bg-white dark:bg-black border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-50" >
-                    <button @click="marcarTodasLeidas" class="flex items-center cursor-pointer text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 transition-colors duration-150" >
+                    <button @click="marcarTodasLeidas" class="flex items-center cursor-pointer text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#21292ea1] transition-colors duration-150" >
                       <CheckCheck class="w-4 h-4 inline-block mr-2 text-green-600" />
                       Marcar como leídas
                     </button>
-                    <button @click="eliminarTodas" class="flex items-center text-left cursor-pointer px-4 py-2 text-sm hover:bg-gray-50 text-red-600 transition-colors duration-150" >
+                    <button @click="eliminarTodas" class="flex items-center text-left cursor-pointer px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-[#21292ea1] text-red-600 transition-colors duration-150" >
                       <Trash class="w-4 h-4 inline-block mr-2 text-red-600" />
                       Eliminar todas
                     </button>
@@ -195,17 +195,17 @@
 
               <!-- Botón de opciones (...) -->
               <div class="relative">
-                <button @click="toggleMenuAcciones" class="p-1 rounded-full text-black font-bold cursor-pointer hover:bg-gray-300 transition" > 
+                <button @click="toggleMenuAcciones" class="p-1 rounded-full text-black dark:hover:bg-slate-700 dark:text-white font-bold cursor-pointer hover:bg-gray-300 transition" > 
                   ⋮ 
                 </button>
 
                 <!-- Menú desplegable -->
-                <div v-if="showMenuAcciones" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-lg z-50" >
-                  <button @click="marcarTodasLeidas" class="flex items-center cursor-pointer text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors duration-150" >
+                <div v-if="showMenuAcciones" class="absolute right-0 mt-2 w-40 bg-white dark:bg-black border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-50" >
+                  <button @click="marcarTodasLeidas" class="flex items-center cursor-pointer text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-[#21292ea1] transition-colors duration-150" >
                     <CheckCheck class="w-4 h-4 inline-block mr-2 text-green-600" />
                     Marcar como leídas
                   </button>
-                  <button @click="eliminarTodas" class="flex items-center text-left cursor-pointer px-4 py-2 text-sm hover:bg-gray-50 text-red-600 transition-colors duration-150" >
+                  <button @click="eliminarTodas" class="flex items-center text-left cursor-pointer px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-[#21292ea1] text-red-600 transition-colors duration-150" >
                     <Trash class="w-4 h-4 inline-block mr-2 text-red-600" />
                     Eliminar todas
                   </button>
@@ -213,7 +213,7 @@
               </div>
             </div>
             <div class="max-h-64 overflow-y-auto">
-              <div v-for="notificacion in notificaciones.slice(0, 30)" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" >
+              <div v-for="notificacion in notificaciones.slice(0, 30)" :key="notificacion.id" class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#21292ea1] transition-colors duration-150 cursor-pointer" >
                 <div @click="handleNotificacionClick(notificacion)" class="flex items-start space-x-3">
                   <div v-if="!notificacion.leido" class="flex-shrink-0">
                     <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
@@ -410,12 +410,14 @@ const NotificationCount = computed(() => {
 
 const toggleNotifications = () => {
   showNotifications.value = !showNotifications.value
+  showMenuAcciones.value = false
   showUserMenu.value = false
   showMobileMenu.value = false
 }
 
 const toggleNotificationsMobile = () => {
   showNotifications.value = !showNotifications.value
+  showMenuAcciones.value = false
   showUserMenu.value = false
   showMobileMenu.value = true
 }
