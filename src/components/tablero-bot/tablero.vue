@@ -399,6 +399,7 @@
     <!-- Modals -->
     <ModalNewBot v-if="showModalNewBot && user.rol === 'admin'" :bot="botSelected" @close="showModalNewBot = false"/>
     <DashboardHistoriaClinica v-if="showModalHistoriaClinica" :bot="botSelected" :onclose="closeModalHistoriaCLinica"/>
+    <DashboardAutorizaciones v-if="showModalAutorizaciones" :bot="botSelected" @close="showModalAutorizaciones = false"/>
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
     <FormDesactivationPerson v-if="showDeactivationModal" :onClose="closeModalForm" :botSelected="control.selectedBot"/>
@@ -427,6 +428,7 @@ import LogModal from './Log-Modal.vue';
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import ModalNewBot from './Modal-New-Bot.vue';
+import DashboardAutorizaciones from './autorizacion/Dashboard-Autorizaciones.vue';
 
 // Stores--------------------------------------------------------------------------------------
 const authStore = useAuthStore()
@@ -449,6 +451,7 @@ const isModalControlUsersOpen = ref(false)
 const showDeactivationModal = ref(false)
 const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
+const showModalAutorizaciones = ref(false)
 const showModalNewBot = ref(false)
 const isLogsModalOpen = ref(false)
 const botOptions = [1, 2, 3]
@@ -467,7 +470,8 @@ const BOT_TYPES = Object.freeze({
   DESCARGA_HC: 'DESCARGA_HC',
   ENVIO_HC: 'ENVIO_HC',
   SOPORTE_PATOLOGIA: 'SOPORTE_PATOLOGIA',
-  RETIRO_USUARIO_GOMEDYS: 'RETIRO_USUARIO_GOMEDYS'
+  RETIRO_USUARIO_GOMEDYS: 'RETIRO_USUARIO_GOMEDYS',
+  AUTOMATIZACION_AUTORIZACIONES: 'AUTOMATIZACION_AUTORIZACIONES'
 });
 const BOT_MAP = {
   1: BOT_TYPES.RETIRO_USUARIO_AVIDANTI,
@@ -478,7 +482,8 @@ const BOT_MAP = {
   6: BOT_TYPES.DESCARGA_HC,
   7: BOT_TYPES.ENVIO_HC,
   8: BOT_TYPES.SOPORTE_PATOLOGIA,
-  9: BOT_TYPES.RETIRO_USUARIO_GOMEDYS
+  9: BOT_TYPES.RETIRO_USUARIO_GOMEDYS,
+  10: BOT_TYPES.AUTOMATIZACION_AUTORIZACIONES
 };
 const BOTS_MASIVOS = [
   BOT_TYPES.MASIVO_AVIDANTI,
@@ -791,6 +796,10 @@ const openModalHistoriaClinica = () => {
   showModalHistoriaClinica.value = true
 }
 
+const openModalAutorizaciones = () => {
+  showModalAutorizaciones.value = true
+}
+
 // funcion para cerrar el modal de historia clinica
 const closeModalHistoriaCLinica = () => {
   showModalHistoriaClinica.value = false
@@ -838,6 +847,11 @@ const openModal = (bot_id, tipo) => {
       openModalHistoriaClinica()
       return 
     }
+    if (botSelected.value.id === 10) {
+      openModalAutorizaciones()
+      return 
+    }
+
     tableroFunctions.openModal()
     //console.log('isopnemodal: ', tableroFunctions.isModalOpen );
   }
