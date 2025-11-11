@@ -434,7 +434,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
             console.log('Registro ignorado porque no existe historial para este bot:', registro.bot_id)
           }
           //actualizar solicitudes si pertenece al usuario
-          if (perteneceASolicitud) {
+          if (perteneceASolicitud && solicitud) {
             const indexSolicitud = this.solicitudes.findIndex(s => s.id === solicitud.id);
             if (indexSolicitud !== -1) {
               // eliminar la solicitud antigua

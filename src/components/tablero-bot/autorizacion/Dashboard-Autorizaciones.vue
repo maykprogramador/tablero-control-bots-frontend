@@ -21,8 +21,8 @@
             <span class="text-xl">📋</span>
           </div>
           <div>
-            <h2 class="text-xl sm:text-2xl font-bold">Autorizaciones de Servicios</h2>
-            <p class="text-blue-100 mt-1">{{ empresa }}</p>
+            <h2 class="text-xl sm:text-2xl font-bold">Autorizaciones</h2>
+            <p class="text-blue-100 mt-1">{{ bot.nombre }}</p>
           </div>
         </div>
 
@@ -341,23 +341,21 @@
       </div>
     </div>
   </div>
+  <ModalAutorizacion v-if="mostrarModal" :registro="registroSeleccionado" @close="mostrarModal = false"/>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted, defineProps, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, defineProps, watch, nextTick, defineEmits } from 'vue'
 import * as XLSX from 'xlsx'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 import { useTableroFunctions } from '@/stores/tablero-functions'
+import ModalAutorizacion from './Modal-Autorizacion.vue'
 dayjs.extend(isBetween)
 
-const props = defineProps({
-  onclose: Function,
-  empresa: {
-    type: String,
-    default: 'Listado de Autorizaciones'
-  }
-})
+const { bot } = defineProps(['bot'])
+
+const emit = defineEmits(['close'])
 
 // computed -------------------------------------------------------------------------------------
 const autorizaciones = computed(() => 
@@ -396,11 +394,21 @@ const autorizaciones = computed(() =>
 const tableroFunctions = useTableroFunctions()
 // ------------------------------------------------------------------------------
 
-// variables refs
 
-// ----------------------------------------------------------------------------------
+// VARIABLES REACTIVAS
+const showDatePopover = ref(false)
+const fechaInicioTemp = ref('')
+const fechaFinTemp = ref('')
+const datePickerRef = ref(null)
+const popoverEl = ref(null)
+const popoverPos = ref({ top: 0, left: 0 })
+const mostrarModal = ref(false)
+const registroSeleccionado = ref(null)
+const currentPage = ref(1)
+const recordsPerPage = 10
 
-const autorizacionesMock = [
+//mock
+/*const autorizacionesMock = [
   {
     id: 1,
     nroAutorizacionRadicado: 'AUT98716',
@@ -456,19 +464,7 @@ const autorizacionesMock = [
     anulada: false,
     activoEPS: false
   }
-]
-
-// VARIABLES REACTIVAS
-const showDatePopover = ref(false)
-const fechaInicioTemp = ref('')
-const fechaFinTemp = ref('')
-const datePickerRef = ref(null)
-const popoverEl = ref(null)
-const popoverPos = ref({ top: 0, left: 0 })
-const mostrarModal = ref(false)
-const registroSeleccionado = ref(null)
-const currentPage = ref(1)
-const recordsPerPage = 10
+]*/
 
 const filtros = ref({
   busqueda: '',
@@ -489,7 +485,10 @@ const epsUnicas = computed(() => {
 })
 
 // Sedes únicas (simuladas)
-const sedesUnicas = computed(() => ['SAN MARCEL', 'CENTRO', 'NORTE', 'SUR'])
+const sedesUnicas = computed(() => {
+  const sedes = [...new Set(registrosAutorizaciones.value.map(r => r.sede).filter(Boolean))]
+  return sedes.sort()
+})
 
 // Rango de fechas texto
 const rangoFechasTexto = computed(() => {
@@ -668,6 +667,8 @@ const limpiarRangoFechas = () => {
 const abrirModal = (registro) => {
   registroSeleccionado.value = registro
   mostrarModal.value = true
+  console.log('modal: ', mostrarModal.value);
+  
 }
 
 const cerrarModal = () => {
@@ -676,7 +677,9 @@ const cerrarModal = () => {
 }
 
 const cerrarModalDashboard = () => {
-  props.onclose()
+  emit('close')
+  mostrarModal.value = false
+  registroSeleccionado.value = null
 }
 
 const exportData = () => {
