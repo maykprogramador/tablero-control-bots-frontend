@@ -348,6 +348,7 @@ import { ref, computed, onMounted, onUnmounted, defineProps, watch, nextTick } f
 import * as XLSX from 'xlsx'
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
+import { useTableroFunctions } from '@/stores/tablero-functions'
 dayjs.extend(isBetween)
 
 const props = defineProps({
@@ -357,6 +358,9 @@ const props = defineProps({
     default: 'Listado de Autorizaciones'
   }
 })
+
+const tableroFunctions = useTableroFunctions()
+
 
 const autorizacionesMock = [
   {
@@ -661,7 +665,10 @@ const handleEscape = (e) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+
+  await tableroFunctions.loadAutorizaciones()
+  
   window.addEventListener('resize', updatePopoverPosition)
   window.addEventListener('scroll', updatePopoverPosition)
   window.addEventListener('click', handleClickOutside)

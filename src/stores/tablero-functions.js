@@ -32,6 +32,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     solicitudes: [],
     metricasBots: [],
     historias_clinicas: [],
+    autorizaciones: [],
     formSolicitudes: [],
     executeBot: false,
     isDark: false,
@@ -271,6 +272,19 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         throw error;
       }
     }, 
+    async loadAutorizaciones() {
+      try {
+        if (this.autorizaciones.length === 0) {
+          const response = await axiosInstance.get('autorizaciones');
+          this.autorizaciones = response.data;
+        }
+        console.log('autorizaciones cargadas: ',this.autorizaciones);
+      } catch (error) {
+        console.error('Error al cargar las autorizaciones:', error);
+        throw error;
+      }
+    },
+    
     // cargar las fechas de soporte patologia con error  o listo
     async LoadFechasSoportePatologia() {
       try {
