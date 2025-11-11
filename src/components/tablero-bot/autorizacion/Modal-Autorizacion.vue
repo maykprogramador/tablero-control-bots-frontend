@@ -39,14 +39,14 @@
                   <User :size="32" class="text-blue-600 dark:text-blue-400" />
                 </div>
                 <div class="flex-1">
-                  <h1 class="text-2xl font-bold text-slate-800 dark:text-gray-100">{{ autorizacion.Paciente.nombre }}</h1>
+                  <h1 class="text-2xl font-bold text-slate-800 dark:text-gray-100">{{ autorizacion.nombrePaciente }}</h1>
                   <div class="mt-3 space-y-2">
                     <p class="text-sm text-gray-600 dark:text-gray-300">
-                      <span class="font-semibold">Identificación:</span> {{ autorizacion.Paciente.numero_identificacion }}
+                      <span class="font-semibold">Identificación:</span> {{ autorizacion.numero_identificacion }}
                     </p>
                     <p class="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
                       <Mail :size="16" class="text-gray-400 dark:text-gray-300" />
-                      {{ autorizacion.Paciente.correo_electronico }}
+                      {{ autorizacion.correo_electronico }}
                     </p>
                   </div>
                 </div>
@@ -81,7 +81,7 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-1">Orden CUPS</p>
-                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.CUPS }}</p>
+                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.cups }}</p>
                 </div>
                 
                 <div>
@@ -217,6 +217,17 @@
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center whitespace-nowrap">{{ formatTime(autorizacion.fin_proceso) }}</p>
                   </div>
                 </div>
+
+                <!-- ✅ Duración total -->
+                <div class="flex items-center gap-2 text-gray-700 dark:text-gray-400 px-3 py-2 rounded-lg">
+                  <Clock :size="16" class="text-gray-700 dark:text-gray-300 flex-shrink-0" />
+                  <span class="text-sm font- text-gray-700 dark:text-gray-300">
+                    Duración total: 
+                    <span class="font-semibold">
+                      {{ calculateDuration(autorizacion.inicio_proceso, autorizacion.fin_proceso) }}
+                    </span>
+                  </span>
+                </div>
                 
                 <!-- Información adicional -->
                 <div class="bg-purple-50 dark:bg-[#80006A]/20 rounded-lg p-4 border border-purple-100 dark:border-[#80006A]">
@@ -239,21 +250,6 @@
                 <div>
                   <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">Método Radicación</p>
                   <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.metodoRadicacion }}</p>
-                </div>
-                
-                <div>
-                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">Paciente ID</p>
-                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">#{{ autorizacion.paciente_id }}</p>
-                </div>
-                
-                <div>
-                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">BOT ID</p>
-                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">#{{ autorizacion.bot_id }}</p>
-                </div>
-                
-                <div>
-                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">Autorización ID</p>
-                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">#{{ autorizacion.id }}</p>
                 </div>
               </div>
             </div>
@@ -289,8 +285,10 @@ import {
 
 const emit = defineEmits(['close'])
 
+const { autorizacion } = defineProps(['autorizacion'])
+
 // Mock data
-const autorizacion = ref({
+/*const autorizacion = ref({
   id: 9,
   paciente_id: 19,
   bot_id: 10,
@@ -316,18 +314,38 @@ const autorizacion = ref({
   fechaVencimiento: "2025-12-11",
   inicio_proceso: "2025-11-11T13:05:00.000Z",
   fin_proceso: "2025-11-11T13:06:00.000Z",
-  Paciente: {
-    numero_identificacion: "1234567791",
-    nombre: "Juan Carlos",
-    correo_electronico: "juan.carlos@email.com"
-  }
-})
+  numero_identificacion: "1234567791",
+  nombrePaciente: "Juan Carlos",
+  correo_electronico: "juan.carlos@email.com"
+})*/
 
 const cerrarModal = () => {
   emit('close')
 }
 
+const calculateDuration = (start, end) => {
+  if (!start || !end) return '—';
+  const startTime = new Date(start).getTime();
+  const endTime = new Date(end).getTime();
+  const diffMs = endTime - startTime;
 
+  if (diffMs <= 0) return '0s';
+
+  const seconds = Math.floor(diffMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+
+  const secs = seconds % 60;
+  const mins = minutes % 60;
+
+  if (hours > 0) {
+    return `${hours}h ${mins}m`;
+  } else if (mins > 0) {
+    return `${mins}m ${secs}s`;
+  } else {
+    return `${secs}s`;
+  }
+};
 // Utility functions
 const formatDate = (dateString) => {
   const date = new Date(dateString)

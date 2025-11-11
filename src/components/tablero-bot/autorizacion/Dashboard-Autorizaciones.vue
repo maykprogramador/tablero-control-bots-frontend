@@ -32,11 +32,11 @@
             <div class="text-lg sm:text-2xl font-bold">{{ registrosAutorizaciones.length }}</div>
             <div class="text-xs sm:text-sm text-white">Total</div>
           </div>
-          <div @click="filtros.estado = 'activo'" class="bg-green-500/60 rounded-lg p-3 cursor-pointer text-center hover:bg-green-500/80 transition-colors">
+          <div @click="filtros.estado = 'activo'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center hover:bg-[#00B094]/90 transition-colors">
             <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('activo') }}</div>
             <div class="text-xs sm:text-sm text-white">Activas</div>
           </div>
-          <div @click="filtros.estado = 'vencidas'" class="bg-yellow-500/60 rounded-lg p-3 cursor-pointer text-center hover:bg-yellow-500/80 transition-colors">
+          <div @click="filtros.estado = 'vencidas'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center hover:bg-[#FF5F3F]/90 transition-colors">
             <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('vencidas') }}</div>
             <div class="text-xs sm:text-sm text-white">Vencidas</div>
           </div>
@@ -209,8 +209,10 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 font-medium">
                     {{ registro.nombrePaciente }}
                   </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                    {{ truncarTexto(registro.grupoAtencion, 25) }}
+                  <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 max-w-70">
+                    <div class="truncate" :title="registro.grupoAtencion">
+                      {{ registro.grupoAtencion }}
+                    </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                     {{ formatearFecha(registro.fechaAutorizacion) }}
@@ -341,7 +343,7 @@
       </div>
     </div>
   </div>
-  <ModalAutorizacion v-if="mostrarModal" :registro="registroSeleccionado" @close="mostrarModal = false"/>
+  <ModalAutorizacion v-if="mostrarModal" :autorizacion="registroSeleccionado" @close="mostrarModal = false"/>
 </template>
 
 <script setup>
@@ -372,7 +374,7 @@ const autorizaciones = computed(() =>
     desRelacionada: a.desRelacionada,
     diagnostico: a.diagnostico,
     cantidad: a.cantidad,
-    numIngresos: a.numIngreso,
+    numIngreso: a.numIngreso,
     numFolio: a.numFolio,
     contratado: a.contratado,
     ordenDuplicada: a.ordenDuplicada,
@@ -387,6 +389,7 @@ const autorizaciones = computed(() =>
     fin_proceso: a.fin_proceso,
     numero_identificacion: a.Paciente.numero_identificacion,
     nombrePaciente: a.Paciente.nombre,
+    correo_electronico: a.Paciente.correo_electronico,
   })))
 
 
