@@ -732,13 +732,32 @@ const cerrarModalDashboard = () => {
 const exportData = () => {
   const data = registrosFiltrados.value.map(record => ({
     'Número Autorización': record.nroAutorizacionRadicado,
+    'Número Orden': record.idOrden,
     'Identificación': record.numero_identificacion,
-    'Paciente': record.nombrePaciente,
+    'Paciente': record.nombrePaciente || '—',
+    'Correo Electrónico': record.correo_electronico || '—',
     'EPS': record.grupoAtencion,
-    'Fecha Autorización': formatearFecha(record.fechaAutorizacion),
-    'Fecha Vencimiento': formatearFecha(record.fechaVencimiento),
+    'Empresa': record.empresa,
+    'Sede': record.sede || '—',
+    'Fecha Solicitud': formatearFecha(record.fechaSolicitud),
+    'Fecha Autorización': record.fechaAutorizacion,
+    'Fecha Vencimiento': record.fechaVencimiento,
     'Días Restantes': calcularDiasRestantes(record.fechaVencimiento),
-    'Estado': getStatusText(getEstado(record))
+    'Estado': getStatusText(getEstado(record)),
+    'CUPS': record.cups,
+    'Descripción Relacionada': record.desRelacionada,
+    'Diagnóstico': record.diagnostico,
+    'Cantidad': record.cantidad,
+    'Nº Ingreso': record.numIngreso,
+    'Nº Folio': record.numFolio,
+    'Contratado': record.contratado ? 'Sí' : 'No',
+    'Orden Duplicada': record.ordenDuplicada ? 'Sí' : 'No',
+    'Anulada': record.anulada ? 'Sí' : 'No',
+    'Activo en EPS': record.activoEPS ? 'Sí' : 'No',
+    'Gestionado y Tramitado': record.gestionadoTramita ? 'Sí' : 'No',
+    'Método Radicación': record.metodoRadicacion,
+    'Inicio Proceso': formatearFecha(record.inicio_proceso),
+    'Fin Proceso': formatearFecha(record.fin_proceso)
   }))
 
   const worksheet = XLSX.utils.json_to_sheet(data)
