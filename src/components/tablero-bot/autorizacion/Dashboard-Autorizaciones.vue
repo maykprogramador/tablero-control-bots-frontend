@@ -21,7 +21,7 @@
             <span class="text-xl">📋</span>
           </div>
           <div>
-            <h2 class="text-xl sm:text-2xl font-bold">Autorizaciones</h2>
+            <h2 class="text-xl sm:text-2xl font-bold">Detalles de Ejecucion</h2>
             <p class="text-blue-100 mt-1">{{ bot.nombre }}</p>
           </div>
         </div>
@@ -29,7 +29,7 @@
         <!-- Summary Stats -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
           <div @click="filtros.estado = ''" class="bg-white/10 rounded-lg p-3 text-center cursor-pointer hover:bg-white/20 transition-colors">
-            <div class="text-lg sm:text-2xl font-bold">{{ registrosAutorizaciones.length }}</div>
+            <div class="text-lg sm:text-2xl font-bold">{{ registrosFiltrados.length }}</div>
             <div class="text-xs sm:text-sm text-white">Total</div>
           </div>
           <div @click="filtros.estado = 'activo'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center hover:bg-[#00B094]/90 transition-colors">
@@ -156,6 +156,15 @@
               <option v-for="sede in sedesUnicas" :key="sede" :value="sede">{{ sede }}</option>
             </select>
           </div>
+          <!-- Empresa -->
+          <div>
+            <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">Empresa</label>
+            <select v-model="filtros.empresa"
+              class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]">
+              <option value="">Todas</option>
+              <option v-for="empresa in empresasUnicas" :key="empresa" :value="empresa">{{ empresa }}</option>
+            </select>
+          </div>
         </div>
 
         <!-- Tabla adaptada para autorizaciones -->
@@ -166,7 +175,16 @@
               <thead class="bg-gray-100 dark:bg-slate-800">
                 <tr>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                    Empresa
+                  </th>
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Número Autorización
+                  </th>
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                    Número Orden
+                  </th>
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                    EPS
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Identificación
@@ -175,7 +193,10 @@
                     Paciente
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
-                    EPS
+                    Ingreso
+                  </th>
+                  <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                    Folio
                   </th>
                   <th class="px-6 py-4 text-left text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Fecha Autorización
@@ -200,8 +221,20 @@
                   :key="registro.id"
                   class="hover:bg-blue-50/50 dark:hover:bg-[#21292e] dark:bg-[#14181a] transition-colors duration-200 group"
                 >
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-900 dark:text-gray-100 font-semibold">
+                    {{ registro.empresa }}
+                  </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-blue-600 dark:text-blue-200 font-semibold">
                     {{ registro.nroAutorizacionRadicado }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-blue-600 dark:text-blue-200 font-semibold">
+                    {{ registro.idOrden }}
+                  </td>
+                  
+                  <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 max-w-70">
+                    <div class="truncate" :title="registro.grupoAtencion">
+                      {{ registro.grupoAtencion }}
+                    </div>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-gray-700 dark:text-gray-300">
                     {{ registro.numero_identificacion }}
@@ -209,10 +242,11 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 font-medium">
                     {{ registro.nombrePaciente }}
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-700 dark:text-gray-300 max-w-70">
-                    <div class="truncate" :title="registro.grupoAtencion">
-                      {{ registro.grupoAtencion }}
-                    </div>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                    {{ registro.numIngreso }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                    {{ registro.numFolio }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                     {{ formatearFecha(registro.fechaAutorizacion) }}
@@ -474,6 +508,7 @@ const filtros = ref({
   estado: '',
   eps: '',
   sede: '',
+  empresa: '',
   fechaInicio: '',
   fechaFin: '',
   tipoDato: 'fecha_solicitud'
@@ -493,6 +528,13 @@ const sedesUnicas = computed(() => {
   return sedes.sort()
 })
 
+// Empresas únicas
+const empresasUnicas = computed(() => {
+  const empresas = [...new Set(registrosAutorizaciones.value.map(r => r.empresa))]
+  return empresas.sort()
+})
+
+
 // Rango de fechas texto
 const rangoFechasTexto = computed(() => {
   const inicio = filtros.value.fechaInicio
@@ -510,7 +552,9 @@ const registrosFiltrados = computed(() => {
     registros = registros.filter(r =>
       r.nombrePaciente.toLowerCase().includes(busqueda) ||
       r.numero_identificacion.includes(busqueda) ||
-      r.nroAutorizacionRadicado.includes(busqueda)
+      r.nroAutorizacionRadicado.includes(busqueda) || 
+      String(r.idOrden).includes(busqueda) ||
+      r.numIngreso.includes(busqueda)
     )
   }
 

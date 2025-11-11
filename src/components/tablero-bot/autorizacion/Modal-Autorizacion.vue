@@ -44,7 +44,7 @@
                     <p class="text-sm text-gray-600 dark:text-gray-300">
                       <span class="font-semibold">Identificación:</span> {{ autorizacion.numero_identificacion }}
                     </p>
-                    <p class="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                    <p v-if="autorizacion.correo_electronico" class="text-sm text-gray-600 dark:text-gray-300 flex items-center gap-2">
                       <Mail :size="16" class="text-gray-400 dark:text-gray-300" />
                       {{ autorizacion.correo_electronico }}
                     </p>
