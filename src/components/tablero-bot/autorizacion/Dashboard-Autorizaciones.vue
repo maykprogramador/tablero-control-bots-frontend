@@ -225,7 +225,7 @@
                     {{ registro.empresa }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-blue-600 dark:text-blue-200 font-semibold">
-                    {{ registro.nroAutorizacionRadicado }}
+                    {{ registro.nroAutorizacionRadicado || '-' }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-mono text-blue-600 dark:text-blue-200 font-semibold">
                     {{ registro.idOrden }}
@@ -261,11 +261,11 @@
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap">
                     <span 
-                      :class="getStatusBadgeClass(getEstadoProceso(registro))"
+                      :class="getStatusBadgeClass(registro.estado)"
                       class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                     >
-                      <span :class="getStatusDotClass(getEstadoProceso(registro))" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
-                      {{ getStatusText(getEstadoProceso(registro)) }}
+                      <span :class="getStatusDotClass(registro.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                      {{ getStatusText(registro.estado) }}
                     </span>
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap text-sm">
@@ -421,6 +421,7 @@ const autorizaciones = computed(() =>
     fechaVencimiento: a.fechaVencimiento,
     inicio_proceso: a.inicio_proceso,
     fin_proceso: a.fin_proceso,
+    estado: a.estado,
     numero_identificacion: a.Paciente.numero_identificacion,
     nombrePaciente: a.Paciente.nombre,
     correo_electronico: a.Paciente.correo_electronico,
@@ -558,16 +559,10 @@ const registrosFiltrados = computed(() => {
     )
   }
 
-  if (filtros.value.estado === 'exito') {
-    registros = registros.filter(r => r.contratado && !r.anulada)
-
-  } else if (filtros.value.estado === 'pendiente') {
-    registros = registros.filter(r => !r.contratado && !r.anulada)
-
-  } else if (filtros.value.estado === 'error') {
-    registros = registros.filter(r => r.anulada)
+  if (filtros.value.estado) {
+    registros = registros.filter(r => r.estado === filtros.value.estado)
   }
-  
+
   if (filtros.value.eps) {
     registros = registros.filter(r => r.grupoAtencion === filtros.value.eps)
   }
@@ -628,20 +623,17 @@ const getDiasRestantesClass = (dias) => {
 }
 
 const formatearFecha = (fecha) => {
-  if (!fecha) return '—'
+  if (!fecha) return '-'
   return dayjs(fecha).format('DD/MM/YYYY')
 }
 
 const truncarTexto = (texto, longitud) => {
-  if (!texto) return '—'
+  if (!texto) return '-'
   return texto.length > longitud ? texto.substring(0, longitud) + '...' : texto
 }
 
 const getStatusBadgeClass = (estado) => {
   const classes = {
-    activo: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
-    vencidas: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
-    anuladas: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
     exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
     pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
     error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
@@ -651,9 +643,6 @@ const getStatusBadgeClass = (estado) => {
 
 const getStatusDotClass = (estado) => {
   const classes = {
-    activo: 'bg-green-500 dark:bg-green-400',
-    vencidas: 'bg-yellow-500 dark:bg-yellow-400',
-    anuladas: 'bg-red-500 dark:bg-red-400',
     exito: 'bg-green-500 dark:bg-green-400',
     pendiente: 'bg-yellow-500 dark:bg-yellow-400',
     error: 'bg-red-500 dark:bg-red-400',
@@ -661,28 +650,17 @@ const getStatusDotClass = (estado) => {
   return classes[estado] || 'bg-gray-500'
 }
 
+const getStatusCount = (estado) => {
+  return registrosFiltrados.value.filter(record => record.estado === estado).length
+}
+
 const getStatusText = (estado) => {
   const texts = {
-    activo: 'Activa',
-    vencidas: 'Vencida',
-    anuladas: 'Anulada',
-    pendiente: 'Pendiente',
+    exito: 'Éxito',
     error: 'Error',
-    exito: 'Exito'
+    pendiente: 'pendiente'
   }
   return texts[estado] || 'Desconocido'
-}
-
-const getEstadoProceso = (registro) => {
-  if (registro.anulada) return 'error'
-  if (registro.ordenDuplicada) return 'pendiente'
-  if (registro.contratado && registro.activoEPS && registro.nroAutorizacionRadicado) return 'exito'
-  return 'pendiente'
-}
-
-
-const getStatusCount = (estado) => {
-  return registrosFiltrados.value.filter(r => getEstadoProceso(r) === estado).length
 }
 
 const togglePopover = () => {
@@ -750,16 +728,16 @@ const exportData = () => {
     'Número Autorización': record.nroAutorizacionRadicado,
     'Número Orden': record.idOrden,
     'Identificación': record.numero_identificacion,
-    'Paciente': record.nombrePaciente || '—',
-    'Correo Electrónico': record.correo_electronico || '—',
+    'Paciente': record.nombrePaciente || '-',
+    'Correo Electrónico': record.correo_electronico || '-',
     'EPS': record.grupoAtencion,
     'Empresa': record.empresa,
-    'Sede': record.sede || '—',
+    'Sede': record.sede || '-',
     'Fecha Solicitud': formatearFecha(record.fechaSolicitud),
     'Fecha Autorización': record.fechaAutorizacion,
     'Fecha Vencimiento': record.fechaVencimiento,
     'Días Restantes': calcularDiasRestantes(record.fechaVencimiento),
-    'Estado': getStatusText(getEstado(record)),
+    'Estado': getStatusText(record),
     'CUPS': record.cups,
     'Descripción Relacionada': record.desRelacionada,
     'Diagnóstico': record.diagnostico,

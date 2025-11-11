@@ -157,29 +157,19 @@
                 <div class="grid grid-cols-2 gap-4 items-center">
                   <div>
                     <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">Nro. Autorización</p>
-                    <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.nroAutorizacionRadicado }}</p>
+                    <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.nroAutorizacionRadicado || 'Pendiente' }}</p>
                   </div>
 
-                  <!-- Estado del Trámite - Alineado a la derecha, sin rellenar -->
-                  <div class="justify-self-start">
+                  <!-- Estado del Trámite -->
+                  <div class="justify-self-start items-center">
+                    <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">Estado del Trámite</p>
                     <transition name="scale">
-                      <span
-                        v-if="estadoTramite"
-                        class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold"
-                        :class="{
-                          'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300': estadoTramite.color === 'green',
-                          'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300': estadoTramite.color === 'yellow',
-                          'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300': estadoTramite.color === 'red'
-                        }"
+                      <span 
+                        :class="getStatusBadgeClass(autorizacion.estado)"
+                        class="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium"
                       >
-                        <span class="w-2 h-2 rounded-full"
-                          :class="{
-                            'bg-green-500 dark:bg-green-400': estadoTramite.color === 'green',
-                            'bg-yellow-500 dark:bg-yellow-400': estadoTramite.color === 'yellow',
-                            'bg-red-500 dark:bg-red-400': estadoTramite.color === 'red'
-                          }"
-                        ></span>
-                        {{ estadoTramite.label }}
+                      <span :class="getStatusDotClass(autorizacion.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                        {{ getStatusText(autorizacion.estado) }}
                       </span>
                     </transition>
                   </div>
@@ -197,7 +187,7 @@
                 </div>
                 
                 <div>
-                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-3">Estado</p>
+                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-3">Estado Vigencia</p>
                   <div class="flex flex-wrap gap-2">
                     <transition name="scale">
                       <span v-if="estadoVigencia"
@@ -422,6 +412,33 @@ const formatDateTime = (dateString) => {
     hour: '2-digit',
     minute: '2-digit'
   })
+}
+
+const getStatusBadgeClass = (estado) => {
+  const classes = {
+    exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+    error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+  }
+  return classes[estado] || 'bg-gray-100 text-gray-700'
+}
+
+const getStatusDotClass = (estado) => {
+  const classes = {
+    exito: 'bg-green-500 dark:bg-green-400',
+    pendiente: 'bg-yellow-500 dark:bg-yellow-400',
+    error: 'bg-red-500 dark:bg-red-400',
+  }
+  return classes[estado] || 'bg-gray-500'
+}
+
+const getStatusText = (estado) => {
+  const texts = {
+    exito: 'Éxito',
+    error: 'Error',
+    pendiente: 'pendiente'
+  }
+  return texts[estado] || 'Desconocido'
 }
 </script>
 
