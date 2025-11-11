@@ -207,7 +207,7 @@
                     {{ registro.numero_identificacion }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 font-medium">
-                    {{ registro.nombre }}
+                    {{ registro.nombrePaciente }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                     {{ truncarTexto(registro.grupoAtencion, 25) }}
@@ -359,15 +359,53 @@ const props = defineProps({
   }
 })
 
-const tableroFunctions = useTableroFunctions()
+// computed -------------------------------------------------------------------------------------
+const autorizaciones = computed(() => 
+  tableroFunctions.autorizaciones.map(a => ({
+    id: a.id,
+    bot_id: a.bot_id,
+    nombreBot: a.Bot.nombre,
+    idOrden: a.idOrden,
+    grupoAtencion: a.grupoAtencion,
+    empresa: a.empresa,
+    sede: a.sede,
+    fechaSolicitud: a.fechaSolicitud,
+    cups: a.CUPS,
+    desRelacionada: a.desRelacionada,
+    diagnostico: a.diagnostico,
+    cantidad: a.cantidad,
+    numIngresos: a.numIngreso,
+    numFolio: a.numFolio,
+    contratado: a.contratado,
+    ordenDuplicada: a.ordenDuplicada,
+    anulada: a.anulada,
+    activoEPS: a.activoEPS,
+    gestionadoTramita: a.gestionadoTramita,
+    metodoRadicacion: a.metodoRadicacion,
+    nroAutorizacionRadicado: a.nroAutorizacionRadicado,
+    fechaAutorizacion: a.fechaAutorizacion,
+    fechaVencimiento: a.fechaVencimiento,
+    inicio_proceso: a.inicio_proceso,
+    fin_proceso: a.fin_proceso,
+    numero_identificacion: a.Paciente.numero_identificacion,
+    nombrePaciente: a.Paciente.nombre,
+  })))
 
+
+// stores: ------------------------------------------------------------------------
+const tableroFunctions = useTableroFunctions()
+// ------------------------------------------------------------------------------
+
+// variables refs
+
+// ----------------------------------------------------------------------------------
 
 const autorizacionesMock = [
   {
     id: 1,
     nroAutorizacionRadicado: 'AUT98716',
     numero_identificacion: '1234567791',
-    nombre: 'Juan Carlos Pérez',
+    nombrePaciente: 'Juan Carlos Pérez',
     grupoAtencion: 'NUEVA EPS REGIMEN SUBSIDIADO',
     fechaAutorizacion: '2025-11-11',
     fechaVencimiento: '2025-12-11',
@@ -378,7 +416,7 @@ const autorizacionesMock = [
     id: 2,
     nroAutorizacionRadicado: 'AUT98717',
     numero_identificacion: '1987654321',
-    nombre: 'María González López',
+    nombrePaciente: 'María González López',
     grupoAtencion: 'SALUD TOTAL REGIMEN CONTRIBUTIVO',
     fechaAutorizacion: '2025-10-20',
     fechaVencimiento: '2025-11-05',
@@ -389,7 +427,7 @@ const autorizacionesMock = [
     id: 3,
     nroAutorizacionRadicado: 'AUT98718',
     numero_identificacion: '1555666777',
-    nombre: 'Carlos Rodríguez Morales',
+    nombrePaciente: 'Carlos Rodríguez Morales',
     grupoAtencion: 'COOMEVA REGIMEN CONTRIBUTIVO',
     fechaAutorizacion: '2025-09-15',
     fechaVencimiento: '2025-10-15',
@@ -400,7 +438,7 @@ const autorizacionesMock = [
     id: 4,
     nroAutorizacionRadicado: 'AUT98719',
     numero_identificacion: '1111222333',
-    nombre: 'Ana Patricia Silva Castro',
+    nombrePaciente: 'Ana Patricia Silva Castro',
     grupoAtencion: 'NUEVA EPS REGIMEN SUBSIDIADO',
     fechaAutorizacion: '2025-11-05',
     fechaVencimiento: '2025-12-05',
@@ -411,7 +449,7 @@ const autorizacionesMock = [
     id: 5,
     nroAutorizacionRadicado: 'AUT98720',
     numero_identificacion: '1333444555',
-    nombre: 'Roberto Fernández Díaz',
+    nombrePaciente: 'Roberto Fernández Díaz',
     grupoAtencion: 'SANITAS REGIMEN CONTRIBUTIVO',
     fechaAutorizacion: '2025-08-10',
     fechaVencimiento: '2025-09-10',
@@ -442,7 +480,7 @@ const filtros = ref({
   tipoDato: 'fecha_solicitud'
 })
 
-const registrosAutorizaciones = computed(() => autorizacionesMock)
+const registrosAutorizaciones = computed(() => autorizaciones.value)
 
 // Empresas/EPS únicas
 const epsUnicas = computed(() => {
@@ -468,7 +506,7 @@ const registrosFiltrados = computed(() => {
   if (filtros.value.busqueda) {
     const busqueda = filtros.value.busqueda.toLowerCase()
     registros = registros.filter(r =>
-      r.nombre.toLowerCase().includes(busqueda) ||
+      r.nombrePaciente.toLowerCase().includes(busqueda) ||
       r.numero_identificacion.includes(busqueda) ||
       r.nroAutorizacionRadicado.includes(busqueda)
     )
@@ -645,7 +683,7 @@ const exportData = () => {
   const data = registrosFiltrados.value.map(record => ({
     'Número Autorización': record.nroAutorizacionRadicado,
     'Identificación': record.numero_identificacion,
-    'Paciente': record.nombre,
+    'Paciente': record.nombrePaciente,
     'EPS': record.grupoAtencion,
     'Fecha Autorización': formatearFecha(record.fechaAutorizacion),
     'Fecha Vencimiento': formatearFecha(record.fechaVencimiento),
@@ -668,6 +706,7 @@ const handleEscape = (e) => {
 onMounted(async () => {
 
   await tableroFunctions.loadAutorizaciones()
+  console.log('autorizaciones cargadas: ', autorizaciones.value);
   
   window.addEventListener('resize', updatePopoverPosition)
   window.addEventListener('scroll', updatePopoverPosition)

@@ -278,7 +278,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           const response = await axiosInstance.get('autorizaciones');
           this.autorizaciones = response.data;
         }
-        console.log('autorizaciones cargadas: ',this.autorizaciones);
+        //console.log('autorizaciones cargadas: ',this.autorizaciones);
       } catch (error) {
         console.error('Error al cargar las autorizaciones:', error);
         throw error;
