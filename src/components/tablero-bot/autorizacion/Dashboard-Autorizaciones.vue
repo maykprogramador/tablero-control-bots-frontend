@@ -32,17 +32,17 @@
             <div class="text-lg sm:text-2xl font-bold">{{ registrosFiltrados.length }}</div>
             <div class="text-xs sm:text-sm text-white">Total</div>
           </div>
-          <div @click="filtros.estado = 'activo'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center hover:bg-[#00B094]/90 transition-colors">
-            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('activo') }}</div>
-            <div class="text-xs sm:text-sm text-white">Activas</div>
+          <div @click="filtros.estado = 'exito'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center hover:bg-[#00B094]/90 transition-colors">
+            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('exito') }}</div>
+            <div class="text-xs sm:text-sm text-white">Exitosos</div>
           </div>
-          <div @click="filtros.estado = 'vencidas'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center hover:bg-[#FF5F3F]/90 transition-colors">
-            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('vencidas') }}</div>
-            <div class="text-xs sm:text-sm text-white">Vencidas</div>
+          <div @click="filtros.estado = 'pendiente'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center hover:bg-[#FF5F3F]/90 transition-colors">
+            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('pendiente') }}</div>
+            <div class="text-xs sm:text-sm text-white">Pendiente</div>
           </div>
-          <div @click="filtros.estado = 'anuladas'" class="bg-red-500/20 rounded-lg p-3 cursor-pointer text-center hover:bg-red-500/30 transition-colors">
-            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('anuladas') }}</div>
-            <div class="text-xs sm:text-sm text-white">Anuladas</div>
+          <div @click="filtros.estado = 'error'" class="bg-red-500/20 rounded-lg p-3 cursor-pointer text-center hover:bg-red-500/30 transition-colors">
+            <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('error') }}</div>
+            <div class="text-xs sm:text-sm text-white">Con Error</div>
           </div>
         </div>
       </div>
@@ -131,9 +131,9 @@
             <select v-model="filtros.estado"
               class="w-40 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]">
               <option value="">Todos</option>
-              <option value="activo">Activas</option>
-              <option value="vencidas">Vencidas</option>
-              <option value="anuladas">Anuladas</option>
+              <option value="exito">Exito</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="error">Error</option>
             </select>
           </div>
 
@@ -261,11 +261,11 @@
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap">
                     <span 
-                      :class="getStatusBadgeClass(getEstado(registro))"
+                      :class="getStatusBadgeClass(getEstadoProceso(registro))"
                       class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
                     >
-                      <span :class="getStatusDotClass(getEstado(registro))" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
-                      {{ getStatusText(getEstado(registro)) }}
+                      <span :class="getStatusDotClass(getEstadoProceso(registro))" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                      {{ getStatusText(getEstadoProceso(registro)) }}
                     </span>
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap text-sm">
@@ -558,14 +558,16 @@ const registrosFiltrados = computed(() => {
     )
   }
 
-  if (filtros.value.estado === 'activo') {
-    registros = registros.filter(r => !r.anulada && calcularDiasRestantes(r.fechaVencimiento) > 0)
-  } else if (filtros.value.estado === 'vencidas') {
-    registros = registros.filter(r => !r.anulada && calcularDiasRestantes(r.fechaVencimiento) <= 0)
-  } else if (filtros.value.estado === 'anuladas') {
+  if (filtros.value.estado === 'exito') {
+    registros = registros.filter(r => r.contratado && !r.anulada)
+
+  } else if (filtros.value.estado === 'pendiente') {
+    registros = registros.filter(r => !r.contratado && !r.anulada)
+
+  } else if (filtros.value.estado === 'error') {
     registros = registros.filter(r => r.anulada)
   }
-
+  
   if (filtros.value.eps) {
     registros = registros.filter(r => r.grupoAtencion === filtros.value.eps)
   }
@@ -639,7 +641,10 @@ const getStatusBadgeClass = (estado) => {
   const classes = {
     activo: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
     vencidas: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
-    anuladas: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300'
+    anuladas: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+    exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+    error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
   }
   return classes[estado] || 'bg-gray-100 text-gray-700'
 }
@@ -648,7 +653,10 @@ const getStatusDotClass = (estado) => {
   const classes = {
     activo: 'bg-green-500 dark:bg-green-400',
     vencidas: 'bg-yellow-500 dark:bg-yellow-400',
-    anuladas: 'bg-red-500 dark:bg-red-400'
+    anuladas: 'bg-red-500 dark:bg-red-400',
+    exito: 'bg-green-500 dark:bg-green-400',
+    pendiente: 'bg-yellow-500 dark:bg-yellow-400',
+    error: 'bg-red-500 dark:bg-red-400',
   }
   return classes[estado] || 'bg-gray-500'
 }
@@ -657,16 +665,24 @@ const getStatusText = (estado) => {
   const texts = {
     activo: 'Activa',
     vencidas: 'Vencida',
-    anuladas: 'Anulada'
+    anuladas: 'Anulada',
+    pendiente: 'Pendiente',
+    error: 'Error',
+    exito: 'Exito'
   }
   return texts[estado] || 'Desconocido'
 }
 
+const getEstadoProceso = (registro) => {
+  if (registro.anulada) return 'error'
+  if (registro.ordenDuplicada) return 'pendiente'
+  if (registro.contratado && registro.activoEPS && registro.nroAutorizacionRadicado) return 'exito'
+  return 'pendiente'
+}
+
+
 const getStatusCount = (estado) => {
-  if (estado === 'activo') return registrosFiltrados.value.filter(r => !r.anulada && calcularDiasRestantes(r.fechaVencimiento) > 0).length
-  if (estado === 'vencidas') return registrosFiltrados.value.filter(r => !r.anulada && calcularDiasRestantes(r.fechaVencimiento) <= 0).length
-  if (estado === 'anuladas') return registrosFiltrados.value.filter(r => r.anulada).length
-  return registrosFiltrados.value.length
+  return registrosFiltrados.value.filter(r => getEstadoProceso(r) === estado).length
 }
 
 const togglePopover = () => {

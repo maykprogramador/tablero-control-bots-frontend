@@ -54,6 +54,7 @@
 
               <!-- Estado EPS -->
               <div class="text-right mt-4 sm:mt-0">
+                <!-- Activo EPS -->
                 <transition name="scale">
                   <span 
                     v-if="autorizacion.activoEPS"
@@ -63,7 +64,6 @@
                   </span>
                 </transition>
               </div>
-
             </div>
           </div>
         </transition>
@@ -154,9 +154,35 @@
               </div>
               
               <div class="space-y-5">
-                <div>
-                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">Nro. Autorización</p>
-                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.nroAutorizacionRadicado }}</p>
+                <div class="grid grid-cols-2 gap-4 items-center">
+                  <div>
+                    <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">Nro. Autorización</p>
+                    <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.nroAutorizacionRadicado }}</p>
+                  </div>
+
+                  <!-- Estado del Trámite - Alineado a la derecha, sin rellenar -->
+                  <div class="justify-self-start">
+                    <transition name="scale">
+                      <span
+                        v-if="estadoTramite"
+                        class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold"
+                        :class="{
+                          'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300': estadoTramite.color === 'green',
+                          'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300': estadoTramite.color === 'yellow',
+                          'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300': estadoTramite.color === 'red'
+                        }"
+                      >
+                        <span class="w-2 h-2 rounded-full"
+                          :class="{
+                            'bg-green-500 dark:bg-green-400': estadoTramite.color === 'green',
+                            'bg-yellow-500 dark:bg-yellow-400': estadoTramite.color === 'yellow',
+                            'bg-red-500 dark:bg-red-400': estadoTramite.color === 'red'
+                          }"
+                        ></span>
+                        {{ estadoTramite.label }}
+                      </span>
+                    </transition>
+                  </div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
@@ -174,18 +200,14 @@
                   <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-3">Estado</p>
                   <div class="flex flex-wrap gap-2">
                     <transition name="scale">
-                      <span v-if="autorizacion.contratado" class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300">
-                        Contratado
-                      </span>
-                    </transition>
-                    <transition name="scale">
-                      <span v-if="autorizacion.ordenDuplicada" class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300">
-                        Orden Duplicada
-                      </span>
-                    </transition>
-                    <transition name="scale">
-                      <span v-if="autorizacion.anulada" class="px-3 py-1 rounded-full text-xs font-semibold bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300">
-                        Anulada
+                      <span v-if="estadoVigencia"
+                        class="px-3 py-1 rounded-full text-xs font-semibold"
+                        :class="{
+                          'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300': estadoVigencia.color === 'blue',
+                          'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300': estadoVigencia.color === 'red'
+                        }"
+                      >
+                        {{ estadoVigencia.label }}
                       </span>
                     </transition>
                   </div>
@@ -272,17 +294,13 @@
 </template>
 
 <script setup>
-import { ref, defineEmits } from 'vue'
-import { 
-  User, 
-  FileText, 
-  Activity, 
-  CheckCircle, 
-  Clock, 
-  Info,
-  Mail
-} from 'lucide-vue-next'
+import { ref, defineEmits, computed} from 'vue'
+import {  User,  FileText,  Activity,  CheckCircle,  Clock,  Info, Mail } from 'lucide-vue-next'
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
 
+
+dayjs.extend(isBetween)
 const emit = defineEmits(['close'])
 
 const { autorizacion } = defineProps(['autorizacion'])
@@ -318,6 +336,37 @@ const { autorizacion } = defineProps(['autorizacion'])
   nombrePaciente: "Juan Carlos",
   correo_electronico: "juan.carlos@email.com"
 })*/
+
+const estadoTramite = computed(() => {
+  if (autorizacion.anulada) {
+    return { label: 'Error', color: 'red' }
+  }
+
+  if (!autorizacion.nroAutorizacionRadicado || autorizacion.nroAutorizacionRadicado.trim() === '') {
+    return { label: 'Pendiente', color: 'yellow' }
+  }
+
+  return { label: 'Éxito', color: 'green' }
+})
+
+
+const diasRestantes = computed(() => {
+  const diff = calcularDiasRestantes(autorizacion.fechaVencimiento)
+  return diff
+})
+
+const estadoVigencia = computed(() => {
+  if (autorizacion.anulada) return null // anulada cancela vigencia
+  return diasRestantes.value > 0
+    ? { label: `Vigente • ${diasRestantes.value} días restantes`, color: "blue" }
+    : { label: "Vencida", color: "red" }
+})
+
+const calcularDiasRestantes = (fechaVencimiento) => {
+  const hoy = dayjs()
+  const vencimiento = dayjs(fechaVencimiento)
+  return vencimiento.diff(hoy, 'day')
+}
 
 const cerrarModal = () => {
   emit('close')
