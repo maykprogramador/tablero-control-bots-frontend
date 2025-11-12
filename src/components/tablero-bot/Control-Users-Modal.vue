@@ -468,7 +468,7 @@ const closeModal = () => {
 
 const loadUsers = async () => {
   isLoading.value = true
-  
+  //await new Promise(resolve => setTimeout(resolve, 5000));
   try {
     // Simulate API call GET /get/users
     await tableroFunctions.getUsers()
