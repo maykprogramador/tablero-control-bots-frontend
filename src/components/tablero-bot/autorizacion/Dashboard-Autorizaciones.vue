@@ -767,9 +767,13 @@ const handleEscape = (e) => {
 }
 
 onMounted(async () => {
-
-  await tableroFunctions.loadAutorizaciones()
-  console.log('autorizaciones cargadas: ', autorizaciones.value);
+  try {
+    await tableroFunctions.loadAutorizaciones()
+    console.log('autorizaciones cargadas: ', autorizaciones.value);
+  }
+  catch(error){
+    alert(error.response.data.error);
+  }
   
   window.addEventListener('resize', updatePopoverPosition)
   window.addEventListener('scroll', updatePopoverPosition)
