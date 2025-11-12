@@ -538,6 +538,51 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           console.warn('⚠️ Trazabilidad recibida de un bot no registrado:', trazabilidad.bot_id);
         }
       });
+      // Evento para nuevas autorizaciones
+      socket.on('nueva_autorizacion', (autorizacion, botActualizado) => {
+        console.log(' Autorización recibida desde socket:', autorizacion);
+
+        // 1 Verificar si el bot pertenece al usuario actual
+        const perteneceABot = this.bots.some(b => b.id === autorizacion.bot_id);
+        if (!perteneceABot) {
+          //console.warn('⚠️ Autorización ignorada: bot no pertenece al usuario actual');
+          return;
+        }
+
+        // 2 Actualizar información del bot si cambió
+        const indexBot = this.bots.findIndex(b => b.id === botActualizado.id);
+        if (indexBot !== -1) {
+          this.bots.splice(indexBot, 1, botActualizado);
+          console.log(' Bot actualizado desde socket (autorizaciones):', botActualizado);
+        }
+
+        // 3 Verificar si ya existe la autorización en el estado
+        const yaExiste = this.autorizaciones.some(a => a.id === autorizacion.id);
+
+        if (this.autorizaciones.length > 0) {
+          if (!yaExiste) {
+            //  Insertar al inicio
+            this.autorizaciones.unshift(autorizacion);
+            console.log(' Nueva autorización agregada al state:', autorizacion);
+          } else {
+            //  Si ya existe, reemplazarla para mantener la más reciente
+            const index = this.autorizaciones.findIndex(a => a.id === autorizacion.id);
+            if (index !== -1) {
+              this.autorizaciones.splice(index, 1);
+            }
+            this.autorizaciones.unshift(autorizacion);
+            console.log(' Autorización actualizada en el state:', autorizacion);
+          }
+        }
+
+        // 4 (Opcional) Actualizar métricas o contadores del bot
+        //this.actualizarMetricaBot(botActualizado.id);
+        this.actualizarMetricasIncremental(botActualizado.id, autorizacion);
+
+        // 5 (Opcional) Mostrar notificación al usuario
+        // this.mostrarToast(`Nueva autorización registrada para ${autorizacion.Paciente?.nombre || 'paciente desconocido'}`);
+      });
+
     },
 
     descargarFormato() {
