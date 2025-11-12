@@ -60,7 +60,7 @@
               <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-200 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              <input v-model="filtros.busqueda" type="text" placeholder="Buscar..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
+              <input v-model="filtros.busqueda" type="search" placeholder="Buscar..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
             </div>
           </div>
 
@@ -550,12 +550,13 @@ const registrosFiltrados = computed(() => {
 
   if (filtros.value.busqueda) {
     const busqueda = filtros.value.busqueda.toLowerCase()
+    
     registros = registros.filter(r =>
       r.nombrePaciente.toLowerCase().includes(busqueda) ||
       r.numero_identificacion.includes(busqueda) ||
-      r.nroAutorizacionRadicado.includes(busqueda) || 
+      r.nroAutorizacionRadicado.toLowerCase().includes(busqueda) || 
       String(r.idOrden).includes(busqueda) ||
-      r.numIngreso.includes(busqueda)
+      r.numIngreso.toLowerCase().includes(busqueda)
     )
   }
 
@@ -797,5 +798,16 @@ onUnmounted(() => {
 
 .modal-enter-active {
   animation: fadeIn 0.3s ease-out;
+}
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  height: 1rem;
+  width: 1rem;
+  background: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%2380006A' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'/></svg>") no-repeat center;
+  cursor: pointer;
+}
+
+.dark input[type="search"]::-webkit-search-cancel-button {
+  background: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23ffffff' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'/></svg>") no-repeat center;
 }
 </style>
