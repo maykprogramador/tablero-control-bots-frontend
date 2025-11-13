@@ -2,7 +2,7 @@
   <div @keydown.esc="cerrarModalDashboard" tabindex="0" @click="cerrarModalDashboard" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div @click.stop class="fixed inset-0 bg-white dark:bg-black rounded-none shadow-2xl 
          w-screen h-screen sm:relative sm:rounded-xl 
-         sm:max-w-8xl sm:max-h-[95vh] sm:w-full sm:h-auto 
+         sm:max-w-8xl sm:max-h-[98vh] sm:w-full sm:h-auto 
          overflow-auto sm:overflow-hidden">
       <!-- Close Button -->
       <button 
