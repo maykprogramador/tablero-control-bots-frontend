@@ -562,11 +562,11 @@ const registrosFiltrados = computed(() => {
     const busqueda = filtros.value.busqueda.toLowerCase()
     
     registros = registros.filter(r =>
-      r.nombrePaciente.toLowerCase().includes(busqueda) ||
+      r.nombrePaciente?.toLowerCase().includes(busqueda) ||
       r.numero_identificacion.includes(busqueda) ||
-      r.nroAutorizacionRadicado.toLowerCase().includes(busqueda) || 
-      String(r.idOrden).includes(busqueda) ||
-      r.numIngreso.toLowerCase().includes(busqueda)
+      r.nroAutorizacionRadicado?.toLowerCase().includes(busqueda) || 
+      String(r.idOrden)?.includes(busqueda) ||
+      r.numIngreso?.toLowerCase().includes(busqueda)
     )
   }
 
