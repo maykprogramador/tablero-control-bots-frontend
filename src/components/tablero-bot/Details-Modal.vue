@@ -304,8 +304,14 @@ watch(
     if (nuevoBot && nuevoBot.id) {
       isLoading.value = true
       //await new Promise(resolve => setTimeout(resolve, 5000)); simula carga de 5 segundos 
-      await tableroFunctions.loadRegistros({ bot_id: nuevoBot.id })
+      try {
+        await tableroFunctions.loadRegistros({ bot_id: nuevoBot.id })
+        isLoading.value = false
+      } catch (error) {
+        alert(error.response.data.error);
+      }
       isLoading.value = false
+      
     }
   },
   { immediate: true }     // ejecuta la primera vez que se monte

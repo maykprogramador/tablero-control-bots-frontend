@@ -280,8 +280,8 @@ watch(
       // Aquí puedes llamar a una función para cargar los logs
       isLoading.value = true
       await tableroFunctions.loadLogs({ bot_id: nuevoBot.id })
-      isLoading.value = false
     }
+    isLoading.value = false
   },
   { immediate: true }
 )

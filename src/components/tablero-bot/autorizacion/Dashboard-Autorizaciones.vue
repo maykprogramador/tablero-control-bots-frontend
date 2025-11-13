@@ -787,6 +787,7 @@ onMounted(async () => {
   }
   catch(error){
     alert(error.response.data.error);
+    isLoading.value = false
   }
   
   window.addEventListener('resize', updatePopoverPosition)
