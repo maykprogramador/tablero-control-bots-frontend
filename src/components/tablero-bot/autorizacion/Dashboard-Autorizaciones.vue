@@ -211,6 +211,9 @@
                     Estado
                   </th>
                   <th class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
+                    Estado Autorizacion
+                  </th>
+                  <th class="px-6 py-4 text-center text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider">
                     Acciones
                   </th>
                 </tr>
@@ -256,7 +259,9 @@
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                     <span :class="getDiasRestantesClass(calcularDiasRestantes(registro.fechaVencimiento))">
-                      {{ calcularDiasRestantes(registro.fechaVencimiento) }}d
+                      {{ calcularDiasRestantes(registro.fechaVencimiento) === null 
+                          ? '-' 
+                          : calcularDiasRestantes(registro.fechaVencimiento) + 'd' }}
                     </span>
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap">
@@ -266,6 +271,15 @@
                     >
                       <span :class="getStatusDotClass(registro.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
                       {{ getStatusText(registro.estado) }}
+                    </span>
+                  </td>
+                  <td class="px-4 py-4 whitespace-nowrap">
+                    <span 
+                      :class="getStatusBadgeClass(registro.estado_autorizacion)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    >
+                      <span :class="getStatusDotClass(registro.estado_autorizacion)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                      {{ getStatusText(registro.estado_autorizacion) }}
                     </span>
                   </td>
                   <td class="px-4 py-4 whitespace-nowrap text-sm">
@@ -431,9 +445,10 @@ const autorizaciones = computed(() =>
     inicio_proceso: a.inicio_proceso,
     fin_proceso: a.fin_proceso,
     estado: a.estado,
+    estado_autorizacion: a.estado_autorizacion,
     numero_identificacion: a.Paciente.numero_identificacion,
     nombrePaciente: a.Paciente.nombre,
-    correo_electronico: a.Paciente.correo_electronico,
+    correo_electronico: a.Paciente.correo_electronico
   })))
 
 
@@ -616,10 +631,14 @@ const visiblePages = computed(() => {
 
 // MÉTODOS
 const calcularDiasRestantes = (fechaVencimiento) => {
-  const hoy = dayjs()
-  const vencimiento = dayjs(fechaVencimiento)
-  return vencimiento.diff(hoy, 'day')
-}
+  if (!fechaVencimiento) return null;
+
+  const vencimiento = dayjs(fechaVencimiento);
+  if (!vencimiento.isValid()) return null;
+
+  const hoy = dayjs();
+  return vencimiento.diff(hoy, "day");
+};
 
 const getEstado = (registro) => {
   if (registro.anulada) return 'anuladas'
@@ -628,10 +647,15 @@ const getEstado = (registro) => {
 }
 
 const getDiasRestantesClass = (dias) => {
-  if (dias > 30) return 'text-green-600 dark:text-green-400 font-semibold'
-  if (dias > 0) return 'text-yellow-600 dark:text-yellow-400 font-semibold'
-  return 'text-red-600 dark:text-red-400 font-semibold'
-}
+  if (dias === null) {
+    return "text-gray-500 dark:text-gray-400 font-semibold";
+  }
+
+  if (dias > 30) return "text-green-600 dark:text-green-400 font-semibold";
+  if (dias > 0)  return "text-yellow-600 dark:text-yellow-400 font-semibold";
+
+  return "text-red-600 dark:text-red-400 font-semibold";
+};
 
 const formatearFecha = (fecha) => {
   if (!fecha) return '-'
@@ -646,16 +670,20 @@ const truncarTexto = (texto, longitud) => {
 const getStatusBadgeClass = (estado) => {
   const classes = {
     exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    autorizado: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
     pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+    radicado: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
     error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
   }
-  return classes[estado] || 'bg-gray-100 text-gray-700'
+  return classes[estado] || 'bg-gray-100 text-gray-700 dark:bg-slate-800 dark:text-gray-300'
 }
 
 const getStatusDotClass = (estado) => {
   const classes = {
     exito: 'bg-green-500 dark:bg-green-400',
+    autorizado: 'bg-green-500 dark:bg-green-400',
     pendiente: 'bg-yellow-500 dark:bg-yellow-400',
+    radicado: 'bg-blue-500 dark:bg-blue-400',
     error: 'bg-red-500 dark:bg-red-400',
   }
   return classes[estado] || 'bg-gray-500'
@@ -668,8 +696,10 @@ const getStatusCount = (estado) => {
 const getStatusText = (estado) => {
   const texts = {
     exito: 'Éxito',
+    autorizado: 'Autorizado',
+    radicado: 'Radicado',
     error: 'Error',
-    pendiente: 'pendiente'
+    pendiente: 'Pendiente'
   }
   return texts[estado] || 'Desconocido'
 }

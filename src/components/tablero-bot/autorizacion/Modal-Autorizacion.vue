@@ -165,11 +165,11 @@
                     <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-2">Estado del Trámite</p>
                     <transition name="scale">
                       <span 
-                        :class="getStatusBadgeClass(autorizacion.estado)"
+                        :class="getStatusBadgeClass(autorizacion.estado_autorizacion)"
                         class="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium"
                       >
-                      <span :class="getStatusDotClass(autorizacion.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
-                        {{ getStatusText(autorizacion.estado) }}
+                      <span :class="getStatusDotClass(autorizacion.estado_autorizacion)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                        {{ getStatusText(autorizacion.estado_autorizacion) }}
                       </span>
                     </transition>
                   </div>
@@ -194,7 +194,8 @@
                         class="px-3 py-1 rounded-full text-xs font-semibold"
                         :class="{
                           'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300': estadoVigencia.color === 'blue',
-                          'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300': estadoVigencia.color === 'red'
+                          'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300': estadoVigencia.color === 'red',
+                          'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300': estadoVigencia.color === 'gray'
                         }"
                       >
                         {{ estadoVigencia.label }}
@@ -341,22 +342,32 @@ const estadoTramite = computed(() => {
 
 
 const diasRestantes = computed(() => {
-  const diff = calcularDiasRestantes(autorizacion.fechaVencimiento)
-  return diff
-})
+  return calcularDiasRestantes(autorizacion.fechaVencimiento);
+});
 
 const estadoVigencia = computed(() => {
-  if (autorizacion.anulada) return null // anulada cancela vigencia
+  if (autorizacion.anulada) return null;
+
+  // no existen días o fecha inválida
+  if (diasRestantes.value === null) {
+    return { label: "No disponible", color: "gray" };
+  }
+
   return diasRestantes.value > 0
     ? { label: `Vigente • ${diasRestantes.value} días restantes`, color: "blue" }
-    : { label: "Vencida", color: "red" }
-})
+    : { label: "Vencida", color: "red" };
+});
 
 const calcularDiasRestantes = (fechaVencimiento) => {
-  const hoy = dayjs()
-  const vencimiento = dayjs(fechaVencimiento)
-  return vencimiento.diff(hoy, 'day')
-}
+  if (!fechaVencimiento) return null;
+
+  const hoy = dayjs();
+  const vencimiento = dayjs(fechaVencimiento);
+
+  if (!vencimiento.isValid()) return null;
+
+  return vencimiento.diff(hoy, "day");
+};
 
 const cerrarModal = () => {
   emit('close')
@@ -417,15 +428,19 @@ const formatDateTime = (dateString) => {
 const getStatusBadgeClass = (estado) => {
   const classes = {
     exito: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    autorizado: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
+    radicado: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
     pendiente: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
     error: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
   }
-  return classes[estado] || 'bg-gray-100 text-gray-700'
+  return classes[estado] || 'bg-gray-100 text-gray-700 dark:bg-slate-700 dark:text-gray-300'
 }
 
 const getStatusDotClass = (estado) => {
   const classes = {
     exito: 'bg-green-500 dark:bg-green-400',
+    autorizado: 'bg-green-500 dark:bg-green-400',
+    radicado: 'bg-yellow-500 dark:bg-yellow-400',
     pendiente: 'bg-yellow-500 dark:bg-yellow-400',
     error: 'bg-red-500 dark:bg-red-400',
   }
@@ -435,10 +450,12 @@ const getStatusDotClass = (estado) => {
 const getStatusText = (estado) => {
   const texts = {
     exito: 'Éxito',
+    autorizado: 'Autorizado',
+    radicado: 'Radicado',
     error: 'Error',
-    pendiente: 'pendiente'
+    pendiente: 'Pendiente'
   }
-  return texts[estado] || 'Desconocido'
+  return texts[estado] || 'No Radicado'
 }
 </script>
 
