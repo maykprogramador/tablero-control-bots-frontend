@@ -80,20 +80,23 @@
               
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
-                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-1">Orden CUPS</p>
-                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.cups }}</p>
+                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-1">
+                    Cups
+                  </p>
+
+                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">
+                    {{ autorizacion.cups }} 
+                    <template v-if="autorizacion.desRelacionada && autorizacion.desRelacionada !== '0'">
+                      / {{ autorizacion.desRelacionada }}
+                    </template>
+                  </p>
                 </div>
-                
+
                 <div>
                   <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-1">ID Orden</p>
                   <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.idOrden }}</p>
                 </div>
-                
-                <div>
-                  <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-1">Descripción</p>
-                  <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.desRelacionada }}</p>
-                </div>
-                
+              
                 <div>
                   <p class="text-xs uppercase font-medium text-gray-500 dark:text-gray-400 mb-1">Cantidad</p>
                   <p class="text-base font-semibold text-slate-800 dark:text-gray-100">{{ autorizacion.cantidad }}</p>
@@ -440,7 +443,7 @@ const getStatusDotClass = (estado) => {
   const classes = {
     exito: 'bg-green-500 dark:bg-green-400',
     autorizado: 'bg-green-500 dark:bg-green-400',
-    radicado: 'bg-yellow-500 dark:bg-yellow-400',
+    radicado: 'bg-blue-500 dark:bg-blue-400',
     pendiente: 'bg-yellow-500 dark:bg-yellow-400',
     error: 'bg-red-500 dark:bg-red-400',
   }

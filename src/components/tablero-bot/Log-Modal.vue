@@ -22,30 +22,44 @@
           <!-- Modal Header -->
           <div class="bg-gradient-to-r from-slate-800 to-[#80006A] text-white p-6 pr-16">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10  /20 rounded-lg flex items-center justify-center">
+              <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
                 <span class="text-xl">📋</span>
               </div>
-              <div>
-                <h2 class="text-2xl font-bold">Historial de Logs</h2>
-                <p class="text-blue-100 mt-1">{{ bot.nombre }}</p>
+
+              <div class="flex items-center gap-3">
+                <div>
+                  <h2 class="text-xl sm:text-2xl font-bold">Detalles de Ejecución</h2>
+                  <p class="text-blue-100 mt-1 flex items-center gap-2">
+                    {{ bot.nombre }}
+                    <!-- SELECT MAQUINA -->
+                    <select v-model="filtrosLogs.maquina" class="bg-transparent border-none border-gray-200 rounded-md text-sm dark:border-slate-600 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition-colors cursor-pointer w-8" >
+                      <!-- opción por defecto -->
+                      <option value="0" class="text-gray-800">0</option>
+                      <!-- máquinas disponibles -->
+                      <option v-for="m in maquinasDisponibles" :key="m" :value="m" class="text-gray-800" >
+                        {{ m }}
+                      </option>
+                    </select>
+                  </p>
+                </div>
               </div>
             </div>
             
             <!-- Summary Stats -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
-              <div @click="statusFilter = ''" class="bg-white/10 rounded-lg p-3 text-center cursor-pointer">
+              <div @click="filtrosLogs.estado = ''" class="bg-white/10 rounded-lg p-3 text-center cursor-pointer">
                 <div class="text-lg sm:text-2xl font-bold">{{ logsDelBot.length}}</div>
                 <div class="text-sm text-blue-100">Total Registros</div>
               </div>
-              <div @click="statusFilter = 'exito'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center">
+              <div @click="filtrosLogs.estado = 'exito'" class="bg-[#00B094]/70 rounded-lg p-3 cursor-pointer text-center">
                 <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('exito') }}</div>
                 <div class="text-sm text-white">Exitosos</div>
               </div>
-              <div @click="statusFilter = 'pendiente'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center">
+              <div @click="filtrosLogs.estado = 'pendiente'" class="bg-[#FF5F3F]/70 rounded-lg p-3 cursor-pointer text-center">
                 <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('pendiente') }}</div>
                 <div class="text-sm text-white">Pendiente</div>
               </div>
-              <div @click="statusFilter = 'error'" class="bg-red-500/20 rounded-lg p-3 cursor-pointer text-center">
+              <div @click="filtrosLogs.estado = 'error'" class="bg-red-500/20 rounded-lg p-3 cursor-pointer text-center">
                 <div class="text-lg sm:text-2xl font-bold text-white">{{ getStatusCount('error') }}</div>
                 <div class="text-sm text-white">Con Error</div>
               </div>
@@ -59,7 +73,7 @@
               <div class="flex items-center gap-2">
                 <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Fecha Inicial</label>
                 <input 
-                  v-model="dateFilterInitial" 
+                  v-model="filtrosLogs.fechaInicio" 
                   type="date" 
                   class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
@@ -67,7 +81,7 @@
               <div class="flex items-center gap-2">
                 <label class="text-sm text-gray-600 dark:text-gray-400 font-medium">Fecha Final</label>
                 <input 
-                  v-model="dateFilterFinal" 
+                  v-model="filtrosLogs.fechaFin" 
                   type="date" 
                   class="px-3 py-2 border-2 border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-md text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
@@ -75,7 +89,7 @@
               <div class="flex items-center gap-2">
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-400">Filtrar por estado:</label>
                 <select 
-                  v-model="statusFilter" 
+                  v-model="filtrosLogs.estado" 
                   class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
                 >
                   <option value="">Todos</option>
@@ -87,7 +101,7 @@
               <div class="flex items-center gap-2">
                 <label class="text-sm font-medium text-gray-700 dark:text-gray-400">Buscar:</label>
                 <input 
-                  v-model="searchQuery"
+                  v-model="filtrosLogs.busqueda"
                   type="text" 
                   placeholder="Buscar en mensajes..."
                   class="px-3 py-1.5 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A]"
@@ -264,12 +278,8 @@ const props = defineProps(['bot'])
 const emit = defineEmits(['close'])
 
 // Modal state
-const statusFilter = ref('')
-const searchQuery = ref('')
 const currentPage = ref(1)
 const logsPerPage = 10
-const dateFilterInitial = ref('')
-const dateFilterFinal = ref('')
 const isLoading = ref(false)
 
 // Watch para cargar logs cuando cambie el bot
@@ -300,26 +310,64 @@ const logsDelBot = computed(() => {
   return logs.value.filter(log => log.bot_id === props.bot.id)
 })
 
+const filtrosLogs = ref({
+  busqueda: '',
+  estado: '',
+  maquina: '0', // ← 0 = todas las máquinas
+  fechaInicio: '',
+  fechaFin: ''
+})
+
+const maquinasDisponibles = computed(() => {
+  const ids = logsDelBot.value
+    .map(l => l.maquina_id)
+    .filter(id => id !== null)
+
+  return [...new Set(ids)].sort((a,b) => a - b)
+})
+
 // Aplicar filtros
 const filteredLogs = computed(() => {
-  return logsDelBot.value.filter(log => {
-    const belongsToBot = log.bot_id === props.bot.id
-    const matchesStatus = !statusFilter.value || log.estado === statusFilter.value
-    const matchesSearch = !searchQuery.value || log.mensaje.toLowerCase().includes(searchQuery.value.toLowerCase())
+  let logsFinales = logsDelBot.value
 
-    let matchesDate = true
+  // 🔍 Búsqueda en el mensaje del log
+  if (filtrosLogs.value.busqueda) {
+    const search = filtrosLogs.value.busqueda.toLowerCase()
+    logsFinales = logsFinales.filter(log =>
+      log.mensaje.toLowerCase().includes(search)
+    )
+  }
 
-    if (dateFilterInitial.value) {
+  //  Estado
+  if (filtrosLogs.value.estado) {
+    logsFinales = logsFinales.filter(log =>
+      log.estado === filtrosLogs.value.estado
+    )
+  }
+
+  //  Filtrar por máquina (0 = mostrar todo)
+  if (filtrosLogs.value.maquina !== "0") {
+    logsFinales = logsFinales.filter(log =>
+      log.maquina_id === Number(filtrosLogs.value.maquina)
+    )
+  }
+
+  //  Rango de fechas
+  if (filtrosLogs.value.fechaInicio) {
+    const startDate = dayjs(filtrosLogs.value.fechaInicio)
+    const endDate = filtrosLogs.value.fechaFin
+      ? dayjs(filtrosLogs.value.fechaFin)
+      : dayjs() // si no hay fecha fin, usar hoy
+
+    logsFinales = logsFinales.filter(log => {
       const logDate = dayjs(log.fecha_log)
-      const startDate = dayjs(dateFilterInitial.value)
-      const endDate = dateFilterFinal.value ? dayjs(dateFilterFinal.value) : dayjs()
+      return logDate.isBetween(startDate, endDate, "day", "[]")
+    })
+  }
 
-      matchesDate = logDate.isBetween(startDate, endDate, 'day', '[]')
-    }
-
-    return belongsToBot && matchesStatus && matchesSearch && matchesDate
-  })
+  return logsFinales
 })
+
 
 const totalPages = computed(() => Math.ceil(filteredLogs.value.length / logsPerPage))
 
@@ -344,11 +392,14 @@ const closeModal = () => {
   // Emitir evento para cerrar el modal
   emit('close')
   // Reset filters
-  statusFilter.value = ''
-  searchQuery.value = ''
   currentPage.value = 1
-  dateFilterInitial.value = ''
-  dateFilterFinal.value = ''
+  filtrosLogs.value = {
+    busqueda: '',
+    estado: '',
+    maquina: '0',
+    fechaInicio: '',
+    fechaFin: ''
+  }
 }
 
 const getStatusCount = (estado) => {

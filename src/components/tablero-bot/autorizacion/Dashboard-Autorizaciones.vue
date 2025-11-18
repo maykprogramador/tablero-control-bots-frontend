@@ -20,11 +20,26 @@
           <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
             <span class="text-xl">📋</span>
           </div>
-          <div>
-            <h2 class="text-xl sm:text-2xl font-bold">Detalles de Ejecucion</h2>
-            <p class="text-blue-100 mt-1">{{ bot.nombre }}</p>
+
+          <div class="flex items-center gap-3">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold">Detalles de Ejecución</h2>
+              <p class="text-blue-100 mt-1 flex items-center gap-2">
+                {{ bot.nombre }}
+                <!-- SELECT MAQUINA -->
+                <select v-model="filtros.maquina" class="bg-transparent border-none border-gray-200 rounded-md text-sm dark:border-slate-600 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition-colors cursor-pointer w-8" >
+                  <!-- opción por defecto -->
+                  <option value="0" class="text-gray-800">0</option>
+                  <!-- máquinas disponibles -->
+                  <option v-for="m in maquinasDisponibles" :key="m" :value="m" class="text-gray-800" >
+                    {{ m }}
+                  </option>
+                </select>
+              </p>
+            </div>
           </div>
         </div>
+
 
         <!-- Summary Stats -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
@@ -421,6 +436,7 @@ const autorizaciones = computed(() =>
   tableroFunctions.autorizaciones.map(a => ({
     id: a.id,
     bot_id: a.bot_id,
+    maquina_id: a.maquina_id,
     nombreBot: a.Bot.nombre,
     idOrden: a.idOrden,
     grupoAtencion: a.grupoAtencion,
@@ -478,7 +494,8 @@ const filtros = ref({
   empresa: '',
   fechaInicio: '',
   fechaFin: '',
-  tipoDato: 'fecha_solicitud'
+  tipoDato: 'fecha_solicitud',
+  maquina: '0'
 })
 
 const registrosAutorizaciones = computed(() => autorizaciones.value)
@@ -501,6 +518,13 @@ const empresasUnicas = computed(() => {
   return empresas.sort()
 })
 
+const maquinasDisponibles = computed(() => {
+  const ids = registrosAutorizaciones.value
+    .map(r => r.maquina_id)
+    .filter(id => id !== null)
+
+  return [...new Set(ids)].sort((a,b) => a - b)
+})
 
 // Rango de fechas texto
 const rangoFechasTexto = computed(() => {
@@ -532,6 +556,12 @@ const registrosFiltrados = computed(() => {
 
   if (filtros.value.eps) {
     registros = registros.filter(r => r.grupoAtencion === filtros.value.eps)
+  }
+
+  if (filtros.value.maquina !== '0') {
+    registros = registros.filter(r =>
+      r.maquina_id === Number(filtros.value.maquina)
+    )
   }
 
   if (filtros.value.fechaInicio) {
