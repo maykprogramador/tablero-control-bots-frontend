@@ -470,65 +470,6 @@ const currentPage = ref(1)
 const recordsPerPage = 10
 const isLoading = ref(false)
 
-//mock
-/*const autorizacionesMock = [
-  {
-    id: 1,
-    nroAutorizacionRadicado: 'AUT98716',
-    numero_identificacion: '1234567791',
-    nombrePaciente: 'Juan Carlos Pérez',
-    grupoAtencion: 'NUEVA EPS REGIMEN SUBSIDIADO',
-    fechaAutorizacion: '2025-11-11',
-    fechaVencimiento: '2025-12-11',
-    anulada: false,
-    activoEPS: true
-  },
-  {
-    id: 2,
-    nroAutorizacionRadicado: 'AUT98717',
-    numero_identificacion: '1987654321',
-    nombrePaciente: 'María González López',
-    grupoAtencion: 'SALUD TOTAL REGIMEN CONTRIBUTIVO',
-    fechaAutorizacion: '2025-10-20',
-    fechaVencimiento: '2025-11-05',
-    anulada: false,
-    activoEPS: true
-  },
-  {
-    id: 3,
-    nroAutorizacionRadicado: 'AUT98718',
-    numero_identificacion: '1555666777',
-    nombrePaciente: 'Carlos Rodríguez Morales',
-    grupoAtencion: 'COOMEVA REGIMEN CONTRIBUTIVO',
-    fechaAutorizacion: '2025-09-15',
-    fechaVencimiento: '2025-10-15',
-    anulada: true,
-    activoEPS: false
-  },
-  {
-    id: 4,
-    nroAutorizacionRadicado: 'AUT98719',
-    numero_identificacion: '1111222333',
-    nombrePaciente: 'Ana Patricia Silva Castro',
-    grupoAtencion: 'NUEVA EPS REGIMEN SUBSIDIADO',
-    fechaAutorizacion: '2025-11-05',
-    fechaVencimiento: '2025-12-05',
-    anulada: false,
-    activoEPS: true
-  },
-  {
-    id: 5,
-    nroAutorizacionRadicado: 'AUT98720',
-    numero_identificacion: '1333444555',
-    nombrePaciente: 'Roberto Fernández Díaz',
-    grupoAtencion: 'SANITAS REGIMEN CONTRIBUTIVO',
-    fechaAutorizacion: '2025-08-10',
-    fechaVencimiento: '2025-09-10',
-    anulada: false,
-    activoEPS: false
-  }
-]*/
-
 const filtros = ref({
   busqueda: '',
   estado: '',
@@ -779,6 +720,7 @@ const exportData = () => {
     'Fecha Vencimiento': record.fechaVencimiento,
     'Días Restantes': calcularDiasRestantes(record.fechaVencimiento),
     'Estado': getStatusText(record),
+    'Estado Autorización': getStatusText(record.estado_autorizacion),
     'CUPS': record.cups,
     'Descripción Relacionada': record.desRelacionada,
     'Diagnóstico': record.diagnostico,
