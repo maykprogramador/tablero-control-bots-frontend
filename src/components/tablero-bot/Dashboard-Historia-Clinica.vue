@@ -18,11 +18,25 @@
       <div class="bg-gradient-to-r from-slate-800 to-[#80006A] text-white p-6 pr-16 md:sticky md:top-0 md:z-10">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-            <span class="text-xl">🤖</span>
+            <span class="text-xl">📋</span>
           </div>
-          <div>
-            <h2 class="text-xl sm:text-2xl font-bold">Detalles de Ejecución</h2>
-            <p class="text-blue-100 mt-1">{{ bot.nombre }}</p>
+
+          <div class="flex items-center gap-3">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold">Detalles de Ejecución</h2>
+              <p class="text-blue-100 mt-1 flex items-center gap-2">
+                {{ bot.nombre }}
+                <!-- SELECT MAQUINA -->
+                <select v-model="filtros.maquina" class="bg-transparent border-none border-gray-200 rounded-md text-sm dark:border-slate-600 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition-colors cursor-pointer w-8" >
+                  <!-- opción por defecto -->
+                  <option value="0" class="text-gray-800"></option>
+                  <!-- máquinas disponibles -->
+                  <option v-for="m in maquinasDisponibles" :key="m" :value="m" class="text-gray-800" >
+                    {{ m }}
+                  </option>
+                </select>
+              </p>
+            </div>
           </div>
         </div>
 
@@ -456,6 +470,7 @@ onMounted(async() => {
 const registrosTrazabilidad = computed(() => 
   tableroFunctions.historias_clinicas.map(t => ({
     id: t.id,
+    maquina_id: t.maquina_id,
     empresa: t.HistoriaClinica.empresa,
     sede: t.HistoriaClinica.sede,
     numero_identificacion: t.HistoriaClinica.Paciente.numero_identificacion,
@@ -488,7 +503,8 @@ const filtros = ref({
   motivo_fallo: '',
   fechaInicio: '',
   fechaFin: '',
-  tipoDato: 'fecha_envio'
+  tipoDato: 'fecha_envio',
+  maquina: '0'
 })
 const isLoading = ref(false)
 const currentPage = ref(1)
@@ -675,6 +691,14 @@ const sedesUnicas = computed(() => {
   return sedes.sort()
 })
 
+const maquinasDisponibles = computed(() => {
+  const ids = registrosTrazabilidad.value
+    .map(r => r.maquina_id)
+    .filter(id => id !== null)
+
+  return [...new Set(ids)].sort((a,b) => a - b)
+})
+
 // Motivos únicos (solo si hay errores)
 const motivosFallosUnicos = computed(() => {
   const errores = registrosTrazabilidad.value.filter(r => r.estado_envio === 'error' && r.motivo_fallo)
@@ -713,6 +737,12 @@ const registrosFiltrados = computed(() => {
   // Filtro por motivo de fallo
   if (filtros.value.motivo_fallo) {
     registros = registros.filter(r => r.motivo_fallo === filtros.value.motivo_fallo)
+  }
+    //  Filtrar por máquina (0 = mostrar todo)
+  if (filtros.value.maquina !== "0") {
+    registros = registros.filter(reg =>
+      reg.maquina_id === Number(filtros.value.maquina)
+    )
   }
 
   // Filtro por rango de fechas (dinámico con tipoDato)
