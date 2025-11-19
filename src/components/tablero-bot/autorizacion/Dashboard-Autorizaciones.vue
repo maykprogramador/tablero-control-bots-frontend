@@ -24,12 +24,12 @@
           <div class="flex items-center gap-3">
             <div>
               <h2 class="text-xl sm:text-2xl font-bold">Detalles de Ejecución</h2>
-              <p class="text-blue-100 mt-1 flex items-center gap-2">
+              <p class="text-blue-100 mt-1 flex items-center gap-1">
                 {{ bot.nombre }}
                 <!-- SELECT MAQUINA -->
-                <select v-model="filtros.maquina" class="bg-transparent border-none border-gray-200 rounded-md text-sm dark:border-slate-600 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition-colors cursor-pointer w-8" >
+                <select v-model="filtros.maquina" class="bg-transparent border-none border-gray-200 rounded-md text-sm dark:border-slate-600 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition-colors cursor-pointer w-auto" >
                   <!-- opción por defecto -->
-                  <option value="0" class="text-gray-800">0</option>
+                  <option value="0" class="text-gray-800"></option>
                   <!-- máquinas disponibles -->
                   <option v-for="m in maquinasDisponibles" :key="m" :value="m" class="text-gray-800" >
                     {{ m }}

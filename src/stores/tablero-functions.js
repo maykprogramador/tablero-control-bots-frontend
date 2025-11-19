@@ -502,7 +502,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
 
       // Evento para historias clínicas
       socket.on('nueva_historia', (trazabilidad, botActualizado) => {
-        //console.log('Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
+        console.log('Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
 
         // Verificar si el bot está en el estado
         const perteneceABot = this.bots.some(b => b.id === trazabilidad.bot_id);

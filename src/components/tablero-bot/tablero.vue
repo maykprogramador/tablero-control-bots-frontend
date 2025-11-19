@@ -79,21 +79,77 @@
                   
                   <div class="flex flex-wrap sm:flex-nowrap items-center sm:justify-between gap-2 sm:gap-3">
                     <!-- Procesados / Total -->
-                    <div class="flex items-center gap-2">
+                    <div class="flex items-center gap-2 relative group">
+                      <!-- DOT que indica cuántas máquinas tiene el bot -->
+                      <span v-if="bot.Maquinas.length > 1" class="absolute -top-2 -right-2 bg-[#80006A] text-white font-bold text-[10px] px-1.5 py-0.5 rounded-full shadow" >
+                        {{ bot.Maquinas.length - 1 }}
+                      </span>
+
+                      <!-- Procesados / Total -->
                       <div class="px-3 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 border-blue-200 dark:border-blue-700">
                         <span class="text-xs sm:text-sm font-semibold text-blue-800 dark:text-blue-300">
-                          {{ bot.procesados }} / {{ bot.total_registros }}
+                          {{ getMaquinaPrincipal(bot)?.procesados }} /
+                          {{ getMaquinaPrincipal(bot)?.total_registros }}
                         </span>
                       </div>
+
                       <!-- Porcentaje -->
                       <p class="px-3 py-1 rounded-full text-xs sm:text-sm font-semibold bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
-                        {{ obtener_porcentaje(bot.procesados, bot.total_registros) }}%
+                        {{ obtener_porcentaje( getMaquinaPrincipal(bot)?.procesados, getMaquinaPrincipal(bot)?.total_registros ) }}%
                       </p>
+                      <!-- MENU DESPLEGABLE DE OTRAS MÁQUINAS -->
+                      <div
+                        v-if="getOtrasMaquinas(bot).length > 0"
+                        class="absolute hidden group-hover:block left-0 bottom-full mb-2 bg-white dark:bg-slate-800 shadow-lg rounded-xl p-3 w-64 z-50 border border-gray-200 dark:border-slate-700"
+                      >
+                        <p class="font-semibold text-sm mb-3 text-slate-700 dark:text-slate-300">Otras máquinas</p>
+
+                        <div 
+                          v-for="m in getOtrasMaquinas(bot)" 
+                          :key="m.id"
+                          class="flex flex-col gap-2 bg-gray-50 dark:bg-slate-700/30 p-3 rounded-xl mb-2 last:mb-0"
+                        >
+                          <!-- TOP: ID + ESTADO -->
+                          <div class="flex items-center justify-between">
+                            <p class="text-xs font-semibold text-slate-600 dark:text-slate-300">
+                              Máquina {{ m.id }}
+                            </p>
+
+                            <span
+                              class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                              :class="getStatusBadgeClass(m.estado)"
+                            >
+                              <span :class="getStatusDotClass(m.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5"></span>
+                              {{ getStatusText(m.estado) }}
+                            </span>
+                          </div>
+
+                          <!-- MIDDLE: PROCESADOS / TOTAL -->
+                          <div class="flex items-center justify-between">
+                            <div class="px-3 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700">
+                              <span class="text-xs font-semibold text-blue-800 dark:text-blue-300">
+                                {{ m.procesados }} / {{ m.total_registros }}
+                              </span>
+                            </div>
+
+                            <p class="px-3 py-0.5 rounded-full text-xs font-semibold bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
+                              {{ obtener_porcentaje( m.procesados, m.total_registros ) }}%
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                     <!-- Estado -->
-                    <span :class="getStatusBadgeClass(bot.estado)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" >
-                      <span :class="getStatusDotClass(bot.estado)" class="w-1.5 h-1.5 rounded-full mr-1.5" ></span>
-                      {{ getStatusText(bot.estado) }}
+                    <span 
+                      :class="getStatusBadgeClass(getMaquinaPrincipal(bot)?.estado)"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    >
+                      <span 
+                        :class="getStatusDotClass(getMaquinaPrincipal(bot)?.estado)" 
+                        class="w-1.5 h-1.5 rounded-full mr-1.5"
+                      ></span>
+                      {{ getStatusText(getMaquinaPrincipal(bot)?.estado) }}
                     </span>
                   </div>
                 </div>
@@ -101,7 +157,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div class="flex flex-col gap-1">
                     <span class="text-xs text-gray-600 dark:text-gray-400 font-medium">Última ejecución</span>
-                    <span class="font-semibold text-slate-800 dark:text-slate-200">{{ formatDate(bot.updatedAt) }}</span>
+                    <span class="font-semibold text-slate-800 dark:text-slate-200">{{ formatDate(getMaquinaPrincipal(bot).updatedAt) }}</span>
                   </div>
                   <div class="flex flex-col gap-1 ml-auto">
                     <div class="flex items-center gap-2 flex-wrap">
@@ -532,6 +588,19 @@ onMounted(async () => {
   );*/
 });
 
+const getMaquinaPrincipal = (bot) => {
+  return bot.Maquinas?.[0] || null;
+};
+
+const getOtrasMaquinas = (bot) => {
+  return bot.Maquinas?.length > 1 ? bot.Maquinas.slice(1) : [];
+};
+
+const obtener_porcentaje = (procesados, total) => {
+  if (!total || total === 0) return 0;
+  return Math.round((procesados / total) * 100);
+};
+
 // funcion para filtrar los bots 
 const filteredBots = computed(() => {
   return bots.value.filter(bot => {
@@ -724,7 +793,7 @@ async function handleDateSelect(date) {
 const loadBots = async() => { 
   try {
     await tableroFunctions.loadbots({ user_id: user.value.user_id, rol: user.value.rol })
-    //console.log('Bots cargados:', bots.value);
+    console.log('Bots cargados:', bots.value);
     
   } catch (err) {
     console.error('Error al cargar los bots:', err)
@@ -819,10 +888,10 @@ function resetControlSelected () {
   tableroFunctions.setExecuteBot(false)
 }
 
-const obtener_porcentaje = (procesados, total) => {
+/*const obtener_porcentaje = (procesados, total) => {
   if (total === 0) return 0
   return Math.round((procesados / total) * 100)
-}
+}*/
 
 //funcion para formatear la fecha en formato 'DD/MM/YYYY HH:mm'
 function formatDate(date) {

@@ -279,7 +279,7 @@
                         Ver detalles
                       </button>
                       <!--  Botón Reprocesar -->
-                      <button v-if="['No se encontro la HC en Indigo', 'No se encontro el pdf, Error al procesar en indigo'].includes(registro.motivo_fallo)" @click="reprocesarTrazabilidad(registro.id)" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-200 dark:hover:bg-blue-900/60 hover:text-blue-800 dark:hover:text-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-800 focus:ring-blue-400 dark:focus:ring-blue-600 transition-all duration-200 group-hover:scale-105" title="Reprocesar trazabilidad" >
+                      <button v-if="['No se encontro la HC en Indigo', 'No se encontro el pdf', 'Error al procesar en indigo'].includes(registro.motivo_fallo)" @click="reprocesarTrazabilidad(registro.id)" class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-semibold rounded-lg text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/40 hover:bg-blue-200 dark:hover:bg-blue-900/60 hover:text-blue-800 dark:hover:text-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:ring-offset-gray-800 focus:ring-blue-400 dark:focus:ring-blue-600 transition-all duration-200 group-hover:scale-105" title="Reprocesar trazabilidad" >
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 4v6h6M20 20v-6h-6M4 10a9 9 0 0116-4.5M20 14a9 9 0 01-16 4.5" />
