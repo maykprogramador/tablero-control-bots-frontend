@@ -785,7 +785,7 @@ onMounted(async () => {
     //await new Promise(resolve => setTimeout(resolve, 5000));
     await tableroFunctions.loadAutorizaciones()
     isLoading.value = false
-    console.log('autorizaciones cargadas: ', autorizaciones.value);
+    //console.log('autorizaciones cargadas: ', autorizaciones.value);
   }
   catch(error){
     alert(error.response.data.error);

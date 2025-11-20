@@ -408,7 +408,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     
     iniciarSocket() { 
       socket.on('nuevo_registro', (registro, bot, solicitud) => {
-        console.log('registro recibido desde el store: ', registro);
+        //console.log('registro recibido desde el store: ', registro);
 
         // usuario actual desde el store de auth
         const authStore = useAuthStore()
@@ -502,7 +502,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
 
       // Evento para historias clínicas
       socket.on('nueva_historia', (trazabilidad, botActualizado) => {
-        console.log('Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
+        //console.log('Trazabilidad recibida desde socket:', trazabilidad, botActualizado);
 
         // Verificar si el bot está en el estado
         const perteneceABot = this.bots.some(b => b.id === trazabilidad.bot_id);
@@ -540,7 +540,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       });
       // Evento para nuevas autorizaciones
       socket.on('nueva_autorizacion', (autorizacion, botActualizado) => {
-        console.log(' Autorización recibida desde socket:', autorizacion);
+        //console.log(' Autorización recibida desde socket:', autorizacion);
 
         // 1 Verificar si el bot pertenece al usuario actual
         const perteneceABot = this.bots.some(b => b.id === autorizacion.bot_id);
@@ -553,7 +553,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         const indexBot = this.bots.findIndex(b => b.id === botActualizado.id);
         if (indexBot !== -1) {
           this.bots.splice(indexBot, 1, botActualizado);
-          console.log(' Bot actualizado desde socket (autorizaciones):', botActualizado);
+          //console.log(' Bot actualizado desde socket (autorizaciones):', botActualizado);
         }
 
         // 3 Verificar si ya existe la autorización en el estado
