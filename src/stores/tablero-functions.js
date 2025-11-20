@@ -563,7 +563,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           if (!yaExiste) {
             //  Insertar al inicio
             this.autorizaciones.unshift(autorizacion);
-            console.log(' Nueva autorización agregada al state:', autorizacion);
+            //console.log(' Nueva autorización agregada al state:', autorizacion);
           } else {
             //  Si ya existe, reemplazarla para mantener la más reciente
             const index = this.autorizaciones.findIndex(a => a.id === autorizacion.id);
@@ -571,7 +571,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
               this.autorizaciones.splice(index, 1);
             }
             this.autorizaciones.unshift(autorizacion);
-            console.log(' Autorización actualizada en el state:', autorizacion);
+            //console.log(' Autorización actualizada en el state:', autorizacion);
           }
         }
 
