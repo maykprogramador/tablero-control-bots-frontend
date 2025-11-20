@@ -348,12 +348,14 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     actualizarMetricasIncremental(botId, registro) {
       const botMetricas = this.metricasBots.find(m => m.bot_id === botId);
       if (!botMetricas) return;
-
       // Incrementamos total_registros
       botMetricas.total_registros++;
-
       // Determinar estado
       const estado = registro.estado || registro.estado_envio;
+      // 2. Si NO es pendiente → restamos un pendiente (sin bajar de 0)
+      if (estado !== "pendiente" && botMetricas.pendiente > 0) {
+        botMetricas.pendiente--;
+      }
 
       switch (estado) {
         case 'exito':
