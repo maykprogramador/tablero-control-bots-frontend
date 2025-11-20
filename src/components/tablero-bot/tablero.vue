@@ -98,17 +98,10 @@
                         {{ obtener_porcentaje( getMaquinaPrincipal(bot)?.procesados, getMaquinaPrincipal(bot)?.total_registros ) }}%
                       </p>
                       <!-- MENU DESPLEGABLE DE OTRAS MÁQUINAS -->
-                      <div
-                        v-if="getOtrasMaquinas(bot).length > 0"
-                        class="absolute hidden group-hover:block left-0 bottom-full mb-2 bg-white dark:bg-slate-800 shadow-lg rounded-xl p-3 w-64 z-50 border border-gray-200 dark:border-slate-700"
-                      >
+                      <!-- MENU DESPLEGABLE DE OTRAS MÁQUINAS -->
+                      <div v-if="getOtrasMaquinas(bot).length > 0" class="absolute hidden group-hover:block left-0 bottom-full mb-2 bg-white dark:bg-slate-800 shadow-lg rounded-xl p-3 w-64 z-50 border border-gray-200 dark:border-slate-700" >
                         <p class="font-semibold text-sm mb-3 text-slate-700 dark:text-slate-300">Otras máquinas</p>
-
-                        <div 
-                          v-for="m in getOtrasMaquinas(bot)" 
-                          :key="m.id"
-                          class="flex flex-col gap-2 bg-gray-50 dark:bg-slate-700/30 p-3 rounded-xl mb-2 last:mb-0"
-                        >
+                        <div v-for="m in getOtrasMaquinas(bot)"  :key="m.id" class="flex flex-col gap-2 bg-gray-50 dark:bg-slate-700/30 p-3 rounded-xl mb-2 last:mb-0" >
                           <!-- TOP: ID + ESTADO -->
                           <div class="flex items-center justify-between">
                             <p class="text-xs font-semibold text-slate-600 dark:text-slate-300">
@@ -126,7 +119,7 @@
 
                           <!-- MIDDLE: PROCESADOS / TOTAL -->
                           <div class="flex items-center justify-between">
-                            <div class="px-3 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/40 border border-blue-200 dark:border-blue-700">
+                            <div class="px-3 py-0.5 rounded-full text-xs bg-blue-100 dark:bg-blue-900/40">
                               <span class="text-xs font-semibold text-blue-800 dark:text-blue-300">
                                 {{ m.procesados }} / {{ m.total_registros }}
                               </span>
@@ -136,8 +129,17 @@
                               {{ obtener_porcentaje( m.procesados, m.total_registros ) }}%
                             </p>
                           </div>
+
+                          <!-- NEW: ULTIMA EJECUCIÓN -->
+                          <div class="flex flex-col mt-1">
+                            <span class="text-[10px] text-gray-600 dark:text-gray-400 font-medium">Última ejecución</span>
+                            <span class="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                              {{ formatDate(m.updatedAt) }}
+                            </span>
+                          </div>
                         </div>
                       </div>
+
 
                     </div>
                     <!-- Estado -->
