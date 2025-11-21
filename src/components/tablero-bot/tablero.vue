@@ -79,7 +79,7 @@
                   
                   <div class="flex flex-wrap sm:flex-nowrap items-center sm:justify-between gap-2 sm:gap-3">
                     <!-- Procesados / Total -->
-                    <div class="flex items-center gap-2 relative group">
+                    <div @click.stop="toggleMenuMaquinas(bot.id)" class="flex items-center gap-2 relative group">
                       <!-- DOT que indica cuántas máquinas tiene el bot -->
                       <span v-if="bot.Maquinas.length > 1" class="absolute -top-2 -right-2 bg-[#80006A] text-white font-bold text-[10px] px-1.5 py-0.5 rounded-full shadow" >
                         {{ bot.Maquinas.length - 1 }}
@@ -98,8 +98,7 @@
                         {{ obtener_porcentaje( getMaquinaPrincipal(bot)?.procesados, getMaquinaPrincipal(bot)?.total_registros ) }}%
                       </p>
                       <!-- MENU DESPLEGABLE DE OTRAS MÁQUINAS -->
-                      <!-- MENU DESPLEGABLE DE OTRAS MÁQUINAS -->
-                      <div v-if="getOtrasMaquinas(bot).length > 0" class="absolute hidden group-hover:block left-0 bottom-full mb-2 bg-white dark:bg-slate-800 shadow-lg rounded-xl p-3 w-64 z-50 border border-gray-200 dark:border-slate-700" >
+                      <div v-if="getOtrasMaquinas(bot).length > 0" :class="maquinaMenuAbierto === bot.id? 'block': 'hidden'" class="absolute right-[-50px] sm:left-0 sm:hidden group-hover:block bottom-full mb-2 bg-white dark:bg-slate-800 shadow-lg rounded-xl p-3 w-64 z-50  border border-gray-200 dark:border-slate-700">
                         <p class="font-semibold text-sm mb-3 text-slate-700 dark:text-slate-300">Otras máquinas</p>
                         <div v-for="m in getOtrasMaquinas(bot)"  :key="m.id" class="flex flex-col gap-2 bg-gray-50 dark:bg-slate-700/30 p-3 rounded-xl mb-2 last:mb-0" >
                           <!-- TOP: ID + ESTADO -->
@@ -515,8 +514,8 @@ const isLogsModalOpen = ref(false)
 const botOptions = [1, 2, 3]
 const fechasError = ref([])
 const selectedLogId = ref(null)
-const botEnEdicion = ref(null)
-const nombreEditado = ref('')
+const maquinaMenuAbierto = ref(null)
+
 
 // ENUMERACION DE LOS BOTS --------------------------------------------------------------------------------------------------------------------------------
 const BOT_TYPES = Object.freeze({
@@ -584,11 +583,18 @@ const checkSession = async () => {
 }
 
 onMounted(async () => {
+  document.addEventListener('click', () => {
+    maquinaMenuAbierto.value = null
+  })
   checkSession();
   /*await Promise.all(
     bots.value.map(bot => tableroFunctions.loadRegistros({ bot_id: bot.id }))
   );*/
 });
+
+const toggleMenuMaquinas = (botId) => {
+  maquinaMenuAbierto.value = maquinaMenuAbierto.value === botId ? null : botId
+}
 
 const getMaquinaPrincipal = (bot) => {
   return bot.Maquinas?.[0] || null;
