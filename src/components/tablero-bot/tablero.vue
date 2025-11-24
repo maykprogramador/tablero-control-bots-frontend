@@ -613,7 +613,7 @@ const obtener_porcentaje = (procesados, total) => {
 // funcion para filtrar los bots 
 const filteredBots = computed(() => {
   return bots.value.filter(bot => {
-    const matchesStatus = !filters.estado || bot.estado === filters.estado
+    const matchesStatus = !filters.estado || bot.Maquinas?.[0]?.estado === filters.estado
     const matchesName = !filters.nombre || bot.nombre.toLowerCase().includes(filters.nombre.toLowerCase())
     return matchesStatus && matchesName
   })
