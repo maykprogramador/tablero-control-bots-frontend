@@ -305,6 +305,7 @@
 
               <Datepicker
                 v-model="selectedDate"
+                dark
                 :day-class="getDayClass"
                 :enable-time-picker="false"
                 :disabled-dates="isDisabled"
