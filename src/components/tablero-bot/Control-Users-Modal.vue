@@ -375,7 +375,7 @@ const router = useRouter()
 const roleFilter = ref('')
 const searchQuery = ref('')
 const currentPage = ref(1)
-const usersPerPage = 8
+const usersPerPage = 10
 
 // Users data
 const users = computed(() => tableroFunctions.users)
