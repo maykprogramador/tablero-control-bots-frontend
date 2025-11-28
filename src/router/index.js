@@ -5,6 +5,7 @@ import Tablero from '@/components/tablero-bot/tablero.vue'
 import Prueba from '@/components/tablero-bot/prueba.vue'
 import Perfil from '@/components/tablero-bot/profile/perfil.vue'
 import AnaliticsRPA from '@/components/tablero-bot/Dashboard-Rpa-Analitics/Analitics-RPA.vue'
+import AnaliticsRPA2 from '@/components/tablero-bot/Dashboard-Rpa-Analitics/Analitics-RPA2.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -29,11 +30,16 @@ const router = createRouter({
       name: 'Perfil',
       component: Perfil,
     },
-    /*{
+    {
       path: '/prueba',
       name: 'prueba',
       component: AnaliticsRPA,
-    }*/
+    },
+    {
+      path: '/prueba1',
+      name: 'prueba1',
+      component: AnaliticsRPA2,
+    }
   ],
 })
 
