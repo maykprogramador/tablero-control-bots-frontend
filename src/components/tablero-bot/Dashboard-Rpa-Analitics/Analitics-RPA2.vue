@@ -29,7 +29,7 @@
 
     <main class="p-6 max-w-[1920px] mx-auto space-y-12">
       <!-- SECCIÓN 1: TARJETAS KPI   -->
-      <section id="kpi-section" class="space-y-6">
+      <section id="kpi-section" class="space-y-4">
 
         <!-- Loading Skeleton -->
         <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
@@ -54,13 +54,18 @@
       </section>
 
       <!-- SECCIÓN 2: GRÁFICOS       -->
-      <section id="charts-section" class="space-y-8">
+      <section id="charts-section" class="space-y-4 ">
         <!-- Más adelante insertaremos:
           - Gráfica de barras
           - Gráfica de líneas
-          - Donut de distribución
-          - Comparativas
-        -->
+              - Donut de distribución
+              - Comparativas
+            -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <RegistrosPorBotChart />
+          <RegistrosPorMaquinaChart />
+        </div>
+        
       </section>
 
       <!-- SECCIÓN 3: TABLAS         -->
@@ -79,6 +84,8 @@ import { useAnalyticsStore } from '@/stores/analitic-functions'
 const analitycsStore = useAnalyticsStore()
 const { kpis } = storeToRefs(analitycsStore)
 import KpiCard from './componentes/KpiCard.vue'
+import RegistrosPorBotChart from './componentes/RegistrosPorBotChart.vue'
+import RegistrosPorMaquinaChart from './componentes/RegistrosPorMaquinaChart.vue'
 import { 
   Activity as ActivityIcon, 
   Calendar as CalendarIcon, 
@@ -127,10 +134,6 @@ ChartJS.register(
   Legend,
   Filler
 )
-
-onMounted(() => {
-  analitycsStore.loadKpis()
-})
 
 // --- STATE ---
 const isLoading = ref(true)
@@ -307,13 +310,15 @@ const getHeatmapColor = (value) => {
 }
 
 // --- INIT ---
-onMounted(() => {
+onMounted( async () => {
   // Simulate API fetch
-  setTimeout(() => {
+  await analitycsStore.loadKpis()
+  /*setTimeout(() => {
     tableData.value = generateRegistros(50)
     logsData.value = generateLogs(20)
     isLoading.value = false
-  }, 1500)
+  }, 1000)*/
+  isLoading.value = false
 })
 </script>
 

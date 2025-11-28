@@ -20,7 +20,9 @@ setupAxiosInterceptor(axiosInstance);
 export const useAnalyticsStore = defineStore('analytics-store', {
   state: () => ({
     isLoading: false,
-    kpis: { totalBots: 0, totalRegistros: 0, totalErrores: 0, totalUsuarios: 0, },
+    kpis: { totalBots: 0, botsActivos: 0, botsInactivos: 0, procesosHoy: { registros: 0, trazabilidades: 0, autorizaciones: 0 }, trends: { registros: 0, trazabilidades: 0, autorizaciones: 0 }, tasasHoy: {} },
+    registrosPorBot: [],
+    procesadosPorMaquina: [],
     // Para gráficos futuros
     /*registrosPorBot: [],
     tortaEstados: [],
@@ -30,15 +32,29 @@ export const useAnalyticsStore = defineStore('analytics-store', {
   actions: {
     async loadKpis() {
       try {
-        this.isLoading = true
         const { data } = await axiosInstance.get(`kpis`)
 
         this.kpis = data
       } catch (err) {
         console.error("Error loading KPIs:", err)
-      } finally {
-        this.isLoading = false
-      }
+      } 
     },
+    async loadRegistrosBots() {
+      try {
+        const { data } = await axiosInstance.get(`registros-bots`)
+        // Suponiendo que data es un array de objetos con 'bot' y 'registros'
+        this.registrosPorBot = data
+      } catch (err) {
+        console.error("Error loading registros por bot:", err)
+      } 
+    },
+    async loadProcesadosPorMaquina() {
+      try {
+        const { data } = await axiosInstance.get(`procesados-por-maquina`)
+        this.procesadosPorMaquina = data
+      } catch (err) {
+        console.error("Error loading procesados por maquina:", err)
+      }
+    }
   }
 })
