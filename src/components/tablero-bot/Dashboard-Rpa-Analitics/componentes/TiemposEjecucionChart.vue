@@ -133,15 +133,27 @@ const chartOptions = {
   maintainAspectRatio: false,
   plugins: {
     legend: { display: false },
-    tooltip: { mode: 'index', intersect: false }
+    tooltip: {
+      mode: 'index',
+      intersect: false,
+      callbacks: {
+        label: (context) => {
+          const segundos = context.raw
+          const minutos = (segundos / 60).toFixed(2)
+          return `${minutos} min`
+        }
+      }
+    }
   },
   scales: {
     y: {
       beginAtZero: false,
       grid: { color: 'rgba(0,0,0,0.04)' },
       ticks: {
-        // <-- CORRECTO: backticks en template string
-        callback: (value) => `${value}s`
+        callback: (value) => {
+          const minutos = (value / 60).toFixed(1)
+          return `${minutos} min`
+        }
       }
     },
     x: {
@@ -155,24 +167,28 @@ const chartOptions = {
   }
 }
 
+
 const chartData = computed(() => {
   const lista = tiemposEjecucion.value[modo.value] || []
   return {
     labels: lista.map(i => i.label),
     datasets: [
       {
-        label: 'Tiempo Promedio (segundos)',
-        data: lista.map(i => i.valor),
+        label: 'Tiempo Promedio (minutos)',
+        data: lista.map(i => i.valor), // siguen siendo segundos
         fill: true,
         tension: 0.1,
         borderWidth: 2,
         borderColor: '#10b981',
         backgroundColor: 'rgba(16, 185, 129, 0.15)',
         pointBackgroundColor: '#10b981',
-        pointRadius: 4
+        pointRadius: 4,
+        //LINEA INTERLINEADA
+        borderDash: [6, 6]
       }
     ]
   }
 })
+
 
 </script>
