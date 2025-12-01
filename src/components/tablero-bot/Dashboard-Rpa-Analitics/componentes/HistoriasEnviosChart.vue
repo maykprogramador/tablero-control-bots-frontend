@@ -4,24 +4,10 @@ import { storeToRefs } from 'pinia'
 import { useAnalyticsStore } from '@/stores/analitic-functions'
 import { Line } from "vue-chartjs"
 
-const props = defineProps({
-  data: {
-    type: Object,
-    default: () => ({
-      semanal: [],
-      mensual: []
-    })
-  }
-})
 const analitycsStore = useAnalyticsStore()
 const { enviosHistoriasClinicas } = storeToRefs(analitycsStore)
-onMounted(async () => {
-  await analitycsStore.loadEnviosHistoriasClinicas()
-  console.log('historias: ',enviosHistoriasClinicas.value);
-})
-
 const modo = ref("semanal") // default
-const data = {
+/*const data = {
   semanal: [
     { label: "Sem 1", valor: 120 },
     { label: "Sem 2", valor: 200 },
@@ -34,7 +20,7 @@ const data = {
     { label: "Mar", valor: 520 },
     { label: "Abr", valor: 610 }
   ]
-}
+}*/
 
 const chartData = computed(() => {
   const dataset = enviosHistoriasClinicas.value[modo.value]
@@ -74,6 +60,12 @@ const chartOptions = {
     }
   }
 }
+
+onMounted(async () => {
+  await analitycsStore.loadEnviosHistoriasClinicas()
+  console.log('historias: ',enviosHistoriasClinicas.value);
+})
+
 </script>
 
 <template>
