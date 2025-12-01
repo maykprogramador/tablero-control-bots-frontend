@@ -22,6 +22,7 @@
         >
           <button 
             @click="modo = 'semanal'"
+            @change="cargarTiempos"
             :class="[
               'px-4 py-1.5 text-xs font-medium rounded-md transition-all duration-200',
               modo === 'semanal'
@@ -37,6 +38,7 @@
           </button>
           <button 
             @click="modo = 'mensual'"
+            @change="cargarTiempos"
             :class="[
               'px-4 py-1.5 text-xs font-medium rounded-md transition-all duration-200',
               modo === 'mensual'
@@ -49,6 +51,22 @@
             ]"
           >
             Mensual
+          </button>
+          <button 
+            @click="modo = 'anual'"
+            @change="cargarTiempos"
+            :class="[
+              'px-4 py-1.5 text-xs font-medium rounded-md transition-all duration-200',
+              modo === 'anual'
+                ? (isDark
+                    ? 'bg-slate-800 text-emerald-400 shadow-sm'
+                    : 'bg-white text-emerald-600 shadow-sm')
+                : (isDark
+                    ? 'text-slate-300 hover:text-white'
+                    : 'text-slate-600 hover:text-slate-800')
+            ]"
+          >
+            Anual
           </button>
         </div>
         <!-- Selector de Bot -->
@@ -129,6 +147,11 @@ const maquinaSeleccionada = ref(1)
 const { tiemposEjecucion } = storeToRefs(analitycsStore)
 const { botsDisponibles } = storeToRefs(tableroFunctions)
 
+const cargarTiempos = async () => {
+  if (!botSeleccionado.value || !maquinaSeleccionada.value) return
+  await analitycsStore.loadTiemposEjecucion( modo.value, botSeleccionado.value, maquinaSeleccionada.value)
+}
+
 const maquinasDelBot = computed(() => {
   if (!botSeleccionado.value) return []
   const bot = botsDisponibles.value.find(b => b.id === botSeleccionado.value)
@@ -146,11 +169,7 @@ watch([modo, botSeleccionado, maquinaSeleccionada], () => {
 
 onMounted(async () => {
   await tableroFunctions.getAllBots()
-  await analitycsStore.loadTiemposEjecucion(
-    modo.value,
-    botSeleccionado.value,
-    maquinaSeleccionada.value
-  )
+  cargarTiempos()
 })
 
 /* === Chart Options === */
