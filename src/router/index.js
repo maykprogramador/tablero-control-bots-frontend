@@ -30,7 +30,7 @@ const router = createRouter({
       name: 'Perfil',
       component: Perfil,
     },
-    {
+    /*{
       path: '/prueba',
       name: 'prueba',
       component: AnaliticsRPA,
@@ -39,7 +39,7 @@ const router = createRouter({
       path: '/prueba1',
       name: 'prueba1',
       component: AnaliticsRPA2,
-    }
+    }*/
   ],
 })
 
