@@ -24,11 +24,7 @@ export const useAnalyticsStore = defineStore('analytics-store', {
     registrosPorBot: [],
     procesadosPorMaquina: [],
     enviosHistoriasClinicas: { semanal: [], mensual: [], anual: [] },
-    tiemposEjecucion: { semanal: [], mensual: [] },
-    // Para gráficos futuros
-    /*registrosPorBot: [],
-    tortaEstados: [],
-    actividadPorDia: [],*/
+    tiemposEjecucion: { semanal: [], mensual: [], anual: [] }
   }),
 
   actions: {

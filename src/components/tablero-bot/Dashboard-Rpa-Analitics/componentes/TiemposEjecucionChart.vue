@@ -160,11 +160,7 @@ const maquinasDelBot = computed(() => {
 
 watch([modo, botSeleccionado, maquinaSeleccionada], () => {
   if (!botSeleccionado.value || !maquinaSeleccionada.value) return
-  analitycsStore.loadTiemposEjecucion(
-    modo.value,
-    botSeleccionado.value,
-    maquinaSeleccionada.value
-  )
+  analitycsStore.loadTiemposEjecucion( modo.value, botSeleccionado.value, maquinaSeleccionada.value )
 })
 
 onMounted(async () => {

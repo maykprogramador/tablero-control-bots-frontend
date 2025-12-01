@@ -106,7 +106,6 @@ ChartJS.register(
 
 // --- STATE ---
 const isLoading = ref(true)
-const currentDate = new Date().toLocaleDateString('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
 // --- INIT ---
 onMounted( async () => {
   // Simulate API fetch
