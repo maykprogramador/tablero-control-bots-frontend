@@ -23,6 +23,7 @@ export const useAnalyticsStore = defineStore('analytics-store', {
     kpis: { totalBots: 0, botsActivos: 0, botsInactivos: 0, procesosHoy: { registros: 0, trazabilidades: 0, autorizaciones: 0 }, trends: { registros: 0, trazabilidades: 0, autorizaciones: 0 }, tasasHoy: {} },
     registrosPorBot: [],
     procesadosPorMaquina: [],
+    enviosHistoriasClinicas: { semanal: [], mensual: [] },
     // Para gráficos futuros
     /*registrosPorBot: [],
     tortaEstados: [],
@@ -54,6 +55,15 @@ export const useAnalyticsStore = defineStore('analytics-store', {
         this.procesadosPorMaquina = data
       } catch (err) {
         console.error("Error loading procesados por maquina:", err)
+      }
+    }
+    ,
+    async loadEnviosHistoriasClinicas() {
+      try {
+        const { data } = await axiosInstance.get(`envios-historias`)
+        this.enviosHistoriasClinicas = data
+      } catch (err) {
+        console.error("Error loading envios de historias clinicas:", err)
       }
     }
   }

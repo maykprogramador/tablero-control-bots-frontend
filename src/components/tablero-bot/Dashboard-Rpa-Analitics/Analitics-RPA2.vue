@@ -64,6 +64,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <RegistrosPorBotChart />
           <RegistrosPorMaquinaChart />
+          <HistoriasEnviosChart />
         </div>
         
       </section>
@@ -120,6 +121,7 @@ import {
   Filler
 } from 'chart.js'
 import { Bar, Line, Doughnut } from 'vue-chartjs'
+import HistoriasEnviosChart from './componentes/HistoriasEnviosChart.vue'
 
 // --- CHART REGISTRATION ---
 ChartJS.register(

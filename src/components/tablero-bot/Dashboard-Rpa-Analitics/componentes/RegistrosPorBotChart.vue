@@ -166,7 +166,8 @@ const datosFiltrados = computed(() =>
 )
 
 const chartData = computed(() => ({
-  labels: datosFiltrados.value.map(b => b.bot),
+  labels: datosFiltrados.value.map((_, index) => `Bot ${index + 1}`),
+
   datasets: [
     {
       label: 'Registros procesados hoy',
