@@ -85,7 +85,7 @@ const tableroFunctions = useTableroFunctions()
 // ======================
 // DATOS MOCK
 // ======================
-const dataMock = {
+/*const dataMock = {
   semanal: [
     { label: 'Sem 1', valor: 13.2 },
     { label: 'Sem 2', valor: 12.8 },
@@ -97,7 +97,7 @@ const dataMock = {
     { label: 'Nov', valor: 12.3 },
     { label: 'Dic', valor: 13.8 },
   ]
-}
+}*/
 
 const modo = ref('semanal')
 const botSeleccionado = ref('')
