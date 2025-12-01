@@ -63,7 +63,7 @@ const chartOptions = {
 
 onMounted(async () => {
   await analitycsStore.loadEnviosHistoriasClinicas()
-  console.log('historias: ',enviosHistoriasClinicas.value);
+  //console.log('historias: ',enviosHistoriasClinicas.value);
 })
 
 </script>

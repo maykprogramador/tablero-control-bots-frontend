@@ -24,6 +24,7 @@ export const useAnalyticsStore = defineStore('analytics-store', {
     registrosPorBot: [],
     procesadosPorMaquina: [],
     enviosHistoriasClinicas: { semanal: [], mensual: [] },
+    tiemposEjecucion: { semanal: [], mensual: [] },
     // Para gráficos futuros
     /*registrosPorBot: [],
     tortaEstados: [],
@@ -64,6 +65,18 @@ export const useAnalyticsStore = defineStore('analytics-store', {
         this.enviosHistoriasClinicas = data
       } catch (err) {
         console.error("Error loading envios de historias clinicas:", err)
+      }
+    },
+    async loadTiemposEjecucion(modo, bot_id, maquina_id) {
+      try {
+        const { data } = await axiosInstance.get(`tiempos-ejecucion`, {
+          params: { modo, bot_id, maquina_id }
+        })
+        this.tiemposEjecucion = data
+        // Aquí puedes decidir cómo almacenar o procesar los datos recibidos
+        console.log("Tiempos de ejecución:", data)
+      } catch (err) {
+        console.error("Error loading tiempos de ejecución:", err)
       }
     }
   }

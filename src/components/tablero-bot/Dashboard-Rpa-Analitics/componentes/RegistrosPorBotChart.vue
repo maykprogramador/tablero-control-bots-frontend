@@ -116,7 +116,7 @@ const LIMITE_INICIAL = 4
 
 onMounted(async() => {
   await analitycsStore.loadRegistrosBots()
-  console.log(registrosPorBot.value)
+  //console.log(registrosPorBot.value)
   
   botsSeleccionados.value = registrosPorBot.value
     .slice(0, LIMITE_INICIAL)

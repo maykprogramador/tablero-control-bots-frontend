@@ -65,6 +65,7 @@
           <RegistrosPorBotChart />
           <RegistrosPorMaquinaChart />
           <HistoriasEnviosChart />
+          <TiemposEjecucionChart class="col-span-2"/>
         </div>
         
       </section>
@@ -122,6 +123,7 @@ import {
 } from 'chart.js'
 import { Bar, Line, Doughnut } from 'vue-chartjs'
 import HistoriasEnviosChart from './componentes/HistoriasEnviosChart.vue'
+import TiemposEjecucionChart from './componentes/TiemposEjecucionChart.vue'
 
 // --- CHART REGISTRATION ---
 ChartJS.register(
