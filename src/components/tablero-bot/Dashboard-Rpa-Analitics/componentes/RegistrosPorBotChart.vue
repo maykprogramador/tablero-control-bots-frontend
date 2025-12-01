@@ -165,9 +165,12 @@ const datosFiltrados = computed(() =>
   registrosPorBot.value.filter(bot => botsSeleccionados.value.includes(bot.bot))
 )
 
+const nombresReales = computed(() =>
+  datosFiltrados.value.map(b => b.bot)
+)
+
 const chartData = computed(() => ({
   labels: datosFiltrados.value.map((_, index) => `Bot ${index + 1}`),
-
   datasets: [
     {
       label: 'Registros procesados hoy',
@@ -183,34 +186,23 @@ const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   scales: {
-    y: {
-      display: false, //   Oculta todo el eje Y (línea, números y espacio reservado)
-      beginAtZero: true
-    },
-    x: {
-      ticks: { 
-        color: '#6b7280',
-        maxRotation: 45,
-        minRotation: 0,
-        font: { size: 12 }
-      },
-      grid: { display: false },
-      border: { display: true, color: '#e5e7eb' } // Mantiene solo la línea sutil de abajo
-    }
+    y: { display: false, beginAtZero: true },
+    x: { grid: { display: false }, ticks: { color: '#6b7280' } }
   },
   plugins: {
-    legend: {
-      display: false //  esto limpia más el gráfico
-    },
+    legend: { display: false },
     tooltip: {
-      enabled: true // Mantiene los tooltips al pasar el mouse
-    },
-    title: {
-      display: false
+      callbacks: {
+        title: (tooltipItems) => {
+          const idx = tooltipItems[0].dataIndex
+          return nombresReales.value[idx]  // NOMBRE REAL
+        },
+        label: (tooltipItem) => {
+          return `Registros: ${tooltipItem.raw}`
+        }
+      }
     }
-  },
-  // Opcional: Para hacer las barras un poco más gorditas como en la imagen 2
-  categoryPercentage: 0.8,
-  barPercentage: 0.9
+  }
 }
+
 </script>
