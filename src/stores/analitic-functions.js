@@ -74,10 +74,21 @@ export const useAnalyticsStore = defineStore('analytics-store', {
         })
         this.tiemposEjecucion = data
         // Aquí puedes decidir cómo almacenar o procesar los datos recibidos
-        console.log("Tiempos de ejecución:", data)
+        //console.log("Tiempos de ejecución:", data)
       } catch (err) {
         console.error("Error loading tiempos de ejecución:", err)
       }
+    },
+    async loadDistribucionEstados(bot_id) {
+      try {
+        const { data } = await axiosInstance.get(`distribucion-estados`, {
+          params: { bot_id }
+        })
+        return data
+      } catch (err) {
+        console.error("Error loading distribución de estados:", err)
+        return { exito: 0, error: 0, pendiente: 0 }
+      }
     }
-  }
+  },
 })

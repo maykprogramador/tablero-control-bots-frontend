@@ -100,8 +100,8 @@ const tableroFunctions = useTableroFunctions()
 }*/
 
 const modo = ref('semanal')
-const botSeleccionado = ref('')
-const maquinaSeleccionada = ref('')
+const botSeleccionado = ref(1)
+const maquinaSeleccionada = ref(1)
 
 const { tiemposEjecucion } = storeToRefs(analitycsStore)
 const { botsDisponibles } = storeToRefs(tableroFunctions)
@@ -123,8 +123,8 @@ watch([modo, botSeleccionado, maquinaSeleccionada], () => {
 
 onMounted(async () => {
   await tableroFunctions.getAllBots()
-  console.log('bots: ', botsDisponibles.value);
-  
+  await analitycsStore.loadTiemposEjecucion( modo.value, botSeleccionado.value, maquinaSeleccionada.value )
+  //console.log('bots: ', botsDisponibles.value);
 })
 
 // chartOptions declarado como objeto estable

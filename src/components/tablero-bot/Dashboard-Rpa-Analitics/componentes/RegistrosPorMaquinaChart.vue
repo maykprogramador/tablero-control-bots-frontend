@@ -126,6 +126,12 @@ const { procesadosPorMaquina } = storeToRefs(analyticsStore)
 
 onMounted(async () => {
   await analyticsStore.loadProcesadosPorMaquina()
+
+  const primerBotValido = procesadosPorMaquina.value.find(
+    b => b.maquinas.some(m => m.procesados > 1)
+  )
+
+  botSeleccionado.value = primerBotValido?.bot || procesadosPorMaquina.value[0]?.bot
 })
 
 /*const procesadosPorMaquina = ref([
@@ -169,7 +175,7 @@ onMounted(async () => {
 ])*/
 
 // Bot seleccionado (por defecto el primero)
-const botSeleccionado = ref(procesadosPorMaquina.value[0]?.bot)
+const botSeleccionado = ref(null)
 const mostrarSelector = ref(false)
 const busqueda = ref('')
 

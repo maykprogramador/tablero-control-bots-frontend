@@ -117,10 +117,12 @@ const LIMITE_INICIAL = 4
 onMounted(async() => {
   await analitycsStore.loadRegistrosBots()
   //console.log(registrosPorBot.value)
-  
-  botsSeleccionados.value = registrosPorBot.value
+  // Filtrar solo bots con más de 1 registro
+  const botsConRegistros = registrosPorBot.value.filter(b => b.registros > 1);
+  // Tomar solo los primeros
+  botsSeleccionados.value = botsConRegistros
     .slice(0, LIMITE_INICIAL)
-    .map(b => b.bot)
+    .map(b => b.bot);
 })
 
 const botsFiltrados = computed(() => {
