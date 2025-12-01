@@ -53,6 +53,7 @@
 
       <!-- Botón Monitoreo -->
       <button
+        v-if="user && user.rol === 'admin'"
         @click="$emit('update:selectedTab', 'monitoreo')"
         :class="[ 
           'flex items-center px-6 py-3 text-sm font-medium focus:outline-none transition-all whitespace-nowrap',
@@ -71,6 +72,10 @@
 <script setup>
 import { defineProps, defineEmits } from 'vue'
 import { BellDot, ActivityIcon } from 'lucide-vue-next'
+import { useAuthStore } from '@/stores/Autentificate/auth'
+
+const userStore = useAuthStore()
+const user = userStore.user
 
 defineProps({
   selectedTab: {

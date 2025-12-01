@@ -213,13 +213,10 @@
           <div v-if="selectedTab === 'notificaciones'"> 
             <NotificacionDashboard :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
           </div>
-          <div v-if="selectedTab === 'monitoreo'"> 
+          <div v-if="selectedTab === 'monitoreo' && user.rol === 'admin'"> 
             <AnaliticsRPA2 />
           </div>
-          <!-- Registros Solicitados Section
-          <div v-if="selectedTab === 'historias'"> 
-            <DashboardHistoriaClinica />
-          </div> -->
+
         </div>
         <!-- Right Panel -->
         <div v-if="mostrarRightPanel()" class="space-y-8">
