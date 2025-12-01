@@ -4,23 +4,15 @@ import { storeToRefs } from 'pinia'
 import { useAnalyticsStore } from '@/stores/analitic-functions'
 import { Line } from "vue-chartjs"
 
+// store del tablero para modo oscuro
+import { useTableroFunctions } from '@/stores/tablero-functions'
+const tableroFunctions = useTableroFunctions()
+const { isDark: isDarkMode } = storeToRefs(tableroFunctions)
+
 const analitycsStore = useAnalyticsStore()
 const { enviosHistoriasClinicas } = storeToRefs(analitycsStore)
+
 const modo = ref("semanal") // default
-/*const data = {
-  semanal: [
-    { label: "Sem 1", valor: 120 },
-    { label: "Sem 2", valor: 200 },
-    { label: "Sem 3", valor: 150 },
-    { label: "Sem 4", valor: 320 }
-  ],
-  mensual: [
-    { label: "Ene", valor: 450 },
-    { label: "Feb", valor: 380 },
-    { label: "Mar", valor: 520 },
-    { label: "Abr", valor: 610 }
-  ]
-}*/
 
 const chartData = computed(() => {
   const dataset = enviosHistoriasClinicas.value[modo.value]
@@ -34,16 +26,21 @@ const chartData = computed(() => {
         borderWidth: 3,
         tension: 0.4,
         fill: true,
-        borderColor: "#0ea5e9",       // azul suave
-        backgroundColor: "rgba(14,165,233,0.2)", // área suave
-        pointBackgroundColor: "#0ea5e9",
+
+        // 🎨 colores dependientes del modo oscuro
+        borderColor: isDarkMode.value ? "#38bdf8" : "#0ea5e9",
+        backgroundColor: isDarkMode.value
+          ? "rgba(56,189,248,0.15)"
+          : "rgba(14,165,233,0.2)",
+        pointBackgroundColor: isDarkMode.value ? "#38bdf8" : "#0ea5e9",
+
         pointRadius: 5
       }
     ]
   }
 })
 
-const chartOptions = {
+const chartOptions = computed(() => ({
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -52,33 +49,53 @@ const chartOptions = {
   scales: {
     y: {
       beginAtZero: false,
-      grid: { color: "rgba(0,0,0,0.05)" },
-      ticks: { padding: 8 }
+
+      grid: {
+        color: isDarkMode.value
+          ? "rgba(255,255,255,0.08)"
+          : "rgba(0,0,0,0.05)"
+      },
+
+      ticks: {
+        padding: 8,
+        color: isDarkMode.value ? "#d1d5db" : "#374151"
+      }
     },
     x: {
-      grid: { display: false }
+      grid: { display: false },
+      ticks: {
+        color: isDarkMode.value ? "#d1d5db" : "#374151"
+      }
     }
   }
-}
+}))
 
 onMounted(async () => {
   await analitycsStore.loadEnviosHistoriasClinicas()
-  //console.log('historias: ',enviosHistoriasClinicas.value);
 })
 
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl shadow p-6 space-y-4">
+  <div
+    class="rounded-2xl shadow p-6 space-y-4 transition-colors duration-300"
+    :class="isDarkMode ? 'dark:bg-slate-800 border border-slate-700' : 'bg-white'"
+  >
 
     <div class="flex justify-between items-center">
-      <h2 class="text-sm font-bold text-slate-600 uppercase">
+      <h2
+        class="text-sm font-bold uppercase transition-colors duration-300"
+        :class="isDarkMode ? 'text-slate-300' : 'text-slate-600'"
+      >
         Envíos Historias Clínicas
       </h2>
 
       <select
         v-model="modo"
-        class="px-2 py-1 border border-slate-300 rounded-lg text-sm"
+        class="px-2 py-1 border rounded-lg text-sm transition-colors duration-300"
+        :class="isDarkMode
+          ? 'bg-slate-800 border-slate-600 text-slate-200'
+          : 'bg-white border-slate-300 text-slate-700'"
       >
         <option value="semanal">Semanal</option>
         <option value="mensual">Mensual</option>

@@ -50,13 +50,27 @@
         <BellDot class="w-5 h-5 mr-1"/>
         Notificaciones
       </button>
+
+      <!-- Botón Monitoreo -->
+      <button
+        @click="$emit('update:selectedTab', 'monitoreo')"
+        :class="[ 
+          'flex items-center px-6 py-3 text-sm font-medium focus:outline-none transition-all whitespace-nowrap',
+          selectedTab === 'monitoreo'
+            ? 'border-b-2 border-[#A65C99] text-[#9e378b]'
+            : 'text-gray-600 dark:text-slate-200 hover:text-[#9e378b]'
+        ]"
+      >
+        <ActivityIcon class="w-5 h-5 mr-1" />
+        Monitor
+      </button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { defineProps, defineEmits } from 'vue'
-import { BellDot } from 'lucide-vue-next'
+import { BellDot, ActivityIcon } from 'lucide-vue-next'
 
 defineProps({
   selectedTab: {

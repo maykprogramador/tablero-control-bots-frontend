@@ -3,7 +3,6 @@
     <div>
       <div class="flex items-center justify-between h-16 px-6">
         <!-- Sección Izquierda: Branding -->
-        
         <h1 @click="$emit('update:selectedTab', 'bots')" class="text-4xl font-semibold tracking-tight cursor-pointer">
           <span class="text-[#FF5F3F]">Heli</span><span class="text-white">xa</span>
           <span class="bg-[#FF5F3F] text-white text-sm font-bold rounded px-2 py-0.5 ml-1 align-top">SGB</span>
@@ -11,6 +10,13 @@
 
         <!-- Sección  Desktop -->
         <div class="hidden md:flex items-center space-x-4">
+          <!-- FECHA -->
+          <div class="hidden md:flex items-center gap-2 px-3 py-1.5  bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 text-white" >
+            <CalendarIcon class="w-4 h-4 text-white/80" />
+            <span class="text-sm font-medium text-white/90">
+              {{ currentDate }}
+            </span>
+          </div>
           <!-- Botón Modo Oscuro / Claro -->
           <button @click="toggleDarkMode" class="relative p-2 rounded-lg text-white hover:text-blue-200 hover:bg-white/10 transition-all duration-300 ease-in-out flex items-center justify-center" :class="{ 'rotate-360': isDark }" title="Cambiar tema" >
             <transition name="fade" mode="out-in">
@@ -267,7 +273,7 @@ const { notificaciones } = storeToRefs(notificacionStore)
 const { isDark } = storeToRefs(tableroFunctions)
 
 //iconos de vue
-import { Settings, LogOut, User, Bell, CircleCheck, CircleX, TriangleAlert, Info, Trash, CheckCheck } from 'lucide-vue-next'
+import { Settings, LogOut, User, Bell, CircleCheck, CircleX, TriangleAlert, Info, Trash, CheckCheck, CalendarIcon } from 'lucide-vue-next'
 import { timeAgo } from '@/utils/TimeAgo'
 import { capitalizarNombre } from '@/utils/CapitalizarNombre'
 
@@ -277,6 +283,8 @@ const showUserMenu = ref(false)
 const showMobileMenu = ref(false)
 const notificationCount = ref(0)
 const showMenuAcciones = ref(false)
+const currentDate = new Date().toLocaleDateString('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+
 
 // Datos de notificaciones
 /*

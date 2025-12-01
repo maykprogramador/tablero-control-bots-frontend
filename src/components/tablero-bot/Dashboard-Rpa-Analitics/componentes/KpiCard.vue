@@ -1,43 +1,34 @@
 <template>
-  <div class="relative bg-gradient-to-br from-slate-700 to-slate-800 rounded-2xl p-6 border border-slate-600 shadow-xl overflow-hidden group hover:shadow-2xl hover:-translate-y-1 transition-all duration-300" >
+  <div
+    class="relative rounded-2xl p-6 border shadow-xl overflow-hidden group transition-all duration-300 bg-white border-slate-200 hover:shadow-2xl hover:-translate-y-1 dark:bg-gradient-to-br dark:from-slate-700 dark:to-slate-800 dark:border-slate-600" >
     <!-- Background Hover Effect -->
-    <div
-      class="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-300"
-      :style="{ backgroundImage: `linear-gradient(135deg, var(--color-${color}), transparent)` }"
-    ></div>
-
+    <div class="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 dark:group-hover:opacity-5" :style="{ backgroundImage: `linear-gradient(135deg, var(--color-${color}), transparent)` }" ></div>
     <!-- Content -->
     <div class="relative z-10">
-
       <!-- Icon -->
-      <div :class="`w-12 h-12 rounded-xl bg-${color}-500/20 flex items-center justify-center mb-4`">
-        <component :is="computedIcon" class="w-6 h-6" :class="`text-${color}-400`" />
+      <div :class="`w-12 h-12 rounded-xl flex items-center justify-center mb-4 bg-${color}-500/10 text-${color}-600 dark:bg-${color}-500/20 dark:text-${color}-400 `" >
+        <component :is="computedIcon" class="w-6 h-6" />
       </div>
-
       <!-- Title -->
-      <p class="text-sm font-medium text-slate-400 mb-2 uppercase tracking-wide">{{ title }}</p>
-
+      <p class="text-sm font-medium uppercase tracking-wide mb-2 text-slate-600 dark:text-slate-400" >
+        {{ title }}
+      </p>
       <!-- Value + Trend -->
       <div class="flex items-end justify-between">
-
-        <h3 class="text-3xl font-bold text-white">
+        <h3 class="text-3xl font-bold text-slate-800 dark:text-white" >
           {{ formattedValue }}
         </h3>
 
-        <div
-          v-if="trend !== null && trend !== undefined"
-          :class="trend >= 0 ? 'text-green-400' : 'text-red-400'"
-          class="text-sm font-semibold flex items-center gap-1"
-        >
+        <div v-if="trend !== null && trend !== undefined" :class="trend >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'" class="text-sm font-semibold flex items-center gap-1" >
           <span v-if="trend >= 0">▲</span>
           <span v-else>▼</span>
           {{ Math.abs(trend) }}%
         </div>
-
       </div>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'

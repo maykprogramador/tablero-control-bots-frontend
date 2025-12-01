@@ -5,7 +5,7 @@
       <HeaderTablero :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
       <!-- Main Content -->
       <perfil v-if="selectedTab === 'perfil'"/>
-      <div v-else :class="[selectedTab !== 'notificaciones'? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 dark:bg-black transition-colors duration-300 gap-8 sm:p-4 lg:p-10">
+      <div v-else :class="[mostrarRightPanel()? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_350px]': '']" class="bg-slate-50 dark:bg-black transition-colors duration-300 gap-8 sm:p-4 lg:p-10">
         <!-- Left Panel - Monitoring -->
         <div class="space-y-8">
           <!-- NAVBAR -->
@@ -213,13 +213,16 @@
           <div v-if="selectedTab === 'notificaciones'"> 
             <NotificacionDashboard :openModalOption="openModal" v-model:selectedTab="selectedTab"/>
           </div>
+          <div v-if="selectedTab === 'monitoreo'"> 
+            <AnaliticsRPA2 />
+          </div>
           <!-- Registros Solicitados Section
           <div v-if="selectedTab === 'historias'"> 
             <DashboardHistoriaClinica />
           </div> -->
         </div>
         <!-- Right Panel -->
-        <div v-if="selectedTab !== 'notificaciones'" class="space-y-8">
+        <div v-if="mostrarRightPanel()" class="space-y-8">
           <!-- Torre de Control -->
           <div class="bg-white dark:bg-[#21292eae] dark:border-slate-800 rounded-xl shadow-md p-6 border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
             <div class="flex items-center mb-5 pb-4 border-b-2 border-gray-100 dark:border-slate-600">
@@ -487,6 +490,7 @@ import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import ModalNewBot from './Modal-New-Bot.vue';
 import DashboardAutorizaciones from './autorizacion/Dashboard-Autorizaciones.vue';
+import AnaliticsRPA2 from './Dashboard-Rpa-Analitics/Analitics-RPA2.vue';
 
 // Stores--------------------------------------------------------------------------------------
 const authStore = useAuthStore()
@@ -886,6 +890,10 @@ const closeModalHistoriaCLinica = () => {
 function descargarFormato() {
   tableroFunctions.descargarFormato()
 }
+
+const mostrarRightPanel = () => {
+  return selectedTab.value !== 'notificaciones' && selectedTab.value !== 'monitoreo';
+};
 
 
 function resetControlSelected () {
