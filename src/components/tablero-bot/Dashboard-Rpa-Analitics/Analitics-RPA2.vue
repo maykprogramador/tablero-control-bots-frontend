@@ -27,12 +27,6 @@
       </section>
       <!-- SECCIÓN 2: GRÁFICOS       -->
       <section id="charts-section" class="space-y-4 ">
-        <!-- Más adelante insertaremos:
-          - Gráfica de barras
-          - Gráfica de líneas
-              - Donut de distribución
-              - Comparativas
-            -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <RegistrosPorBotChart />
           <RegistrosPorMaquinaChart />
