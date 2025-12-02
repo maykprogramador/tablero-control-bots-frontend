@@ -816,7 +816,7 @@ const loadBots = async() => {
 
 const ejecutarBot = async () => { 
   //console.log('ejecutar bot: ', formInactivation.value);
-
+  // Lógica para los bots de retiro de usuario aqui
   if (formInactivation.value !== null && formInactivation.value.length > 0) {
     //console.log('registros a inactivar: ', formInactivation.value);
     if(user.value.cargo){
@@ -834,9 +834,18 @@ const ejecutarBot = async () => {
       selectedTab.value = 'perfil';
     }
   }
-
-  if (control.archivo != null) {
-    console.log('archivo a procesar: ', control.archivo);
+  // Lógica para los bots de carga masiva aqui
+  if (control.archivo != null && BOTS_MASIVOS.includes(selectedBotName.value)) {
+    console.log('archivo a procesar: ', control.archivo, 'bot: ', control.selectedBot);
+    try {
+      const response = await tableroFunctions.cargarNotasCredito(control.selectedBot, control.archivo);
+      // Reiniciar el control después de la carga
+     // resetControlSelected();
+      alert(response);
+      //tableroFunctions.setExecuteBot(false);
+    } catch (error) {
+      alert(error.response.data.error);
+    }
   }
   // Lógica para ejecutar el bot de patologias aqui
   if (selectedBotName.value === BOT_TYPES.SOPORTE_PATOLOGIA && selectedDate.value) {

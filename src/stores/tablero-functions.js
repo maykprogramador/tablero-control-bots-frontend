@@ -402,7 +402,24 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         alert('❌ No se pudo reprocesar la trazabilidad.');
       }
     },
-    
+
+    async cargarNotasCredito(bot_id, file) {
+      try {
+        console.log('bot_id: ', bot_id, 'archivo: ', file);
+
+        const formData = new FormData();
+        formData.append('archivo', file);
+
+        const response = await axiosInstance.post('cargar/notas-credito', formData,
+          { params: { bot_id }, headers: { 'Content-Type': 'multipart/form-data' } });
+        return response.data.message;
+      } catch (error) {
+        console.error('Error al cargar las notas crédito:', error);
+        throw error;
+      }
+    },
+
+
     iniciarSocket() { 
       socket.on('nuevo_registro', (registro, bot, solicitud) => {
         //console.log('registro recibido desde el store: ', registro);
@@ -583,7 +600,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     },
 
     descargarFormato() {
-      window.open(`${API_BASE_URL_BACK}/bots/descargar-formato`, '_blank');
+      window.open(`${API_BASE_URL_BACK}/api/bots/descargar-formato`, '_blank');
     },
     
     resetState() {
