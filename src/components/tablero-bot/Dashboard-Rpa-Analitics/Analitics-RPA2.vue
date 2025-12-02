@@ -31,8 +31,9 @@
           <RegistrosPorBotChart />
           <RegistrosPorMaquinaChart />
           <HistoriasEnviosChart />
-          <TiemposEjecucionChart class="col-span-2"/>
+          <TiemposEjecucionChart class="col-span-1 lg:col-span-2"/>
           <DistribucionEstadosChart />
+          <TendenciaInactivaciones class="col-span-1 lg:col-span-2"/>
         </div>
         
       </section>
@@ -89,6 +90,7 @@ import { Bar, Line, Doughnut } from 'vue-chartjs'
 import HistoriasEnviosChart from './componentes/HistoriasEnviosChart.vue'
 import TiemposEjecucionChart from './componentes/TiemposEjecucionChart.vue'
 import DistribucionEstadosChart from './componentes/DistribucionEstadosChart.vue'
+import TendenciaInactivaciones from './componentes/TendenciaInactivaciones.vue'
 
 // --- CHART REGISTRATION ---
 ChartJS.register(

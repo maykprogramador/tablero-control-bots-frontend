@@ -1,23 +1,23 @@
 <template>
   <div
     class="rounded-2xl shadow-lg border p-6 transition-colors duration-300"
-    :class="isDark ? 'dark:bg-slate-800 dark:border-slate-700' : 'bg-gradient-to-br from-white to-slate-50 border-slate-200/50'" >
-    <div class="flex justify-between items-center mb-6">
+    :class="isDark ? 'dark:bg-slate-800 dark:border-slate-700' : 'bg-gradient-to-br from-white to-slate-50 border-slate-200/50'" 
+  >
+    <div class="flex flex-wrap justify-between items-center mb-6 gap-3 md:gap-6">
       <h3
-        class="text-sm font-bold uppercase tracking-wide flex items-center gap-2 transition-colors duration-300"
+        class="text-sm font-bold uppercase tracking-wide flex items-center gap-2 transition-colors duration-300 flex-1 min-w-[180px]"
         :class="isDark ? 'text-slate-200' : 'text-slate-700'"
       >
-        <svg class="w-4 h-4" :class="isDark ? 'text-emerald-400' : 'text-emerald-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24" >
+        <svg class="w-4 h-4" :class="isDark ? 'text-emerald-400' : 'text-emerald-500'" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
-
         Tiempos de Ejecución Promedio
       </h3>
 
-      <div class="flex items-center gap-3">
-        <!-- Selector Semanal/Mensual -->
+      <div class="flex flex-wrap gap-2 md:gap-3 items-center w-full md:w-auto">
+        <!-- Selector Semanal/Mensual/Anual -->
         <div
-          class="flex rounded-lg p-1 gap-1 transition-colors duration-300"
+          class="flex flex-wrap rounded-lg p-1 gap-1 transition-colors duration-300"
           :class="isDark ? 'bg-slate-700' : 'bg-slate-100'"
         >
           <button 
@@ -69,12 +69,14 @@
             Anual
           </button>
         </div>
+
         <!-- Selector de Bot -->
-        <div class="relative">
+        <div class="relative flex-1 min-w-[160px]">
           <select
             v-model="botSeleccionado"
-            class="w-36 appearance-none text-sm rounded-lg pl-3 pr-10 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 cursor-pointer shadow-sm"
-            :class="isDark ? 'bg-slate-800 border border-slate-600 text-slate-200 hover:border-slate-500' : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-400'" >
+            class="w-full appearance-none text-sm rounded-lg pl-3 pr-10 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 cursor-pointer shadow-sm"
+            :class="isDark ? 'bg-slate-800 border border-slate-600 text-slate-200 hover:border-slate-500' : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-400'" 
+          >
             <option disabled value="">Seleccionar bot</option>
             <option v-for="b in botsDisponibles" :key="b.id" :value="b.id">
               {{ b.nombre }}
@@ -87,13 +89,15 @@
             </svg>
           </div>
         </div>
+
         <!-- Selector de Máquina -->
         <transition enter-active-class="transition-all duration-300 ease-out" enter-from-class="opacity-0 transform scale-95" enter-to-class="opacity-100 transform scale-100" leave-active-class="transition-all duration-200 ease-in" leave-from-class="opacity-100 transform scale-100" leave-to-class="opacity-0 transform scale-95" >
-          <div v-if="botSeleccionado" class="relative">
+          <div v-if="botSeleccionado" class="relative flex-1 min-w-[140px]">
             <select
               v-model="maquinaSeleccionada"
-              class="w-32 appearance-none text-sm rounded-lg pl-3 pr-10 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 cursor-pointer shadow-sm"
-              :class="isDark ? 'bg-slate-800 border border-slate-600 text-slate-200 hover:border-slate-500' : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-400'" >
+              class="w-full appearance-none text-sm rounded-lg pl-3 pr-10 py-2 font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 cursor-pointer shadow-sm"
+              :class="isDark ? 'bg-slate-800 border border-slate-600 text-slate-200 hover:border-slate-500' : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-400'" 
+            >
               <option disabled value="">Seleccionar máquina</option>
               <option v-for="m in maquinasDelBot" :key="m.id" :value="m.id">
                 Máquina {{ m.id }}
@@ -107,9 +111,9 @@
             </div>
           </div>
         </transition>
-
       </div>
     </div>
+
     <!-- Contenedor gráfico -->
     <div class="h-[260px]">
       <Line :data="chartData" :options="chartOptions" />

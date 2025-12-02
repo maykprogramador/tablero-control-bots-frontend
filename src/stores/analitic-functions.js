@@ -24,7 +24,8 @@ export const useAnalyticsStore = defineStore('analytics-store', {
     registrosPorBot: [],
     procesadosPorMaquina: [],
     enviosHistoriasClinicas: { semanal: [], mensual: [], anual: [] },
-    tiemposEjecucion: { semanal: [], mensual: [], anual: [] }
+    tiemposEjecucion: { semanal: [], mensual: [], anual: [] },
+    solicitudesInactivacion: { semanal: [], mensual: [], anual: [] }
   }),
 
   actions: {
@@ -86,6 +87,14 @@ export const useAnalyticsStore = defineStore('analytics-store', {
       } catch (err) {
         console.error("Error loading distribución de estados:", err)
         return { exito: 0, error: 0, pendiente: 0 }
+      }
+    },
+    async loadSolicitudesInactivacion(modo) {
+      try {
+        const { data } = await axiosInstance.get(`solicitudes-inactivacion`, { params: { modo } })
+        this.solicitudesInactivacion = data
+      } catch (err) {
+        console.error("Error loading solicitudes de inactivación:", err)
       }
     }
   },

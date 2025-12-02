@@ -3,7 +3,7 @@
     <!-- TITULO + SELECT A LA DERECHA -->
     <div class="flex items-start justify-between mb-4">
       <!-- TÍTULO -->
-      <h3 class="text-sm font-bold text-slate-600 dark:text-slate-300 flex items-center gap-2">
+      <h3 class="text-sm uppercase font-bold text-slate-600 dark:text-slate-300 flex items-center gap-2">
         <PieChartIcon class="text-purple-500" />
         Distribución de Estado
       </h3>
