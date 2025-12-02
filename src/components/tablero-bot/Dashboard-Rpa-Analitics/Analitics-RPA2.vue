@@ -53,25 +53,6 @@ const { kpis } = storeToRefs(analitycsStore)
 import KpiCard from './componentes/KpiCard.vue'
 import RegistrosPorBotChart from './componentes/RegistrosPorBotChart.vue'
 import RegistrosPorMaquinaChart from './componentes/RegistrosPorMaquinaChart.vue'
-import { 
-  Activity as ActivityIcon, 
-  Calendar as CalendarIcon, 
-  Bell as BellIcon, 
-  TrendingUp as TrendingUpIcon,
-  PieChart as PieChartIcon,
-  Search as SearchIcon,
-  Filter as FilterIcon,
-  Download as DownloadIcon,
-  MoreHorizontal as MoreHorizontalIcon,
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-  Zap as ZapIcon,
-  AlertOctagon as AlertIcon,
-  CheckCircle2 as CheckIcon,
-  Server as ServerIcon,
-  Flame as FlameIcon,
-  FileCheck as FileCheckIcon
-} from 'lucide-vue-next'
 
 import {
   Chart as ChartJS,
@@ -86,7 +67,7 @@ import {
   Legend,
   Filler
 } from 'chart.js'
-import { Bar, Line, Doughnut } from 'vue-chartjs'
+
 import HistoriasEnviosChart from './componentes/HistoriasEnviosChart.vue'
 import TiemposEjecucionChart from './componentes/TiemposEjecucionChart.vue'
 import DistribucionEstadosChart from './componentes/DistribucionEstadosChart.vue'
