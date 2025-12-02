@@ -297,7 +297,7 @@
               </button>
             </div>
 
-            <!-- funcionalidad para el soporte de patologias-->
+            <!-- funcionalidad para el soporte de patologias
             <div v-if="selectedBotName === BOT_TYPES.SOPORTE_PATOLOGIA" class="max-w-md mx-auto p-6 bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  rounded-xl shadow-lg">
               <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-slate-200">
                 Selecciona una fecha
@@ -318,7 +318,7 @@
                 Fecha seleccionada:
                 <strong>{{ selectedDate.toLocaleDateString() }}</strong>
               </p>
-            </div>
+            </div>-->
 
             <!-- Execute Button -->
             <button
@@ -594,6 +594,10 @@ onMounted(async () => {
   );*/
 });
 
+const botsOfSelect = () => { 
+  return bots.value.filter(b => b.id !== 8);
+}
+
 const toggleMenuMaquinas = (botId) => {
   maquinaMenuAbierto.value = maquinaMenuAbierto.value === botId ? null : botId
 }
@@ -661,10 +665,10 @@ const botEstado = computed(() => {
     return 'archivo'
   }
 
-  if (selectedBotName.value === BOT_TYPES.SOPORTE_PATOLOGIA ) {
+  /*if (selectedBotName.value === BOT_TYPES.SOPORTE_PATOLOGIA ) {
     if (!selectedDate.value) return 'pendiente_fecha'
     if (selectedDate.value) return 'ejecutable_p'
-  }
+  }*/
 })
 const filters = reactive({
   date: '2025-01-28',
@@ -802,8 +806,8 @@ async function handleDateSelect(date) {
 // funcion para cargar los bots 
 const loadBots = async() => { 
   try {
-    await tableroFunctions.loadbots({ user_id: user.value.user_id, rol: user.value.rol })
-    console.log('Bots cargados:', bots.value);
+    await tableroFunctions.loadbots({ user_id: user.value.user_id })
+    //console.log('Bots cargados:', bots.value);
     
   } catch (err) {
     console.error('Error al cargar los bots:', err)

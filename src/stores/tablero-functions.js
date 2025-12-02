@@ -54,14 +54,9 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     closeModal() {
       this.isModalOpen = false
     },
-    async loadbots({ user_id, rol }) {
+    async loadbots({ user_id }) {
       try {
-        const response = await axiosInstance.get('get', {
-          params: {
-            user_id,
-            rol
-          }
-        });
+        const response = await axiosInstance.get('get');
         this.bots = response.data;
         this.inicializarMetricas(this.bots);
         //carga las métricas desde la API
@@ -288,7 +283,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     // cargar las fechas de soporte patologia con error  o listo
     async LoadFechasSoportePatologia() {
       try {
-        const { data } = await axiosInstance.get('logs/fechas', { params: { estado: 'error' } });
+        const { data } = await axiosInstance.get('logs/fechas', { params: { estado: 'error', bot_id: 8} });
         return data;
       } catch (error) {
         console.error('Error al cargar las fechas de soporte patologia:', error);
