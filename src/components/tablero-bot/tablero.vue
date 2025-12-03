@@ -304,19 +304,8 @@
                     {{ control.fileName || 'Arrastrar archivo aquí o usar el botón' }}
                   </div>
 
-                  <input
-                    type="file"
-                    ref="fileInput"
-                    @change="handleFileChange"
-                    class="hidden"
-                    accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                  />
-
-                  <button
-                    type="button"
-                    @click="triggerFileSelect"
-                    class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600"
-                  >
+                  <input type="file" ref="fileInput" @change="handleFileChange" class="hidden" accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                  <button type="button" @click="triggerFileSelect" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600" >
                     Seleccionar archivo
                   </button>
                 </div>
@@ -325,51 +314,25 @@
             </div>
             <!-- Botón de Registro solo para los bots de retiro de usuario -->
             <div class="mb-6">
-              <button v-if="BOTS_RETIRO.includes(selectedBotName)" @click="openDeactivationModal" class="w-full cursor-pointer flex items-center justify-center px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200" >
+              <button v-if="BOTS_RETIRO.includes(selectedBotName) && !control.archivo" @click="openDeactivationModal" class="w-full cursor-pointer flex items-center justify-center px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200" >
                 <span class="text-lg mr-2">📝</span>
                 Registrar personas a inactivar
               </button>
             </div>
+            <!-- Botón de carga de archivo solo para los bots de retiro de usuario -->
             <div class="mb-6">
               <!-- Input oculto -->
-              <input
-                type="file"
-                ref="fileInput"
-                @change="handleFileChange"
-                class="hidden"
-                accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-              />
-
+              <input type="file" ref="fileInput" @change="handleFileChange" class="hidden" accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
               <!-- Botón para cargar archivo -->
               <button 
-                v-if="!control.archivo && BOTS_RETIRO.includes(selectedBotName)"
-                @click="triggerFileSelect"
-                class="w-full group flex items-center justify-center px-4 py-3 
-                      bg-white dark:bg-slate-800 
-                      border-2 border-dashed border-indigo-300 dark:border-indigo-700 
-                      hover:border-indigo-500 dark:hover:border-indigo-500 
-                      text-indigo-600 dark:text-indigo-400 
-                      font-medium rounded-xl 
-                      transition-all duration-300 
-                      hover:bg-indigo-50 dark:hover:bg-indigo-900/20 
-                      hover:shadow-md 
-                      focus:outline-none focus:ring-4 focus:ring-indigo-100"
-              >
+                v-if="!control.archivo && BOTS_RETIRO.includes(selectedBotName) && formInactivation.length === 0" @click="triggerFileSelect" class="w-full group flex items-center justify-center px-4 py-3 bg-white dark:bg-slate-800 border-2 border-dashed border-indigo-300 dark:border-indigo-700 hover:border-indigo-500 dark:hover:border-indigo-500 text-indigo-600 dark:text-indigo-400 font-medium rounded-xl transition-all duration-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-100">
                 <UploadCloud class="w-6 h-6 mr-2 transition-transform duration-300 group-hover:-translate-y-1" />
                 <span>Cargar usuarios a inactivar</span>
               </button>
-
               <!-- Tarjeta elegante cuando ya hay archivo -->
               <div 
-                v-else-if="control.archivo"
-                class="flex items-center gap-3 p-4 mt-2 
-                      bg-indigo-50 dark:bg-indigo-900/20
-                      border border-indigo-300 dark:border-indigo-700
-                      text-indigo-700 dark:text-indigo-300
-                      rounded-xl shadow-sm animate-fadeIn"
-              >
+                v-else-if="control.archivo" class="flex items-center gap-3 p-4 mt-2  bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-300 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 rounded-xl shadow-sm animate-fadeIn" >
                 <File class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-
                 <div class="flex-1">
                   <p class="font-medium text-sm truncate">
                     {{ control.archivo.name }}
@@ -389,10 +352,6 @@
               </div>
 
             </div>
-
-            
-            
-
             <!-- funcionalidad para el soporte de patologias
             <div v-if="selectedBotName === BOT_TYPES.SOPORTE_PATOLOGIA" class="max-w-md mx-auto p-6 bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  rounded-xl shadow-lg">
               <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-slate-200">
@@ -415,7 +374,6 @@
                 <strong>{{ selectedDate.toLocaleDateString() }}</strong>
               </p>
             </div>-->
-
             <!-- Execute Button -->
             <button
               @click="ejecutarBot()"
@@ -753,7 +711,7 @@ const NuevoBot = () => {
 const botSteps = {
   RETIRO_USUARIO_AVIDANTI: {
     steps: [
-      { label: "Formulario", key: "form", check: (ctx) => ctx.form.length > 0 && !control.archivo },
+      { label: "llenar formulario o Cargar Archivo", key: "form", check: (ctx) => ctx.form.length > 0 && !control.archivo },
     ]
   },
 
