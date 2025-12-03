@@ -414,7 +414,17 @@ export const useTableroFunctions = defineStore('tablero-functions',{
 
         const response = await axiosInstance.post('cargar/notas-credito', formData, 
           { params: { bot_id }, headers: { 'Content-Type': 'multipart/form-data' } });
-        return response.data.message;
+
+        const { data, message} = response.data;
+        if (this.notas_credito_avidanti.length !== 0) {
+          this.notas_credito_avidanti = [...data, ...this.notas_credito_avidanti];
+        }
+        // se actualiza la metrica del bot de notas credito segun las notas credito que se crearon
+        for (const notaCredito of data) {
+          this.actualizarMetricasIncremental(notaCredito.bot_id, notaCredito);
+        }
+
+        return message;
       } catch (error) {
         console.error('Error al cargar las notas crédito:', error);
         throw error;

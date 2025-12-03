@@ -244,46 +244,84 @@
 
             <!-- Si los bots son de envio masivo o carga de archivo  -->
             <div v-if="BOTS_MASIVOS.includes(selectedBotName)"  class="mb-6">
+              <!-- Botón para descargar formato -->
               <div class="mb-4">
-                <button
-                  @click="descargarFormato"
-                  class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 border border-blue-300 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-200 hover:shadow-md"
-                >
+                <button @click="descargarFormato" class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 border border-blue-300 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-200 hover:shadow-md" >
                   📥 Descargar formato de archivo
                 </button>
               </div>
-              <h3 class="text-lg text-slate-800 dark:text-slate-200 mb-3">Cargar Archivo</h3>
-              <!-- Botón para descargar formato -->
-              <!-- Funcionalidad de cargar archivo que arrastre y solte en el cuadro -->
-              <div
-                class="border-2 border-dashed border-[#80006A] rounded-lg p-5 text-center bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700  transition-all duration-300 hover:bg-blue-50 dark:hover:bg-slate-800 hover:border-[#80006A]"
-                @dragover.prevent="handleDragOver"
-                @dragleave="handleDragLeave"
-                @drop.prevent="handleDrop"
-                :class="{ 'bg-blue-100 border-blue-700': isDragging }"
-              >
-                <div class="text-2xl mb-2">📁</div>
+              <!-- SELECTOR DE SEDE -->
+              <div class="relative mb-6">
+                <label class="block text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+                  Seleccionar sede
+                </label>
+                <!-- Botón principal -->
+                <div
+                  @click="showSedeDropdown = !showSedeDropdown" class="flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-800  border border-gray-300 dark:border-gray-700  rounded-lg cursor-pointer transition-all duration-200  hover:shadow-md dark:hover:shadow-black/40" >
+                  <span class="text-sm text-slate-700 dark:text-gray-200">
+                    {{ selectedSede || 'Seleccionar sede...' }}
+                  </span>
 
-                <div class="text-gray-700 dark:text-gray-400 mb-3">
-                  {{ control.fileName || 'Arrastrar archivo aquí o usar el botón' }}
+                  <svg class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform" :class="{ 'rotate-180': showSedeDropdown }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
                 </div>
-
-                <input
-                  type="file"
-                  ref="fileInput"
-                  @change="handleFileChange"
-                  class="hidden"
-                  accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                />
-
-                <button
-                  type="button"
-                  @click="triggerFileSelect"
-                  class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600"
-                >
-                  Seleccionar archivo
-                </button>
+                <!-- Dropdown -->
+                <div
+                  v-if="showSedeDropdown" class="absolute z-20 mt-2 w-full bg-white dark:bg-gray-800  rounded-lg shadow-xl border border-gray-200 dark:border-gray-700" >
+                  <!-- Input búsqueda -->
+                  <div class="p-2">
+                    <input v-model="searchSede" type="text" placeholder="Buscar sede..." class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600  dark:bg-gray-700 dark:text-gray-100 rounded-lg  focus:ring-[#80006A] focus:border-[#80006A]  dark:focus:ring-[#80006A] dark:focus:border-[#80006A]" />
+                  </div>
+                  <!-- Lista de sedes -->
+                  <ul class="max-h-52 overflow-y-auto">
+                    <li
+                      v-for="s in filteredSedes" :key="s.id" @click="selectSede(s)" class="px-4 py-2 text-sm cursor-pointer  hover:bg-[#80006A]/10  dark:hover:bg-[#80006A]/20  text-gray-700 dark:text-gray-200 transition-colors" >
+                      <span class="font-bold text-[#80006A] dark:text-[#d98acb]">
+                        {{ s.id }}
+                      </span>
+                      - {{ s.nombre }}
+                    </li>
+                    <li v-if="filteredSedes.length === 0" class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400" >
+                      No se encontraron resultados
+                    </li>
+                  </ul>
+                </div>
               </div>
+              <template v-if="selectedSede">
+                <h3 class="text-lg text-slate-800 dark:text-slate-200 mb-3">Cargar Archivo</h3>
+                <!-- Funcionalidad de cargar archivo que arrastre y solte en el cuadro -->
+                <div
+                  class="border-2 border-dashed border-[#80006A] rounded-lg p-5 text-center bg-gray-50 dark:bg-[#21292eae] dark:border-slate-700  transition-all duration-300 hover:bg-blue-50 dark:hover:bg-slate-800 hover:border-[#80006A]"
+                  @dragover.prevent="handleDragOver"
+                  @dragleave="handleDragLeave"
+                  @drop.prevent="handleDrop"
+                  :class="{ 'bg-blue-100 border-blue-700': isDragging }"
+                >
+                  <div class="text-2xl mb-2">📁</div>
+
+                  <div class="text-gray-700 dark:text-gray-400 mb-3">
+                    {{ control.fileName || 'Arrastrar archivo aquí o usar el botón' }}
+                  </div>
+
+                  <input
+                    type="file"
+                    ref="fileInput"
+                    @change="handleFileChange"
+                    class="hidden"
+                    accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  />
+
+                  <button
+                    type="button"
+                    @click="triggerFileSelect"
+                    class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-slate-800 dark:text-slate-200 rounded-lg text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600"
+                  >
+                    Seleccionar archivo
+                  </button>
+                </div>
+              </template>
+              
             </div>
             <!-- Botón de Registro solo para los bots de retiro de usuario -->
             <div class="mb-6">
@@ -341,24 +379,20 @@
               <p class="text-sm text-gray-700 dark:text-gray-400 mb-1">
                 <!-- Si hay bot seleccionado -->
                 <template v-if="control.selectedBot">
-                  <span class="flex flex-col">
+                  <div class="flex flex-col">
                     <span>✅ {{ selectedBotData.nombre }} listo</span>
-                    <!-- Mostrar estado dinámico según condiciones -->
-                    <span v-if="botEstado === 'pendiente'">⏳ Pendiente Formulario</span>
-                    <span v-if="botEstado === 'ejecutable'">✅ Formulario listo</span>
-                    <span v-if="botEstado === 'ejecutable'">✅ Bot Listo para ejecución</span>
-                    <span v-if="botEstado === 'pendiente_fecha'">⏳ Pendiente Fecha</span>
-                    <span v-if="botEstado === 'ejecutable_p'">✅ Bot Listo para ejecución</span>
-                  </span>
-                  <!-- Archivo -->
-                  <p v-if="botEstado === 'archivo'" class="text-sm text-gray-700 dark:text-gray-400 mb-1">
-                    📄 Archivo: {{ control.fileName || 'No seleccionado' }}
-                  </p>
-                  <p v-if="botEstado === 'archivo_l'" class="text-sm text-gray-700 dark:text-gray-400 mb-1">
-                    📄 Archivo: {{ control.fileName }}
-                  </p>
+                    <!-- LISTA DE PASOS DINÁMICOS -->
+                    <div v-for="step in botStepsState" :key="step.label">
+                      <span>
+                        <span v-if="step.done">✅</span>
+                        <span v-else>⏳</span>
+                        {{ step.label }}
+                      </span>
+                    </div>
+
+                  </div>
                 </template>
-                <!-- Si no hay bot seleccionado -->
+
                 <template v-else>
                   ⏳ Ningún bot seleccionado
                 </template>
@@ -657,9 +691,50 @@ const NuevoBot = () => {
   //console.log('bot seleccionado: ',botSelected.value)
 }
 
+// Estado del bot basado en condiciones esta funcion es para la parte de torre de control en la parte estado de Ejecucion
+const botSteps = {
+  RETIRO_USUARIO_AVIDANTI: {
+    steps: [
+      { label: "Pendiente Formulario", key: "form", check: (ctx) => ctx.form.length > 0 }
+    ]
+  },
+
+  MASIVO_AVIDANTI: {
+    steps: [
+      { label: "Pendiente Sede", key: "sede", check: (ctx) => ctx.sede !== "" },
+      { label: "Pendiente Archivo", key: "archivo", check: (ctx) => !!ctx.archivo }
+    ]
+  },
+
+  /*SOPORTE_PATOLOGIA: {
+     steps: [
+     { label: "Pendiente Fecha", key: "fecha", check: (ctx) => !!ctx.fecha }
+    ]
+   }*/
+};
+
+const botStepsState = computed(() => {
+  const botName = selectedBotName.value;
+  const rules = botSteps[botName];
+
+  if (!rules) return [];
+
+  const ctx = {
+    form: formInactivation.value,
+    sede: selectedSede.value,
+    archivo: control.archivo,
+    fecha: selectedDate.value
+  };
+
+  return rules.steps.map(step => ({
+    label: step.label,
+    done: step.check(ctx)
+  }));
+});
+
 
 // Estado del bot basado en condiciones esta funcion es para la parte de torre de control en la parte estado de Ejecucion
-const botEstado = computed(() => {
+/*const botEstado = computed(() => {
   if (BOTS_RETIRO.includes(selectedBotName.value)){
     if (formInactivation.value.length === 0) return 'pendiente'
 
@@ -668,15 +743,19 @@ const botEstado = computed(() => {
   }
     
   if (BOTS_MASIVOS.includes(selectedBotName.value)) {
-    if (!control.archivo)  return 'archivo'
-    if (control.archivo) return 'archivo_l'
+    if (selectedSede.value === '') return 'pendiente_sede'
+    if (selectedSede.value){
+      if (!control.archivo) return 'archivo'
+      if (control.archivo) return 'archivo_l'
+    }
   }
 
   /*if (selectedBotName.value === BOT_TYPES.SOPORTE_PATOLOGIA ) {
     if (!selectedDate.value) return 'pendiente_fecha'
     if (selectedDate.value) return 'ejecutable_p'
-  }*/
+  }
 })
+*/
 const filters = reactive({
   date: '2025-01-28',
   estado: '',
@@ -687,6 +766,33 @@ const selectedBotData = computed(() => {
   return bots.value.find(bot => bot.id === control.selectedBot) || null
 })
 
+// Estado selector de sedes
+const showSedeDropdown = ref(false)
+const selectedSede = ref("")
+const searchSede = ref("")
+
+const sedes = ref([
+  { id: "CAM", nombre: "Clínica Avidanti Manizales" },
+  { id: "ACI", nombre: "Clínica Avidanti Ibagué" },
+  { id: "CASM", nombre: "Clínica Avidanti Santa Marta" },
+  { id: "ADC", nombre: "Angiografía de Colombia" },
+  { id: "CACV", nombre: "Clínica Avidanti Ciudad Verde" },
+  { id: "DSZF", nombre: "Diacor Soacha Zona Franca" },
+  { id: "CAA", nombre: "Clínica Avidanti Armenia" },
+])
+
+const filteredSedes = computed(() => {
+  if (!searchSede.value) return sedes.value
+  return sedes.value.filter(s =>
+    s.nombre.toLowerCase().includes(searchSede.value.toLowerCase()) ||
+    s.id.toLowerCase().includes(searchSede.value.toLowerCase())
+  )
+})
+
+const selectSede = (sede) => {
+  selectedSede.value = sede.nombre
+  showSedeDropdown.value = false
+}
 // funcion para abrir modal de nuevo bot
 
 function triggerFileSelect() {
@@ -842,14 +948,14 @@ const ejecutarBot = async () => {
     }
   }
   // Lógica para los bots de carga masiva aqui
-  if (control.archivo != null && BOTS_MASIVOS.includes(selectedBotName.value)) {
-    console.log('archivo a procesar: ', control.archivo, 'bot: ', control.selectedBot);
+  if (control.archivo != null && BOTS_MASIVOS.includes(selectedBotName.value) && selectedSede.value) {
+    console.log('archivo a procesar: ', control.archivo, 'bot: ', control.selectedBot, 'sede: ', selectedSede.value);
     try {
-      const response = await tableroFunctions.cargarNotasCredito(control.selectedBot, control.archivo, 'Clinica Avidanti Ibague');
+      const response = await tableroFunctions.cargarNotasCredito(control.selectedBot, control.archivo, selectedSede.value);
       // Reiniciar el control después de la carga
-     // resetControlSelected();
+      resetControlSelected();
       alert(response);
-      //tableroFunctions.setExecuteBot(false);
+      tableroFunctions.setExecuteBot(false);
     } catch (error) {
       alert(error.response.data.error);
     }
@@ -921,6 +1027,7 @@ function resetControlSelected () {
   control.archivo = null // reiniciar archivo
   selectedDate.value = null
   selectedLogId.value = null
+  selectedSede.value = ''
   tableroFunctions.setSolicitudInactivacion([])
   tableroFunctions.setExecuteBot(false)
 }
