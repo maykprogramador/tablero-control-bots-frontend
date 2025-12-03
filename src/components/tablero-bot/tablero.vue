@@ -325,15 +325,73 @@
             </div>
             <!-- Botón de Registro solo para los bots de retiro de usuario -->
             <div class="mb-6">
-              <button
-                v-if="BOTS_RETIRO.includes(selectedBotName)"
-                @click="openDeactivationModal"
-                class="w-full cursor-pointer flex items-center justify-center px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200"
-              >
+              <button v-if="BOTS_RETIRO.includes(selectedBotName)" @click="openDeactivationModal" class="w-full cursor-pointer flex items-center justify-center px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200" >
                 <span class="text-lg mr-2">📝</span>
                 Registrar personas a inactivar
               </button>
             </div>
+            <div class="mb-6">
+              <!-- Input oculto -->
+              <input
+                type="file"
+                ref="fileInput"
+                @change="handleFileChange"
+                class="hidden"
+                accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              />
+
+              <!-- Botón para cargar archivo -->
+              <button 
+                v-if="!control.archivo && BOTS_RETIRO.includes(selectedBotName)"
+                @click="triggerFileSelect"
+                class="w-full group flex items-center justify-center px-4 py-3 
+                      bg-white dark:bg-slate-800 
+                      border-2 border-dashed border-indigo-300 dark:border-indigo-700 
+                      hover:border-indigo-500 dark:hover:border-indigo-500 
+                      text-indigo-600 dark:text-indigo-400 
+                      font-medium rounded-xl 
+                      transition-all duration-300 
+                      hover:bg-indigo-50 dark:hover:bg-indigo-900/20 
+                      hover:shadow-md 
+                      focus:outline-none focus:ring-4 focus:ring-indigo-100"
+              >
+                <UploadCloud class="w-6 h-6 mr-2 transition-transform duration-300 group-hover:-translate-y-1" />
+                <span>Cargar usuarios a inactivar</span>
+              </button>
+
+              <!-- Tarjeta elegante cuando ya hay archivo -->
+              <div 
+                v-else-if="control.archivo"
+                class="flex items-center gap-3 p-4 mt-2 
+                      bg-indigo-50 dark:bg-indigo-900/20
+                      border border-indigo-300 dark:border-indigo-700
+                      text-indigo-700 dark:text-indigo-300
+                      rounded-xl shadow-sm animate-fadeIn"
+              >
+                <File class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+
+                <div class="flex-1">
+                  <p class="font-medium text-sm truncate">
+                    {{ control.archivo.name }}
+                  </p>
+                  <p class="text-xs opacity-75">
+                    {{ (control.archivo.size / 1024).toFixed(1) }} KB
+                  </p>
+                </div>
+
+                <button
+                  @click="removeFile"
+                  class="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
+                  title="Eliminar archivo"
+                >
+                  <X class="w-5 h-5" />
+                </button>
+              </div>
+
+            </div>
+
+            
+            
 
             <!-- funcionalidad para el soporte de patologias
             <div v-if="selectedBotName === BOT_TYPES.SOPORTE_PATOLOGIA" class="max-w-md mx-auto p-6 bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  rounded-xl shadow-lg">
@@ -385,7 +443,7 @@
                     <div v-for="step in botStepsState" :key="step.label">
                       <span>
                         <span v-if="step.done">✅</span>
-                        <span v-else>⏳</span>
+                        <span v-else>⏳ Pendiente </span>
                         {{ step.label }}
                       </span>
                     </div>
@@ -512,7 +570,7 @@ import ControlUsersModal from './Control-Users-Modal.vue';
 import FormDesactivationPerson from './Form-Desactivation-Person.vue';
 import RegistrosSection from './Registros-section.vue';
 import NavVar from './Nav-var.vue';
-import { LogOut, Monitor, Cog, UserCog, Bolt, SquarePen, Trash  } from 'lucide-vue-next';
+import { LogOut, Monitor, Cog, UserCog, Bolt, SquarePen, Trash, UploadCloud, X, File }  from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
@@ -695,14 +753,14 @@ const NuevoBot = () => {
 const botSteps = {
   RETIRO_USUARIO_AVIDANTI: {
     steps: [
-      { label: "Pendiente Formulario", key: "form", check: (ctx) => ctx.form.length > 0 }
+      { label: "Formulario", key: "form", check: (ctx) => ctx.form.length > 0 && !control.archivo },
     ]
   },
 
   MASIVO_AVIDANTI: {
     steps: [
-      { label: "Pendiente Sede", key: "sede", check: (ctx) => ctx.sede !== "" },
-      { label: "Pendiente Archivo", key: "archivo", check: (ctx) => !!ctx.archivo }
+      { label: "Sede", key: "sede", check: (ctx) => ctx.sede !== "" },
+      { label: "Archivo", key: "archivo", check: (ctx) => !!ctx.archivo }
     ]
   },
 
@@ -732,30 +790,6 @@ const botStepsState = computed(() => {
   }));
 });
 
-
-// Estado del bot basado en condiciones esta funcion es para la parte de torre de control en la parte estado de Ejecucion
-/*const botEstado = computed(() => {
-  if (BOTS_RETIRO.includes(selectedBotName.value)){
-    if (formInactivation.value.length === 0) return 'pendiente'
-
-    if (formInactivation.value.length > 0) return 'ejecutable'
-    return null
-  }
-    
-  if (BOTS_MASIVOS.includes(selectedBotName.value)) {
-    if (selectedSede.value === '') return 'pendiente_sede'
-    if (selectedSede.value){
-      if (!control.archivo) return 'archivo'
-      if (control.archivo) return 'archivo_l'
-    }
-  }
-
-  /*if (selectedBotName.value === BOT_TYPES.SOPORTE_PATOLOGIA ) {
-    if (!selectedDate.value) return 'pendiente_fecha'
-    if (selectedDate.value) return 'ejecutable_p'
-  }
-})
-*/
 const filters = reactive({
   date: '2025-01-28',
   estado: '',
@@ -826,6 +860,10 @@ function handleFileChange(event) {
   }
 }
 
+const removeFile = () => {
+  fileInput.value.value = ""
+  control.archivo = null
+}
 // Validación del archivo
 function validateAndSetFile(file) {
   const allowedTypes = [
@@ -930,23 +968,40 @@ const loadBots = async() => {
 const ejecutarBot = async () => { 
   //console.log('ejecutar bot: ', formInactivation.value);
   // Lógica para los bots de retiro de usuario aqui
-  if (formInactivation.value !== null && formInactivation.value.length > 0) {
-    //console.log('registros a inactivar: ', formInactivation.value);
-    if(user.value.cargo){
+  if (BOTS_RETIRO.includes(selectedBotName.value)) {
+    
+    if (formInactivation.value !== null && formInactivation.value.length > 0) {
+      //console.log('registros a inactivar: ', formInactivation.value);
+      if(user.value.cargo){
+        try {
+          await tableroFunctions.createSolicitud(formInactivation.value, authStore.user.user_id, control.selectedBot);
+          tableroFunctions.setSolicitudInactivacion([]);
+          alert('Registro guardado satisfactoriamente');
+          tableroFunctions.setExecuteBot(false);
+        } catch (error) {
+          //console.log(error.message); //  aquí captura el mensaje
+          alert(error.message);       //  y lo muestra en el alert
+        }
+      }else{
+        alert('Por favor ingrese su cargo antes de continuar');
+        selectedTab.value = 'perfil';
+      }
+    }
+    // logica para ejecutar el bot de retiro de usuarios de forma masiva
+    if (control.archivo !== null) {
+      console.log('ejecutar masivo: ', control.archivo);
       try {
-        await tableroFunctions.createSolicitud(formInactivation.value, authStore.user.user_id, control.selectedBot);
-        tableroFunctions.setSolicitudInactivacion([]);
-        alert('Registro guardado satisfactoriamente');
+        const mensaje = await tableroFunctions.createSolicitudMasiva(control.archivo, control.selectedBot)
+        alert(mensaje);
+        resetControlSelected();
         tableroFunctions.setExecuteBot(false);
       } catch (error) {
         //console.log(error.message); //  aquí captura el mensaje
-        alert(error.message);       //  y lo muestra en el alert
+        alert(error.response.data.error); 
       }
-    }else{
-      alert('Por favor ingrese su cargo antes de continuar');
-      selectedTab.value = 'perfil';
     }
   }
+  
   // Lógica para los bots de carga masiva aqui
   if (control.archivo != null && BOTS_MASIVOS.includes(selectedBotName.value) && selectedSede.value) {
     console.log('archivo a procesar: ', control.archivo, 'bot: ', control.selectedBot, 'sede: ', selectedSede.value);
@@ -1129,6 +1184,13 @@ const getStatusDotClass = (estado) => {
 </script>
 <!-- CSS adicional para asegurar que funcione -->
 <style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
 /* Asegurar que el contenedor principal no desborde */
 .main-container {
   max-width: 100vw !important;

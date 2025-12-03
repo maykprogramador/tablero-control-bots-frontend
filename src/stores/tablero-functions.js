@@ -232,6 +232,24 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         throw new Error('No se pudo crear la solicitud intente nuevamente');
       }
     },
+    async createSolicitudMasiva(file, bot_id) {
+      //console.log('archivo: ', file, 'bot: ',bot_id);
+      const formData = new FormData();
+      formData.append('archivo', file);
+      try {
+        const response = await axiosInstance.post('create/solicitud/masiva', formData, 
+          { params: { bot_id }, headers: { 'Content-Type': 'multipart/form-data' } });
+        const { data, message} = response.data;
+        //console.log('solicitud creada: ',data);
+        if (this.solicitudes.length !== 0) {
+          this.solicitudes = [...data, ...this.solicitudes];
+        }
+        return message;
+      } catch (error) {
+        console.error('Error al crear la solicitud', error);
+        throw error;
+      }
+    },
     async loadSolicitudes(user) {
       try {
           if (this.solicitudes.length === 0) {
@@ -411,6 +429,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         const formData = new FormData();
         formData.append('archivo', file);
         formData.append('sede', sede); 
+
 
         const response = await axiosInstance.post('cargar/notas-credito', formData, 
           { params: { bot_id }, headers: { 'Content-Type': 'multipart/form-data' } });
