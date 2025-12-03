@@ -648,6 +648,9 @@ const exportData = () => {
     Duración: record.duracion? formatDuration(record.duracion) : '—',
     Estado: capitalizarPrimeraLetra(record.estado),
     Descripción: record.descripcion,
+    cufe: record.cufe,
+    cude: record.cude,
+    pdf: record.pdf,
     Bot: record.bot
   }));
 

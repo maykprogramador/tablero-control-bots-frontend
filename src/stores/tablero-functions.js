@@ -613,6 +613,44 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         // 5 (Opcional) Mostrar notificación al usuario
         // this.mostrarToast(`Nueva autorización registrada para ${autorizacion.Paciente?.nombre || 'paciente desconocido'}`);
       });
+      socket.on('nueva_nota_credito', (notaCredito, botActualizado) => {
+        console.log(' notaCredito recibida desde socket:', notaCredito);
+
+        // 1 Verificar si el bot pertenece al usuario actual
+        const perteneceABot = this.bots.some(b => b.id === notaCredito.bot_id);
+        if (!perteneceABot) {
+          //console.warn('⚠️ Autorización ignorada: bot no pertenece al usuario actual');
+          return;
+        }
+        // 2 Actualizar información del bot si cambió
+        const indexBot = this.bots.findIndex(b => b.id === botActualizado.id);
+        if (indexBot !== -1) {
+          this.bots.splice(indexBot, 1, botActualizado);
+          //console.log(' Bot actualizado desde socket (autorizaciones):', botActualizado);
+        }
+        // 3 Verificar si ya existe la nota credito en el estado
+        const yaExiste = this.notas_credito_avidanti.some(n => n.id === notaCredito.id);
+
+        if (this.notas_credito_avidanti.length > 0) {
+          if (!yaExiste) {
+            //  Insertar al inicio
+            this.notas_credito_avidanti.unshift(notaCredito);
+            //console.log(' Nueva autorización agregada al state:', autorizacion);
+          } else {
+            //  Si ya existe, reemplazarla para mantener la más reciente
+            const index = this.notas_credito_avidanti.findIndex(n => n.id === notaCredito.id);
+            if (index !== -1) {
+              this.notas_credito_avidanti.splice(index, 1);
+            }
+            this.notas_credito_avidanti.unshift(notaCredito);
+            //console.log(' Autorización actualizada en el state:', autorizacion);
+          }
+        }
+        //Actualizar métricas o contadores del bot
+        this.actualizarMetricasIncremental(botActualizado.id, notaCredito);
+        // 5 (Opcional) Mostrar notificación al usuario
+        // this.mostrarToast(`Nueva autorización registrada para ${autorizacion.Paciente?.nombre || 'paciente desconocido'}`);
+      });
 
     },
 
