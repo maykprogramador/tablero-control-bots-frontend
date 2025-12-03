@@ -354,6 +354,9 @@
                   <p v-if="botEstado === 'archivo'" class="text-sm text-gray-700 dark:text-gray-400 mb-1">
                     📄 Archivo: {{ control.fileName || 'No seleccionado' }}
                   </p>
+                  <p v-if="botEstado === 'archivo_l'" class="text-sm text-gray-700 dark:text-gray-400 mb-1">
+                    📄 Archivo: {{ control.fileName }}
+                  </p>
                 </template>
                 <!-- Si no hay bot seleccionado -->
                 <template v-else>
@@ -458,6 +461,7 @@
     <ModalNewBot v-if="showModalNewBot && user.rol === 'admin'" :bot="botSelected" @close="showModalNewBot = false"/>
     <DashboardHistoriaClinica v-if="showModalHistoriaClinica" :bot="botSelected" :onclose="closeModalHistoriaCLinica"/>
     <DashboardAutorizaciones v-if="showModalAutorizaciones" :bot="botSelected" @close="showModalAutorizaciones = false"/>
+    <DashboardNotasCredito v-if="showModalNotasCreditoAvidanti" :bot="botSelected" @close="showModalNotasCreditoAvidanti = false"/>
     <DetailsModal v-if="isModalOpen" :bot="botSelected"/>
     <ControlUsersModal v-if="isModalControlUsersOpen" :onClose="closeModal"/>
     <FormDesactivationPerson v-if="showDeactivationModal" :onClose="closeModalForm" :botSelected="control.selectedBot"/>
@@ -488,6 +492,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import ModalNewBot from './Modal-New-Bot.vue';
 import DashboardAutorizaciones from './autorizacion/Dashboard-Autorizaciones.vue';
 import AnaliticsRPA2 from './Dashboard-Rpa-Analitics/Analitics-RPA2.vue';
+import DashboardNotasCredito from './notas-credito-avidanti/Dashboard-Notas-Credito.vue';
 
 // Stores--------------------------------------------------------------------------------------
 const authStore = useAuthStore()
@@ -511,6 +516,7 @@ const showDeactivationModal = ref(false)
 const selectedTab = ref('bots')
 const showModalHistoriaClinica = ref(false)
 const showModalAutorizaciones = ref(false)
+const showModalNotasCreditoAvidanti = ref(false)
 const showModalNewBot = ref(false)
 const isLogsModalOpen = ref(false)
 const botOptions = [1, 2, 3]
@@ -661,8 +667,9 @@ const botEstado = computed(() => {
     return null
   }
     
-  if (BOTS_MASIVOS.includes(selectedBotName.value) && !control.archivo) {
-    return 'archivo'
+  if (BOTS_MASIVOS.includes(selectedBotName.value)) {
+    if (!control.archivo)  return 'archivo'
+    if (control.archivo) return 'archivo_l'
   }
 
   /*if (selectedBotName.value === BOT_TYPES.SOPORTE_PATOLOGIA ) {
@@ -838,7 +845,7 @@ const ejecutarBot = async () => {
   if (control.archivo != null && BOTS_MASIVOS.includes(selectedBotName.value)) {
     console.log('archivo a procesar: ', control.archivo, 'bot: ', control.selectedBot);
     try {
-      const response = await tableroFunctions.cargarNotasCredito(control.selectedBot, control.archivo);
+      const response = await tableroFunctions.cargarNotasCredito(control.selectedBot, control.archivo, 'Clinica Avidanti Ibague');
       // Reiniciar el control después de la carga
      // resetControlSelected();
       alert(response);
@@ -892,6 +899,9 @@ const openModalAutorizaciones = () => {
   showModalAutorizaciones.value = true
 }
 
+const openModalNotasCreditoAvidanti = () => {
+  showModalNotasCreditoAvidanti.value = true
+}
 // funcion para cerrar el modal de historia clinica
 const closeModalHistoriaCLinica = () => {
   showModalHistoriaClinica.value = false
@@ -945,6 +955,10 @@ const openModal = (bot_id, tipo) => {
     }
     if (botSelected.value.id === 10) {
       openModalAutorizaciones()
+      return 
+    }
+    if (botSelected.value.id === 4) {
+      openModalNotasCreditoAvidanti()
       return 
     }
 

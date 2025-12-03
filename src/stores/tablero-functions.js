@@ -33,6 +33,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     metricasBots: [],
     historias_clinicas: [],
     autorizaciones: [],
+    notas_credito_avidanti: [],
     formSolicitudes: [],
     executeBot: false,
     isDark: false,
@@ -403,18 +404,34 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       }
     },
 
-    async cargarNotasCredito(bot_id, file) {
+    async cargarNotasCredito(bot_id, file, sede) {
       try {
-        console.log('bot_id: ', bot_id, 'archivo: ', file);
+        console.log('bot_id: ', bot_id, 'archivo: ', file, 'sede: ', sede);
 
         const formData = new FormData();
         formData.append('archivo', file);
+        formData.append('sede', sede); 
 
-        const response = await axiosInstance.post('cargar/notas-credito', formData,
+        const response = await axiosInstance.post('cargar/notas-credito', formData, 
           { params: { bot_id }, headers: { 'Content-Type': 'multipart/form-data' } });
         return response.data.message;
       } catch (error) {
         console.error('Error al cargar las notas crédito:', error);
+        throw error;
+      }
+    },
+    async loadNotasCreditoAvidanti() {
+      try {
+          if (this.notas_credito_avidanti.length === 0) {
+            const response = await axiosInstance.get('notas-credito-avidanti');
+            this.notas_credito_avidanti = response.data;
+            console.log('notas credito avidanti cargadas de la DB: ',this.notas_credito_avidanti);
+          }
+          else {
+            //console.log('notas credito avidanti cargadas del estado: ',this.notas_credito_avidanti);
+          } 
+      } catch (error) {
+        console.error('Error al cargar las notas credito avidanti:', error);
         throw error;
       }
     },
