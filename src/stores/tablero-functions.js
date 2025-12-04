@@ -359,11 +359,11 @@ export const useTableroFunctions = defineStore('tablero-functions',{
       }
     },
 
-    actualizarMetricasIncremental(botId, registro) {
+    actualizarMetricasIncremental(botId, registro, existe = false) {
       const botMetricas = this.metricasBots.find(m => m.bot_id === botId);
       if (!botMetricas) return;
       // Incrementamos total_registros
-      botMetricas.total_registros++;
+      if (!existe) botMetricas.total_registros++;
       // Determinar estado
       const estado = registro.estado || registro.estado_envio;
       // 2. Si NO es pendiente → restamos un pendiente (sin bajar de 0)
@@ -454,11 +454,8 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           if (this.notas_credito_avidanti.length === 0) {
             const response = await axiosInstance.get('notas-credito-avidanti');
             this.notas_credito_avidanti = response.data;
-            console.log('notas credito avidanti cargadas de la DB: ',this.notas_credito_avidanti);
+            //console.log('notas credito avidanti cargadas de la DB: ',this.notas_credito_avidanti);
           }
-          else {
-            //console.log('notas credito avidanti cargadas del estado: ',this.notas_credito_avidanti);
-          } 
       } catch (error) {
         console.error('Error al cargar las notas credito avidanti:', error);
         throw error;
@@ -643,8 +640,8 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         // this.mostrarToast(`Nueva autorización registrada para ${autorizacion.Paciente?.nombre || 'paciente desconocido'}`);
       });
       socket.on('nueva_nota_credito', (notaCredito, botActualizado) => {
-        console.log(' notaCredito recibida desde socket:', notaCredito);
-
+        //console.log(' notaCredito recibida desde socket:', notaCredito);
+        let existe = false;
         // 1 Verificar si el bot pertenece al usuario actual
         const perteneceABot = this.bots.some(b => b.id === notaCredito.bot_id);
         if (!perteneceABot) {
@@ -670,13 +667,16 @@ export const useTableroFunctions = defineStore('tablero-functions',{
             const index = this.notas_credito_avidanti.findIndex(n => n.id === notaCredito.id);
             if (index !== -1) {
               this.notas_credito_avidanti.splice(index, 1);
+              this.notas_credito_avidanti.unshift(notaCredito);
+              existe = true;
             }
-            this.notas_credito_avidanti.unshift(notaCredito);
             //console.log(' Autorización actualizada en el state:', autorizacion);
           }
+          //Actualizar métricas o contadores del bot
+          this.actualizarMetricasIncremental(botActualizado.id, notaCredito, existe);
+        } else{
+          this.actualizarMetricaBot(botActualizado.id)
         }
-        //Actualizar métricas o contadores del bot
-        this.actualizarMetricasIncremental(botActualizado.id, notaCredito);
         // 5 (Opcional) Mostrar notificación al usuario
         // this.mostrarToast(`Nueva autorización registrada para ${autorizacion.Paciente?.nombre || 'paciente desconocido'}`);
       });

@@ -362,7 +362,7 @@ onMounted(async() => {
    isLoading.value = true;
   try {
     await tableroFunctions.loadNotasCreditoAvidanti(); 
-    console.log('notasCredito: ', registrosTrazabilidad.value);
+    //console.log('notasCredito: ', registrosTrazabilidad.value);
     
   }
   catch(error){
