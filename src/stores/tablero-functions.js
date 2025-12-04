@@ -683,8 +683,12 @@ export const useTableroFunctions = defineStore('tablero-functions',{
 
     },
 
-    descargarFormato() {
-      window.open(`${API_BASE_URL_BACK}/api/bots/descargar-formato`, '_blank');
+    descargarFormato(formato) {
+      console.log('formato: ',formato);
+      
+      if (formato === 'notaCredito') window.open(`${API_BASE_URL_BACK}/api/bots/descargar-formato/nota-credito`, '_blank');
+      if (formato === 'retiroUsuarios') window.open(`${API_BASE_URL_BACK}/api/bots/descargar-formato/retiro-usuarios`, '_blank');
+
     },
     
     resetState() {

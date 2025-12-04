@@ -246,7 +246,7 @@
             <div v-if="BOTS_MASIVOS.includes(selectedBotName)"  class="mb-6">
               <!-- Botón para descargar formato -->
               <div class="mb-4">
-                <button @click="descargarFormato" class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 border border-blue-300 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-200 hover:shadow-md" >
+                <button @click="descargarFormato('notaCredito')" class="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 border border-blue-300 rounded-lg text-sm font-medium transition-all duration-300 hover:bg-blue-200 hover:shadow-md" >
                   📥 Descargar formato de archivo
                 </button>
               </div>
@@ -313,45 +313,50 @@
               
             </div>
             <!-- Botón de Registro solo para los bots de retiro de usuario -->
-            <div class="mb-6">
-              <button v-if="BOTS_RETIRO.includes(selectedBotName) && !control.archivo" @click="openDeactivationModal" class="w-full cursor-pointer flex items-center justify-center px-4 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-lg shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-orange-200" >
-                <span class="text-lg mr-2">📝</span>
-                Registrar personas a inactivar
-              </button>
-            </div>
-            <!-- Botón de carga de archivo solo para los bots de retiro de usuario -->
-            <div class="mb-6">
-              <!-- Input oculto -->
-              <input type="file" ref="fileInput" @change="handleFileChange" class="hidden" accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-              <!-- Botón para cargar archivo -->
-              <button 
-                v-if="!control.archivo && BOTS_RETIRO.includes(selectedBotName) && formInactivation.length === 0" @click="triggerFileSelect" class="w-full group flex items-center justify-center px-4 py-3 bg-white dark:bg-slate-800 border-2 border-dashed border-indigo-300 dark:border-indigo-700 hover:border-indigo-500 dark:hover:border-indigo-500 text-indigo-600 dark:text-indigo-400 font-medium rounded-xl transition-all duration-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-100">
-                <UploadCloud class="w-6 h-6 mr-2 transition-transform duration-300 group-hover:-translate-y-1" />
-                <span>Cargar usuarios a inactivar</span>
-              </button>
-              <!-- Tarjeta elegante cuando ya hay archivo -->
-              <div 
-                v-else-if="control.archivo" class="flex items-center gap-3 p-4 mt-2  bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-300 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 rounded-xl shadow-sm animate-fadeIn" >
-                <File class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                <div class="flex-1">
-                  <p class="font-medium text-sm truncate">
-                    {{ control.archivo.name }}
-                  </p>
-                  <p class="text-xs opacity-75">
-                    {{ (control.archivo.size / 1024).toFixed(1) }} KB
-                  </p>
-                </div>
-
-                <button
-                  @click="removeFile"
-                  class="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors"
-                  title="Eliminar archivo"
-                >
-                  <X class="w-5 h-5" />
+            <div v-if="BOTS_RETIRO.includes(selectedBotName)" >
+              <!-- BOTÓN REGISTRAR PERSONAS A INACTIVAR -->
+              <div class="mb-6">
+                <button v-if="!control.archivo" @click="openDeactivationModal" class="w-full flex items-center justify-center gap-2 px-4 py-3  bg-gradient-to-r from-orange-400 to-orange-500  hover:from-orange-500 hover:to-orange-600 text-white font-semibold  rounded-xl shadow-md  transition-all duration-300  hover:shadow-lg hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-orange-200/50" >
+                  <span class="text-lg">📝</span>
+                  Registrar personas a inactivar
                 </button>
               </div>
-
+              <!-- BOTÓN DESCARGAR FORMATO – NUEVO DISEÑO ELEGANTE -->
+              <div class="mb-4">
+                <button @click="descargarFormato('retiroUsuarios')" class="flex items-center gap-2 w-full px-4 py-2 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-700 hover:shadow-sm transition-all" >
+                  <Download class="w-4 h-4 text-indigo-500 dark:text-indigo-400" />
+                  Formato de archivo
+                </button>
+              </div>
+              <!-- Botón de carga de archivo solo para los bots de retiro de usuario -->
+              <div class="mb-6">
+                <!-- Input oculto -->
+                <input type="file" ref="fileInput" @change="handleFileChange" class="hidden" accept=".pdf,.xlsx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                <!-- Botón para cargar archivo -->
+                <button 
+                  v-if="!control.archivo && formInactivation.length === 0" @click="triggerFileSelect" class="w-full group flex items-center justify-center px-4 py-3 bg-white dark:bg-slate-800 border-2 border-dashed border-indigo-300 dark:border-indigo-700 hover:border-indigo-500 dark:hover:border-indigo-500 text-indigo-600 dark:text-indigo-400 font-medium rounded-xl transition-all duration-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:shadow-md focus:outline-none focus:ring-4 focus:ring-indigo-100">
+                  <UploadCloud class="w-6 h-6 mr-2 transition-transform duration-300 group-hover:-translate-y-1" />
+                  <span>Cargar usuarios a inactivar</span>
+                </button>
+                <!-- Tarjeta elegante cuando ya hay archivo -->
+                <div 
+                  v-else-if="control.archivo" class="flex items-center gap-3 p-4 mt-2  bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-300 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 rounded-xl shadow-sm animate-fadeIn" >
+                  <File class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  <div class="flex-1">
+                    <p class="font-medium text-sm truncate">
+                      {{ control.archivo.name }}
+                    </p>
+                    <p class="text-xs opacity-75">
+                      {{ (control.archivo.size / 1024).toFixed(1) }} KB
+                    </p>
+                  </div>
+                  <button @click="removeFile" class="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition-colors" title="Eliminar archivo" >
+                    <X class="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
             </div>
+            
             <!-- funcionalidad para el soporte de patologias
             <div v-if="selectedBotName === BOT_TYPES.SOPORTE_PATOLOGIA" class="max-w-md mx-auto p-6 bg-white dark:bg-[#21292eae] dark:border-slate-700 transition-colors duration-300  rounded-xl shadow-lg">
               <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-slate-200">
@@ -528,7 +533,7 @@ import ControlUsersModal from './Control-Users-Modal.vue';
 import FormDesactivationPerson from './Form-Desactivation-Person.vue';
 import RegistrosSection from './Registros-section.vue';
 import NavVar from './Nav-var.vue';
-import { LogOut, Monitor, Cog, UserCog, Bolt, SquarePen, Trash, UploadCloud, X, File }  from 'lucide-vue-next';
+import { LogOut, Monitor, Cog, UserCog, Bolt, SquarePen, Trash, UploadCloud, X, File, Download }  from 'lucide-vue-next';
 import { useAuthStore } from '@/stores/Autentificate/auth';
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
@@ -1026,8 +1031,8 @@ const closeModalHistoriaCLinica = () => {
   showModalHistoriaClinica.value = false
 }
 
-function descargarFormato() {
-  tableroFunctions.descargarFormato()
+function descargarFormato(formato) {
+  tableroFunctions.descargarFormato(formato)
 }
 
 const mostrarRightPanel = () => {
