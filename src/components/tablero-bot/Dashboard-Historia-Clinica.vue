@@ -71,11 +71,30 @@
             <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">
               Buscar por nombre o identificación
             </label>
-            <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-200 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input v-model="filtros.busqueda" type="text" placeholder="Buscar..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
+
+            <div class="flex gap-0">
+              <!-- Select -->
+              <select 
+                v-model="filtros.tipoBusqueda" 
+                class="px-3 py-2.5 h-10 text-sm font-medium text-gray-700 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:z-10 cursor-pointer border border-gray-200 dark:border-slate-600 rounded-l-lg transition appearance-none"
+              >
+                <option value="rapida">⚡ Rápida</option>
+                <option value="avanzada">⚙️ Avanzada</option>
+              </select>
+              
+              <!-- Input -->
+              <div class="relative flex-1">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+
+                <input 
+                  v-model="filtros.busqueda"  
+                  type="text"  
+                  :placeholder="filtros.tipoBusqueda === 'rapida' ? 'Buscar...' : 'Búsqueda detallada...'"  
+                  class="w-full pl-9 pr-3 py-2.5 h-10 bg-gray-50 dark:bg-slate-800 dark:text-slate-100 text-gray-900 text-sm border border-gray-200 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:z-10 rounded-r-lg transition border-l-0"
+                />
+              </div>
             </div>
           </div>
 
@@ -438,6 +457,7 @@ import { capitalizarNombre } from '@/utils/CapitalizarNombre';
 import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween';
 import { formatDuration } from '@/utils/FormatSeconds';
+import debounce from 'lodash/debounce'
 dayjs.extend(isBetween);
 
 
@@ -447,24 +467,6 @@ const router = useRouter()
 const tableroFunctions = useTableroFunctions()
 // Props -----------------------------------------------------------------------------
 const props = defineProps(['onclose','bot'])
-
-
-onMounted(async() => {
-   window.addEventListener('resize', updatePopoverPosition)
-   window.addEventListener('scroll', updatePopoverPosition)
-   window.addEventListener('click', handleClickOutside)
-   isLoading.value = true;
-  //await new Promise(resolve => setTimeout(resolve, 5000)); // simula la carga de datos por un tiempo de 5 segundos
-  try {
-    await tableroFunctions.loadHistoriasClinicas(authStore.user);
-  }
-  catch(error){
-    alert(error.response.data.error);
-  }
-  
-  isLoading.value = false;
-  document.addEventListener('keydown', handleEscape)
-})
 
 // COMPUTED ------------------------------------------------------------------------
 const registrosTrazabilidad = computed(() => 
@@ -495,7 +497,9 @@ const datePickerRef = ref(null)
 // Estado reactivo
 const mostrarModal = ref(false)
 const registroSeleccionado = ref(null)
+const today = dayjs().format('YYYY-MM-DD')
 const filtros = ref({
+  tipoBusqueda:'rapida',
   busqueda: '',
   estado: '',
   empresa: '',
@@ -524,69 +528,24 @@ const registrosTrazabilidad2 = ref([
     motivo_fallo: null,
     bot: "Bot_Historias_Clinicas"
   },
-  {
-    empresa: "Hospital Central",
-    numero_identificacion: "1234567890",
-    nombre: "María González López",
-    correo_electronico: "maria.gonzalez@email.com",
-    ingreso: "2025-09-21-03",
-    fecha_historia: "2025-09-21",
-    folio: "F12346",
-    estado_envio: "error",
-    motivo_fallo: "Correo electrónico inválido",
-    bot: "Bot_Historias_Clinicas"
-  },
-  {
-    empresa: "Clínica San José",
-    numero_identificacion: "9876543210",
-    nombre: "Carlos Rodríguez",
-    correo_electronico: null,
-    ingreso: "2025-09-20-02",
-    fecha_historia: "2025-09-20",
-    folio: "F12347",
-    estado_envio: "pendiente",
-    motivo_fallo: null,
-    bot: "Bot_Historias_Clinicas_V2"
-  },
-  {
-    empresa: "IPS Salud Total",
-    numero_identificacion: "5555666777",
-    nombre: "Ana Patricia Morales",
-    correo_electronico: "ana.morales@correo.co",
-    ingreso: "2025-09-19-01",
-    fecha_historia: "2025-09-19",
-    folio: "F12348",
-    estado_envio: "exito",
-    motivo_fallo: null,
-    bot: "Bot_Historias_Clinicas"
-  },
-  {
-    empresa: "Hospital Central",
-    numero_identificacion: "1111222333",
-    nombre: "Roberto Silva Martínez",
-    correo_electronico: "roberto.silva@invalid",
-    ingreso: "2025-09-18-04",
-    fecha_historia: "2025-09-18",
-    folio: "F12349",
-    estado_envio: "error",
-    motivo_fallo: "Formato de correo electrónico inválido",
-    bot: "Bot_Historias_Clinicas"
-  },
-  {
-    empresa: "Clínica San José",
-    numero_identificacion: "4444555666",
-    nombre: "Lucía Fernández Castro",
-    correo_electronico: "lucia.fernandez@gmail.com",
-    ingreso: "2025-09-17-01",
-    fecha_historia: "2025-09-17",
-    folio: "F12350",
-    estado_envio: "exito",
-    motivo_fallo: null,
-    bot: "Bot_Historias_Clinicas_V2"
-  }
 ])
 */
-
+onMounted(async() => {
+   window.addEventListener('resize', updatePopoverPosition)
+   window.addEventListener('scroll', updatePopoverPosition)
+   window.addEventListener('click', handleClickOutside)
+   isLoading.value = true;
+  //await new Promise(resolve => setTimeout(resolve, 5000)); // simula la carga de datos por un tiempo de 5 segundos
+  try {
+    await tableroFunctions.loadHistoriasClinicas(filtros.value.busqueda, filtros.value.fechaInicio, filtros.value.fechaFin, filtros.value.tipoDato);
+  }
+  catch(error){
+    alert(error.response.data.error);
+  }
+  
+  isLoading.value = false;
+  document.addEventListener('keydown', handleEscape)
+})
 //paginacion -----------------------------------------------------------------------------------------
 const totalPages = computed(() => Math.ceil(registrosFiltrados.value.length / recordsPerPage))
 
@@ -621,6 +580,11 @@ function updatePopoverPosition() {
   }
 }
 
+const ejecutarBusqueda = () => {
+  console.log('Ejecutando búsqueda:', filtros.value)
+  // Aquí implementas tu lógica de búsqueda
+}
+
 // abrir / cerrar el popover
 function togglePopover() {
   showDatePopover.value = !showDatePopover.value
@@ -640,6 +604,20 @@ function handleClickOutside(event) {
   }
 }
 
+const aplicarFiltros = async () => {
+  isLoading.value = true;
+
+  try {
+    await tableroFunctions.loadHistoriasClinicas( filtros.value.busqueda, filtros.value.fechaInicio, filtros.value.fechaFin, filtros.value.tipoDato );
+  } catch (error) {
+    console.error(error);
+    alert(error.response?.data?.error || "Error al cargar datos");
+  }
+
+  isLoading.value = false;
+}
+
+
 // Computed para mostrar el rango seleccionado
 const rangoFechasTexto = computed(() => {
   const inicio = filtros.value.fechaInicio
@@ -657,26 +635,25 @@ const rangoFechasTexto = computed(() => {
 
 
 // Función para aplicar el rango de fechas
-const aplicarRangoFechas = () => {
+const aplicarRangoFechas = async() => {
   if (fechaInicioTemp.value) {
     filtros.value.fechaInicio = fechaInicioTemp.value
     filtros.value.fechaFin = fechaFinTemp.value || ''
     showDatePopover.value = false
+    await aplicarFiltros()
   }
 }
 
 // Función para limpiar el rango de fechas
-const limpiarRangoFechas = () => {
+const limpiarRangoFechas = async() => {
   fechaInicioTemp.value = ''
   fechaFinTemp.value = ''
   filtros.value.fechaInicio = ''
   filtros.value.fechaFin = ''
   filtros.value.tipoDato = 'fecha_envio'
   showDatePopover.value = false
+  await aplicarFiltros()
 }
-
-// Cerrar popover al hacer clic fuera
-
 
 // Computed properties
 // Empresas únicas
@@ -746,7 +723,7 @@ const registrosFiltrados = computed(() => {
   }
 
   // Filtro por rango de fechas (dinámico con tipoDato)
-  if (filtros.value.fechaInicio) {
+  /*if (filtros.value.fechaInicio) {
     const startDate = dayjs(filtros.value.fechaInicio)
     const endDate = filtros.value.fechaFin
       ? dayjs(filtros.value.fechaFin)
@@ -768,7 +745,7 @@ const registrosFiltrados = computed(() => {
       }
     })
 
-  }
+  }*/
   return registros
 })
 
@@ -777,6 +754,20 @@ watch(() => filtros.value.estado, (nuevoValor) => {
     filtros.value.motivo_fallo = ''
   }
 })
+
+const debouncedSearch = debounce(() => {
+  if (filtros.value.tipoBusqueda === 'rapida') return
+
+  aplicarFiltros()   // Llama al backend
+}, 400)
+
+// Watch de la búsqueda
+watch(
+  () => filtros.value.busqueda,
+  () => {
+    debouncedSearch()
+  }
+)
 // Métodos
 const reprocesarTrazabilidad = async (id) => {
   if (!confirm('¿Estás seguro de que deseas marcar esta trazabilidad como pendiente para reprocesar?')) return;

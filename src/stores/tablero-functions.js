@@ -270,17 +270,17 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         console.error('Error al cargar los bots:', error);
       }
     },
-    async loadHistoriasClinicas(user) {
+    async loadHistoriasClinicas(search, fechaInicio, fechaFin, tipoDato) {
+      const params = { search, fechaInicio, fechaFin, tipoDato };
+      console.log('params: ', params);
+
       try {
-          if (this.historias_clinicas.length === 0) {
-            const response = await axiosInstance.get('get/historiasClinicas', { params: { user_id: user.user_id, } });
-            this.historias_clinicas = response.data;
-            //console.log('historias cargadas de la DB: ',this.historias_clinicas);
-          }
-          else {
-            //console.log('historias_clinicas cargadas del estado: ',this.historias_clinicas);
-          }
-          
+        const { data } = await axiosInstance.get('get/historiasClinicas/op', { params });
+        console.log('data: ',data);
+        
+        this.historias_clinicas = data;
+        console.log('historias cargadas de la DB: ',this.historias_clinicas);
+      
       } catch (error) {
         console.error('Error al cargar las historias clinicas:', error);
         throw error;
