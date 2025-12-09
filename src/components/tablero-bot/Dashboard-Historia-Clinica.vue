@@ -580,11 +580,6 @@ function updatePopoverPosition() {
   }
 }
 
-const ejecutarBusqueda = () => {
-  console.log('Ejecutando búsqueda:', filtros.value)
-  // Aquí implementas tu lógica de búsqueda
-}
-
 // abrir / cerrar el popover
 function togglePopover() {
   showDatePopover.value = !showDatePopover.value
@@ -687,7 +682,7 @@ const registrosFiltrados = computed(() => {
   let registros = registrosTrazabilidad.value
 
   // Filtro por búsqueda
-  if (filtros.value.busqueda) {
+  if (filtros.value.busqueda && filtros.value.tipoBusqueda === 'rapida') {
     const busqueda = filtros.value.busqueda.toLowerCase()
     registros = registros.filter(r =>
       r.nombre.toLowerCase().includes(busqueda) ||
@@ -755,6 +750,7 @@ watch(() => filtros.value.estado, (nuevoValor) => {
   }
 })
 
+// Debounce para la búsqueda avanzada
 const debouncedSearch = debounce(() => {
   if (filtros.value.tipoBusqueda === 'rapida') return
 

@@ -69,13 +69,32 @@
           <!-- Campo de búsqueda -->
           <div class="flex-1 min-w-[200px]">
             <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 mb-1">
-              Buscar por paciente o número
+              Buscar por nombre o identificación
             </label>
-            <div class="relative">
-              <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-200 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-              <input v-model="filtros.busqueda" type="search" placeholder="Buscar..." class="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg bg-gray-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition" />
+
+            <div class="flex gap-0">
+              <!-- Select -->
+              <select 
+                v-model="filtros.tipoBusqueda" 
+                class="px-3 py-2.5 h-10 text-sm font-medium text-gray-700 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 hover:bg-gray-100 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:z-10 cursor-pointer border border-gray-200 dark:border-slate-600 rounded-l-lg transition appearance-none"
+              >
+                <option value="rapida">⚡ Rápida</option>
+                <option value="avanzada">⚙️ Avanzada</option>
+              </select>
+              
+              <!-- Input -->
+              <div class="relative flex-1">
+                <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m1.35-5.65a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+
+                <input 
+                  v-model="filtros.busqueda"  
+                  type="search"  
+                  :placeholder="filtros.tipoBusqueda === 'rapida' ? 'Buscar...' : 'Búsqueda detallada...'"  
+                  class="w-full pl-9 pr-3 py-2.5 h-10 bg-gray-50 dark:bg-slate-800 dark:text-slate-100 text-gray-900 text-sm border border-gray-200 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:z-10 rounded-r-lg transition border-l-0"
+                />
+              </div>
             </div>
           </div>
 
@@ -105,9 +124,10 @@
                         v-model="filtros.tipoDato"
                         class="w-full px-3 py-2 border border-gray-200 rounded-md text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:border-[#80006A] transition-colors"
                       >
-                        <option value="fecha_solicitud">Fecha Solicitud</option>
-                        <option value="fecha_autorizacion">Fecha Autorización</option>
-                        <option value="fecha_vencimiento">Fecha Vencimiento</option>
+                        <option value="createdAt" disabled hidden>Seleccione una opción</option>
+                        <option value="fechaSolicitud">Fecha Solicitud</option>
+                        <option value="fechaAutorizacion">Fecha Autorización</option>
+                        <option value="fechaVencimiento">Fecha Vencimiento</option>
                       </select>
                     </div>
                     <!-- Fecha inicial -->
@@ -425,6 +445,7 @@ import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 import { useTableroFunctions } from '@/stores/tablero-functions'
 import ModalAutorizacion from './Modal-Autorizacion.vue'
+import debounce from 'lodash/debounce'
 dayjs.extend(isBetween)
 
 const { bot } = defineProps(['bot'])
@@ -487,6 +508,7 @@ const recordsPerPage = 10
 const isLoading = ref(false)
 
 const filtros = ref({
+  tipoBusqueda: 'rapida',
   busqueda: '',
   estado: '',
   eps: '',
@@ -494,7 +516,7 @@ const filtros = ref({
   empresa: '',
   fechaInicio: '',
   fechaFin: '',
-  tipoDato: 'fecha_solicitud',
+  tipoDato: 'createdAt',
   maquina: '0'
 })
 
@@ -535,10 +557,24 @@ const rangoFechasTexto = computed(() => {
   return `${inicio} - ${fin}`
 })
 
+const aplicarFiltros = async () => {
+  isLoading.value = true;
+
+  try {
+    await tableroFunctions.loadAutorizaciones( filtros.value.busqueda, filtros.value.fechaInicio, filtros.value.fechaFin, filtros.value.tipoDato );
+  } catch (error) {
+    console.error(error);
+    alert(error.response?.data?.error || "Error al cargar datos");
+  }
+
+  isLoading.value = false;
+}
+
+
 const registrosFiltrados = computed(() => {
   let registros = registrosAutorizaciones.value
 
-  if (filtros.value.busqueda) {
+  if (filtros.value.busqueda && filtros.value.tipoBusqueda === 'rapida') {
     const busqueda = filtros.value.busqueda.toLowerCase()
     
     registros = registros.filter(r =>
@@ -553,6 +589,11 @@ const registrosFiltrados = computed(() => {
   if (filtros.value.estado) {
     registros = registros.filter(r => r.estado === filtros.value.estado)
   }
+  
+  // Filtro por empresa
+  if (filtros.value.empresa) {
+    registros = registros.filter(r => r.empresa === filtros.value.empresa)
+  }
 
   if (filtros.value.eps) {
     registros = registros.filter(r => r.grupoAtencion === filtros.value.eps)
@@ -564,7 +605,7 @@ const registrosFiltrados = computed(() => {
     )
   }
 
-  if (filtros.value.fechaInicio) {
+  /*if (filtros.value.fechaInicio) {
     const startDate = dayjs(filtros.value.fechaInicio)
     const endDate = filtros.value.fechaFin ? dayjs(filtros.value.fechaFin) : null
 
@@ -576,7 +617,7 @@ const registrosFiltrados = computed(() => {
         return recordDate.isSame(startDate, 'day')
       }
     })
-  }
+  }*/
 
   return registros
 })
@@ -705,6 +746,7 @@ const aplicarRangoFechas = () => {
     filtros.value.fechaInicio = fechaInicioTemp.value
     filtros.value.fechaFin = fechaFinTemp.value || ''
     showDatePopover.value = false
+    aplicarFiltros()
   }
 }
 
@@ -713,8 +755,9 @@ const limpiarRangoFechas = () => {
   fechaFinTemp.value = ''
   filtros.value.fechaInicio = ''
   filtros.value.fechaFin = ''
-  filtros.value.tipoDato = 'fecha_solicitud'
+  filtros.value.tipoDato = 'createdAt'
   showDatePopover.value = false
+  aplicarFiltros()
 }
 
 const abrirModal = (registro) => {
@@ -779,11 +822,26 @@ const handleEscape = (e) => {
   }
 }
 
+// Debounce para la búsqueda avanzada
+const debouncedSearch = debounce(() => {
+  if (filtros.value.tipoBusqueda === 'rapida') return
+
+  aplicarFiltros()   // Llama al backend
+}, 400)
+
+// Watch de la búsqueda
+watch(
+  () => filtros.value.busqueda,
+  () => {
+    debouncedSearch()
+  }
+)
+
 onMounted(async () => {
   try {
     isLoading.value = true
     //await new Promise(resolve => setTimeout(resolve, 5000));
-    await tableroFunctions.loadAutorizaciones()
+    await tableroFunctions.loadAutorizaciones(filtros.value.busqueda, filtros.value.fechaInicio, filtros.value.fechaFin, filtros.value.tipoDato)
     isLoading.value = false
     //console.log('autorizaciones cargadas: ', autorizaciones.value);
   }

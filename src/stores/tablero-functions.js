@@ -272,27 +272,26 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     },
     async loadHistoriasClinicas(search, fechaInicio, fechaFin, tipoDato) {
       const params = { search, fechaInicio, fechaFin, tipoDato };
-      console.log('params: ', params);
-
+      //console.log('params: ', params);
       try {
         const { data } = await axiosInstance.get('get/historiasClinicas/op', { params });
-        console.log('data: ',data);
-        
+        //console.log('data: ',data);
         this.historias_clinicas = data;
-        console.log('historias cargadas de la DB: ',this.historias_clinicas);
-      
+        //console.log('historias cargadas de la DB: ',this.historias_clinicas);
       } catch (error) {
         console.error('Error al cargar las historias clinicas:', error);
         throw error;
       }
     }, 
-    async loadAutorizaciones() {
+    async loadAutorizaciones(search, fechaInicio, fechaFin, tipoDato) {
       try {
-        if (this.autorizaciones.length === 0) {
-          const response = await axiosInstance.get('autorizaciones');
-          this.autorizaciones = response.data;
-        }
-        //console.log('autorizaciones cargadas: ',this.autorizaciones);
+        const params = { search, fechaInicio, fechaFin, tipoDato };
+        console.log('params: ', params);
+        const { data } = await axiosInstance.get('autorizaciones/op', { params });
+        console.log('data: ',data);
+        this.autorizaciones = data;
+      
+        console.log('autorizaciones cargadas: ',this.autorizaciones);
       } catch (error) {
         console.error('Error al cargar las autorizaciones:', error);
         throw error;
