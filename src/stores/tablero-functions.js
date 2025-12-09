@@ -286,12 +286,12 @@ export const useTableroFunctions = defineStore('tablero-functions',{
     async loadAutorizaciones(search, fechaInicio, fechaFin, tipoDato) {
       try {
         const params = { search, fechaInicio, fechaFin, tipoDato };
-        console.log('params: ', params);
+        //console.log('params: ', params);
         const { data } = await axiosInstance.get('autorizaciones/op', { params });
-        console.log('data: ',data);
+        //console.log('data: ',data);
         this.autorizaciones = data;
       
-        console.log('autorizaciones cargadas: ',this.autorizaciones);
+        //console.log('autorizaciones cargadas: ',this.autorizaciones);
       } catch (error) {
         console.error('Error al cargar las autorizaciones:', error);
         throw error;
