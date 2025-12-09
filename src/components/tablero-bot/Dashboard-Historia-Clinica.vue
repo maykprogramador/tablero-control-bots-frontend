@@ -90,7 +90,7 @@
 
                 <input 
                   v-model="filtros.busqueda"  
-                  type="text"  
+                  type="search"  
                   :placeholder="filtros.tipoBusqueda === 'rapida' ? 'Buscar...' : 'Búsqueda detallada...'"  
                   class="w-full pl-9 pr-3 py-2.5 h-10 bg-gray-50 dark:bg-slate-800 dark:text-slate-100 text-gray-900 text-sm border border-gray-200 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#80006A] focus:z-10 rounded-r-lg transition border-l-0"
                 />
@@ -890,5 +890,17 @@ onUnmounted(() => {
 
 .modal-enter-active {
   animation: fadeIn 0.3s ease-out;
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  height: 1rem;
+  width: 1rem;
+  background: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%2380006A' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'/></svg>") no-repeat center;
+  cursor: pointer;
+}
+
+.dark input[type="search"]::-webkit-search-cancel-button {
+  background: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23ffffff' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><path stroke-linecap='round' stroke-linejoin='round' d='M6 18L18 6M6 6l12 12'/></svg>") no-repeat center;
 }
 </style>
