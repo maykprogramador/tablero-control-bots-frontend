@@ -270,28 +270,32 @@ export const useTableroFunctions = defineStore('tablero-functions',{
         console.error('Error al cargar los bots:', error);
       }
     },
-    async loadHistoriasClinicas(search, fechaInicio, fechaFin, tipoDato) {
+    async loadHistoriasClinicas(search, fechaInicio, fechaFin, tipoDato, filtro = false) {
       const params = { search, fechaInicio, fechaFin, tipoDato };
       //console.log('params: ', params);
       try {
-        const { data } = await axiosInstance.get('get/historiasClinicas/op', { params });
-        //console.log('data: ',data);
-        this.historias_clinicas = data;
+        if ((!this.historias_clinicas.length) || (this.historias_clinicas.length && filtro)) {
+          const { data } = await axiosInstance.get('get/historiasClinicas/op', { params });
+          //console.log('data: ',data);
+          this.historias_clinicas = data;
+        }
         //console.log('historias cargadas de la DB: ',this.historias_clinicas);
       } catch (error) {
         console.error('Error al cargar las historias clinicas:', error);
         throw error;
       }
     }, 
-    async loadAutorizaciones(search, fechaInicio, fechaFin, tipoDato) {
+    async loadAutorizaciones(search, fechaInicio, fechaFin, tipoDato, filtro = false) {
       try {
         const params = { search, fechaInicio, fechaFin, tipoDato };
         //console.log('params: ', params);
-        const { data } = await axiosInstance.get('autorizaciones/op', { params });
-        //console.log('data: ',data);
-        this.autorizaciones = data;
-      
-        //console.log('autorizaciones cargadas: ',this.autorizaciones);
+        if ((!this.autorizaciones.length) || (this.autorizaciones.length && filtro)) {
+          const { data } = await axiosInstance.get('autorizaciones/op', { params });
+          //console.log('data: ',data);
+          this.autorizaciones = data;
+          //console.log('autorizaciones cargadas de la db: ',this.autorizaciones);
+        }
+        
       } catch (error) {
         console.error('Error al cargar las autorizaciones:', error);
         throw error;

@@ -506,6 +506,7 @@ const registroSeleccionado = ref(null)
 const currentPage = ref(1)
 const recordsPerPage = 10
 const isLoading = ref(false)
+const today = dayjs().format('YYYY-MM-DD')
 
 const filtros = ref({
   tipoBusqueda: 'rapida',
@@ -561,7 +562,7 @@ const aplicarFiltros = async () => {
   isLoading.value = true;
 
   try {
-    await tableroFunctions.loadAutorizaciones( filtros.value.busqueda, filtros.value.fechaInicio, filtros.value.fechaFin, filtros.value.tipoDato );
+    await tableroFunctions.loadAutorizaciones( filtros.value.busqueda, filtros.value.fechaInicio, filtros.value.fechaFin, filtros.value.tipoDato, true );
   } catch (error) {
     console.error(error);
     alert(error.response?.data?.error || "Error al cargar datos");

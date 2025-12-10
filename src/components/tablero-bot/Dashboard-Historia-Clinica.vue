@@ -603,7 +603,7 @@ const aplicarFiltros = async () => {
   isLoading.value = true;
 
   try {
-    await tableroFunctions.loadHistoriasClinicas( filtros.value.busqueda, filtros.value.fechaInicio, filtros.value.fechaFin, filtros.value.tipoDato );
+    await tableroFunctions.loadHistoriasClinicas( filtros.value.busqueda, filtros.value.fechaInicio, filtros.value.fechaFin, filtros.value.tipoDato, true );
   } catch (error) {
     console.error(error);
     alert(error.response?.data?.error || "Error al cargar datos");
