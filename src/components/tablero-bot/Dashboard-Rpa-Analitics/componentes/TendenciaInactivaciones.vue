@@ -16,9 +16,9 @@
 
       <div class="relative">
         <select v-model="modo" @change="cargarSolicitudes()" class="appearance-none text-sm rounded-lg pl-4 pr-10 py-1.5 font-medium focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-200 cursor-pointer shadow-sm" :class="isDark ? 'bg-slate-700 border border-slate-600 text-slate-200 hover:border-slate-500' : 'bg-white border border-slate-300 text-slate-700 hover:border-slate-400'" >
-          <option value="semanal">Última semana</option>
-          <option value="mensual">Último mes</option>
-          <option value="anual">Último año</option>
+          <option value="semanal">Semanal</option>
+          <option value="mensual">Mensual</option>
+          <option value="anual">Anual</option>
         </select>
         
         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
