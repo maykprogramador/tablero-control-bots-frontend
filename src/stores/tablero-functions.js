@@ -489,7 +489,7 @@ export const useTableroFunctions = defineStore('tablero-functions',{
           }
           if (yaTieneRegistros) {
             this.registros.unshift(registro)
-            console.log('Registro agregado desde socket:', registro)
+            //console.log('Registro agregado desde socket:', registro)
           }else{
             console.log('Registro ignorado porque no existe historial para este bot:', registro.bot_id)
           }
